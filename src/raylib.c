@@ -195,15 +195,19 @@ RLAPI void ToggleFullscreen(void) {
 }
 
 RLAPI void MaximizeWindow(void) {
+    rl.fl |= FLAG_WINDOW_MAXIMIZED;
     SDL_MaximizeWindow(rl.w);
 }
 
 RLAPI void MinimizeWindow(void) {
+    rl.fl |= FLAG_WINDOW_MINIMIZED;
     SDL_MinimizeWindow(rl.w);
 }
 
 RLAPI void RestoreWindow(void) {
     SDL_RestoreWindow(rl.w);
+    rl.fl &= ~FLAG_WINDOW_MAXIMIZED;
+    rl.fl &= ~FLAG_WINDOW_MINIMIZED;
 }
 
 RLAPI void ClearBackground(Color color) {
