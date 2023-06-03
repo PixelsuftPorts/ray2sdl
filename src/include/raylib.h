@@ -95,6 +95,15 @@ RLAPI bool SaveFileText(const char *fileName, char *text);
 RLAPI bool FileExists(const char *fileName);
 RLAPI bool DirectoryExists(const char *dirPath);
 RLAPI bool IsFileExtension(const char *fileName, const char *ext);
+RLAPI const char *GetFileExtension(const char *fileName);
+RLAPI const char *GetFileName(const char *filePath);
+RLAPI const char *GetFileNameWithoutExt(const char *filePath);
+RLAPI const char *GetDirectoryPath(const char *filePath);
+RLAPI const char *GetPrevDirectoryPath(const char *dirPath);
+RLAPI const char *GetWorkingDirectory(void);
+RLAPI const char *GetApplicationDirectory(void);
+RLAPI bool ChangeDirectory(const char *dir);
+RLAPI bool IsPathFile(const char *path);
 
 RLAPI void ClearBackground(Color color);
 RLAPI void BeginDrawing(void);

@@ -146,7 +146,7 @@ RLCAPI bool ExportDataAsCode(const unsigned char *data, unsigned int size, const
     return success;
 }
 
-RLAPI char *LoadFileText(const char *fileName) {
+RLCAPI char *LoadFileText(const char *fileName) {
     if (fileName == NULL) {
         TRACELOG(LOG_WARNING, "FILEIO: File name provided is not valid");
         return NULL;
@@ -160,7 +160,7 @@ RLAPI char *LoadFileText(const char *fileName) {
     return result;
 }
 
-RLAPI void UnloadFileText(char *text) {
+RLCAPI void UnloadFileText(char *text) {
     if (text == NULL) {
         TRACELOG(LOG_WARNING, "FILEIO: NULL pointer passed");
         return;
@@ -168,7 +168,7 @@ RLAPI void UnloadFileText(char *text) {
     SDL_free(text);
 }
 
-RLAPI bool SaveFileText(const char *fileName, char *text) {
+RLCAPI bool SaveFileText(const char *fileName, char *text) {
     if (fileName == NULL) {
         TRACELOG(LOG_WARNING, "FILEIO: File name provided is not valid");
         return false;
@@ -197,7 +197,7 @@ RLAPI bool SaveFileText(const char *fileName, char *text) {
     return true;
 }
 
-RLAPI bool FileExists(const char *fileName) {
+RLCAPI bool FileExists(const char *fileName) {
     if (fileName == NULL) {
         TRACELOG(LOG_WARNING, "FILEIO: NULL pointer passed");
         return false;
@@ -251,7 +251,7 @@ DIR *opendir(const char *name)
 }
 #endif
 
-RLAPI bool DirectoryExists(const char *dirPath) {
+RLCAPI bool DirectoryExists(const char *dirPath) {
     if (dirPath == NULL) {
         TRACELOG(LOG_WARNING, "FILEIO: NULL pointer passed");
         return false;
@@ -264,6 +264,49 @@ RLAPI bool DirectoryExists(const char *dirPath) {
     return true;
 }
 
-RLAPI bool IsFileExtension(const char *fileName, const char *ext) {
+RLCAPI bool IsFileExtension(const char *fileName, const char *ext) {
+    const char *fileExt = GetFileExtension(fileName);
+    if (fileExt == NULL)
+        return false;
+    return !SDL_strcmp(fileExt, ext);
+}
+
+RLCAPI const char *GetFileExtension(const char *fileName) {
+    // This one doesn't check UPPER or lower case so it's not mine problem
+    const char *dot = SDL_strrchr(fileName, '.');
+    if (!dot || dot == fileName)
+        return NULL;
+    return dot;
+}
+
+RLCAPI const char *GetFileName(const char *filePath) {
+    return "";
+}
+
+RLCAPI const char *GetFileNameWithoutExt(const char *filePath) {
+    return "";
+}
+
+RLCAPI const char *GetDirectoryPath(const char *filePath) {
+    return "";
+}
+
+RLCAPI const char *GetPrevDirectoryPath(const char *dirPath) {
+    return "";
+}
+
+RLCAPI const char *GetWorkingDirectory(void) {
+    return "";
+}
+
+RLCAPI const char *GetApplicationDirectory(void) {
+    return "";
+}
+
+RLCAPI bool ChangeDirectory(const char *dir) {
+    return "";
+}
+
+RLCAPI bool IsPathFile(const char *path) {
     return false;
 }
