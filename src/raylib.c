@@ -15,9 +15,11 @@ RLAPI void InitWindow(int width, int height, const char *title) {
         SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
         width, height,
         SDL_WINDOW_HIDDEN | (rl.fl & FLAG_FULLSCREEN_MODE ? SDL_WINDOW_FULLSCREEN : 0) |
-        (rl.fl & FLAG_WINDOW_RESIZABLE ? SDL_WINDOW_RESIZABLE : 0) | (rl.fl & FLAG_WINDOW_RESIZABLE ? SDL_WINDOW_RESIZABLE : 0) |
-        (rl.fl & FLAG_WINDOW_UNDECORATED ? SDL_WINDOW_BORDERLESS : 0) | (rl.fl & FLAG_WINDOW_MINIMIZED ? SDL_WINDOW_MINIMIZED : 0) |
-        (rl.fl & FLAG_WINDOW_MAXIMIZED ? SDL_WINDOW_MAXIMIZED : 0) | (rl.fl & FLAG_WINDOW_TOPMOST ? SDL_WINDOW_ALWAYS_ON_TOP : 0) | 
+        (rl.fl & FLAG_WINDOW_RESIZABLE ? SDL_WINDOW_RESIZABLE : 0) |
+        (rl.fl & FLAG_WINDOW_UNDECORATED ? SDL_WINDOW_BORDERLESS : 0) |
+        (rl.fl & FLAG_WINDOW_MINIMIZED ? SDL_WINDOW_MINIMIZED : 0) |
+        (rl.fl & FLAG_WINDOW_MAXIMIZED ? SDL_WINDOW_MAXIMIZED : 0) |
+        (rl.fl & FLAG_WINDOW_TOPMOST ? SDL_WINDOW_ALWAYS_ON_TOP : 0) | 
         (rl.fl & FLAG_WINDOW_HIGHDPI ? SDL_WINDOW_ALLOW_HIGHDPI : 0) | 
         (rl.fl & FLAG_WINDOW_UNFOCUSED ? 0 : (SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_MOUSE_FOCUS))
     );
@@ -75,11 +77,41 @@ RLAPI bool IsWindowState(unsigned int flag) {
 }
 
 RLAPI void SetWindowState(unsigned int flags) {
+    unsigned int diff = rl.fl ^ flags;
     rl.fl |= flags;
+    if (diff & FLAG_WINDOW_HIDDEN)
+        SDL_HideWindow(rl.w);
+    if (diff & FLAG_FULLSCREEN_MODE)
+        SDL_SetWindowFullscreen(rl.w, SDL_WINDOW_FULLSCREEN);
+    if (diff & FLAG_WINDOW_RESIZABLE)
+        SDL_SetWindowResizable(rl.w, SDL_TRUE);
+    if (diff & SDL_WINDOW_BORDERLESS)
+        SDL_SetWindowBordered(rl.w, SDL_FALSE);
+    if (diff & FLAG_WINDOW_MINIMIZED)
+        SDL_MinimizeWindow(rl.w);
+    if (diff & FLAG_WINDOW_MAXIMIZED)
+        SDL_MaximizeWindow(rl.w);
+    if (diff & FLAG_WINDOW_TOPMOST)
+        SDL_SetWindowAlwaysOnTop(rl.w, SDL_TRUE);
 }
 
 RLAPI void ClearWindowState(unsigned int flags) {
     rl.fl &= ~flags;
+    unsigned int diff = rl.fl ^ flags;
+    if (diff & FLAG_WINDOW_HIDDEN)
+        SDL_ShowWindow(rl.w);
+    if (diff & FLAG_FULLSCREEN_MODE)
+        SDL_SetWindowFullscreen(rl.w, 0);
+    if (diff & FLAG_WINDOW_RESIZABLE)
+        SDL_SetWindowResizable(rl.w, SDL_FALSE);
+    if (diff & SDL_WINDOW_BORDERLESS)
+        SDL_SetWindowBordered(rl.w, SDL_TRUE);
+    if ((diff & FLAG_WINDOW_MINIMIZED) || ((diff & FLAG_WINDOW_MAXIMIZED) && !(rl.fl & FLAG_WINDOW_MINIMIZED)))
+        SDL_RestoreWindow(rl.w);
+    if (diff & FLAG_WINDOW_TOPMOST)
+        SDL_SetWindowAlwaysOnTop(rl.w, SDL_FALSE);
+    if (diff & FLAG_WINDOW_UNFOCUSED)
+        SDL_SetWindowInputFocus(rl.w);
 }
 
 RLAPI void ClearBackground(Color color) {
