@@ -189,7 +189,7 @@ RLAPI void ClearBackground(Color color) {
 }
 
 RLAPI void BeginDrawing(void) {
-
+    SDL_SetRenderTarget(rl.r, NULL);
 }
 
 RLAPI void EndDrawing(void) {
