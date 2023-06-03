@@ -2,10 +2,10 @@
 #include <SDL2/SDL.h>
 #include <rayconf.h>
 
-#define RAYLIB_VERSION_MAJOR 4
-#define RAYLIB_VERSION_MINOR 5
+#define RAYLIB_VERSION_MAJOR 228
+#define RAYLIB_VERSION_MINOR 0
 #define RAYLIB_VERSION_PATCH 0
-#define RAYLIB_VERSION  "4.5"
+#define RAYLIB_VERSION  "228.0"
 
 #if defined(_WIN32) && 0
     #if defined(BUILD_LIBTYPE_SHARED)
@@ -23,7 +23,7 @@
 #endif
 
 #if defined(SUPPORT_TRACELOG)
-    #define TRACELOG(level, msg, ...) TraceLog(level, "[%s:%i %s] " msg, __FILE__, __LINE__, __func__, ##__VA_ARGS__)
+    #define TRACELOG(level, msg, ...) TraceLog(level, "[%s:%i at %s] " msg, __FILE__, __LINE__, __func__, ##__VA_ARGS__)
 #else
     #define TRACELOG(level, msg, ...) (void)0
 #endif

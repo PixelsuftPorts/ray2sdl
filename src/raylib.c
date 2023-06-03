@@ -1,19 +1,24 @@
 #include <stdio.h>
-#include <stdarg.h>
 #include <raylib.h>
 #include <raydef.h>
 #include <raydark.h>
 #include <rayconf.h>
+#ifdef SUPPORT_TRACELOG
+#include <stdarg.h>
+#endif
 
 // TODO: Error Handling For Every Function
 
 RLAPI void InitWindow(int width, int height, const char *title) {
     if (rl.first_init) {
         rl.first_init = false;
+        TRACELOG(LOG_INFO, "Initializing ray2sdl %s", RAYLIB_VERSION);
+        TRACELOG(LOG_INFO, "Supported raylib modules:");
+        TRACELOG(LOG_INFO, "     > bruh:...... loaded (mandatory)");
     }
     if (!rl.was_init) {
         if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS | SDL_INIT_TIMER) < 0) {
-            // TODO
+            TRACELOG(LOG_ERROR, "Failed to initialize SDL (%s)", SDL_GetError());
         } 
         rl.was_init = true;
     }
@@ -31,15 +36,27 @@ RLAPI void InitWindow(int width, int height, const char *title) {
         (rl.fl & FLAG_WINDOW_UNFOCUSED ? 0 : (SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_MOUSE_FOCUS))
     );
     if (rl.w == NULL) {
-        // TODO
+        TRACELOG(LOG_ERROR, "Failed to create window (%s)", SDL_GetError());
     }
     rl.r = SDL_CreateRenderer(
         rl.w,
-        -1, // TODO
+        2, // TODO
         SDL_RENDERER_ACCELERATED | (rl.fl & FLAG_VSYNC_HINT ? SDL_RENDERER_PRESENTVSYNC : 0)
     );
     if (rl.r == NULL) {
-        // TODO
+        TRACELOG(LOG_ERROR, "Failed to create renderer (%s)", SDL_GetError());
+    }
+    else {
+        int mon = GetCurrentMonitor();
+        SDL_RendererInfo info;
+        SDL_GetRendererInfo(rl.r, &info);
+        TRACELOG(LOG_INFO, "DISPLAY: Device initialized successfully");
+        TRACELOG(LOG_INFO, "     > Display size: %ix%i", GetMonitorWidth(mon), GetMonitorHeight(mon));
+        TRACELOG(LOG_INFO, "     > Screen size:  %ix%i", GetScreenWidth(), GetScreenHeight());
+        TRACELOG(LOG_INFO, "     > Render size:  %ix%i", GetRenderWidth(), GetRenderHeight());
+        TRACELOG(LOG_INFO, "RENDER: Information:");
+        TRACELOG(LOG_INFO, "     > Name:             %s", info.name);
+        TRACELOG(LOG_INFO, "     > Max Texture Size: %ix%i", info.max_texture_width, info.max_texture_width);
     }
     CheckDarkMode(rl.w);
     rl.should_close = false;
