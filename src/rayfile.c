@@ -36,26 +36,28 @@ RLAPI unsigned char *LoadFileData(const char *fileName, unsigned int *bytesRead)
     }
     SDL_RWops* file = SDL_RWFromFile(fileName, "rb");
     if (file == NULL) {
-        TRACELOG(LOG_WARNING, "FILEIO: Failed to open file (%s)", SDL_GetError());
+        TRACELOG(LOG_WARNING, "FILEIO: [%s] Failed to open file (%s)", fileName, SDL_GetError());
         return NULL;
     }
     Sint64 size = SDL_RWsize(file);
     if (size <= 0) { // If is 0 idk because in raylib it raises an error
-        TRACELOG(LOG_WARNING, "FILEIO: Failed to get file size (%s)", SDL_GetError());
+        TRACELOG(LOG_WARNING, "FILEIO: [%s] Failed to get file size (%s)", fileName, SDL_GetError());
         if (SDL_RWclose(file) < 0)
-            TRACELOG(LOG_WARNING, "FILEIO: Failed to close file (%s)", SDL_GetError());
+            TRACELOG(LOG_WARNING, "FILEIO: [%s] Failed to close file (%s)", fileName, SDL_GetError());
     }
     data = SDL_malloc((size_t)size);
     if (data == NULL) {
-        TRACELOG(LOG_WARNING, "FILEIO: Failed to allocate memory for buffer");
+        TRACELOG(LOG_WARNING, "FILEIO: [%s] Failed to allocate memory for buffer", fileName);
         if (SDL_RWclose(file) < 0)
-            TRACELOG(LOG_WARNING, "FILEIO: Failed to close file (%s)", SDL_GetError());
+            TRACELOG(LOG_WARNING, "FILEIO: [%s] Failed to close file (%s)", fileName, SDL_GetError());
     }
     *bytesRead = (unsigned int)SDL_RWread(file, (void*)data, 1, (size_t)size);
-    if (*bytesRead != (unsigned int)size)
-        TRACELOG(LOG_WARNING, "FILEIO: Failed to properly read file (%s)", SDL_GetError());
+    if (*bytesRead >= (unsigned int)size)
+        TRACELOG(LOG_WARNING, "FILEIO: [%s] File loaded successfully", fileName);
+    else
+        TRACELOG(LOG_INFO, "FILEIO: [%s] Failed to properly read file (%s)", fileName, SDL_GetError());
     if (SDL_RWclose(file) < 0)
-        TRACELOG(LOG_WARNING, "FILEIO: Failed to close file (%s)", SDL_GetError());
+        TRACELOG(LOG_WARNING, "FILEIO: [%s] Failed to close file (%s)", fileName, SDL_GetError());
     return data;
 }
 
