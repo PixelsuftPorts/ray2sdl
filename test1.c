@@ -6,6 +6,7 @@ void __imp__wassert() {}
 
 int main(void)
 {
+    SetWindowState(FLAG_WINDOW_ALWAYS_RUN | FLAG_VSYNC_HINT | FLAG_WINDOW_HIGHDPI);
     InitWindow(800, 450, "raylib [core] example - basic window");
 
     while (!WindowShouldClose())

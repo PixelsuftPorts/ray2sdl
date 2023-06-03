@@ -807,6 +807,7 @@ struct rl {
     SDL_Event event;
     SDL_Window* w;
     SDL_Renderer* r;
+    unsigned int fl;
     bool was_init;
     bool should_close;
 };

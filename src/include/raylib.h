@@ -10,6 +10,10 @@ extern "C" {
 RLAPI void InitWindow(int width, int height, const char *title);
 RLAPI bool WindowShouldClose(void);
 RLAPI void CloseWindow(void);
+RLAPI bool IsWindowReady(void);
+RLAPI bool IsWindowState(unsigned int flag);
+RLAPI void SetWindowState(unsigned int flags);
+RLAPI void ClearWindowState(unsigned int flags);
 
 RLAPI void ClearBackground(Color color);
 RLAPI void BeginDrawing(void);

@@ -9,11 +9,17 @@ RLAPI void InitWindow(int width, int height, const char *title) {
         } 
         rl.was_init = true;
     }
+    // TODO: FLAG_WINDOW_ALWAYS_RUN emulation
     rl.w = SDL_CreateWindow(
         title,
         SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
         width, height,
-        SDL_WINDOW_HIDDEN
+        SDL_WINDOW_HIDDEN | (rl.fl & FLAG_FULLSCREEN_MODE ? SDL_WINDOW_FULLSCREEN : 0) |
+        (rl.fl & FLAG_WINDOW_RESIZABLE ? SDL_WINDOW_RESIZABLE : 0) | (rl.fl & FLAG_WINDOW_RESIZABLE ? SDL_WINDOW_RESIZABLE : 0) |
+        (rl.fl & FLAG_WINDOW_UNDECORATED ? SDL_WINDOW_BORDERLESS : 0) | (rl.fl & FLAG_WINDOW_MINIMIZED ? SDL_WINDOW_MINIMIZED : 0) |
+        (rl.fl & FLAG_WINDOW_MAXIMIZED ? SDL_WINDOW_MAXIMIZED : 0) | (rl.fl & FLAG_WINDOW_TOPMOST ? SDL_WINDOW_ALWAYS_ON_TOP : 0) | 
+        (rl.fl & FLAG_WINDOW_HIGHDPI ? SDL_WINDOW_ALLOW_HIGHDPI : 0) | 
+        (rl.fl & FLAG_WINDOW_UNFOCUSED ? 0 : (SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_MOUSE_FOCUS))
     );
     if (rl.w == NULL) {
         // TODO
@@ -21,14 +27,15 @@ RLAPI void InitWindow(int width, int height, const char *title) {
     rl.r = SDL_CreateRenderer(
         rl.w,
         -1, // TODO
-        SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC
+        SDL_RENDERER_ACCELERATED | (rl.fl & FLAG_VSYNC_HINT ? SDL_RENDERER_PRESENTVSYNC : 0)
     );
     if (rl.r == NULL) {
         // TODO
     }
     CheckDarkMode(rl.w);
     rl.should_close = false;
-    SDL_ShowWindow(rl.w);
+    if (!(rl.fl & FLAG_WINDOW_HIDDEN))
+        SDL_ShowWindow(rl.w);
 }
 
 void PollEvents() {
@@ -57,6 +64,22 @@ RLAPI void CloseWindow(void) {
         SDL_Quit();
         rl.was_init = false;
     }
+}
+
+RLAPI bool IsWindowReady(void) {
+    return (bool)rl.w;
+}
+
+RLAPI bool IsWindowState(unsigned int flag) {
+    return (bool)(rl.fl & flag);
+}
+
+RLAPI void SetWindowState(unsigned int flags) {
+    rl.fl |= flags;
+}
+
+RLAPI void ClearWindowState(unsigned int flags) {
+    rl.fl &= ~flags;
 }
 
 RLAPI void ClearBackground(Color color) {
