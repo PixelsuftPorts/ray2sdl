@@ -196,6 +196,10 @@ RLAPI bool SaveFileText(const char *fileName, char *text) {
 }
 
 RLAPI bool FileExists(const char *fileName) {
+    if (fileName == NULL) {
+        TRACELOG(LOG_WARNING, "FILEIO: NULL pointer passed");
+        return false;
+    }
     SDL_RWops* file = SDL_RWFromFile(fileName, "rb");
     if (file == NULL) {
         TRACELOG(LOG_WARNING, "lol %s", SDL_GetError());
@@ -208,7 +212,16 @@ RLAPI bool FileExists(const char *fileName) {
 }
 
 RLAPI bool DirectoryExists(const char *dirPath) {
-    return false;
+    if (fileName == NULL) {
+        TRACELOG(LOG_WARNING, "FILEIO: NULL pointer passed");
+        return false;
+    }
+    DIR *dir = opendir(dirPath);
+    if (dir == NULL)
+        return false;
+    if (closedir(dir) < 0)
+        TRACELOG(LOG_WARNING, "FILEIO: [%s] WTF Failed to close dir", dirPath);
+    return true;
 }
 
 RLAPI bool IsFileExtension(const char *fileName, const char *ext) {
