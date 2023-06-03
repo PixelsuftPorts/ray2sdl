@@ -242,6 +242,38 @@ RLAPI void *GetWindowHandle(void) {
     return GetHandleBySDLWindow(rl.w);
 }
 
+RLAPI int GetScreenWidth(void) {
+    int width;
+    SDL_GetWindowSize(rl.w, &width, NULL);
+    return width;
+}
+
+RLAPI int GetScreenHeight(void) {
+    int height;
+    SDL_GetWindowSize(rl.w, NULL, &height);
+    return height;
+}
+
+RLAPI int GetRenderWidth(void) {
+    int width;
+    SDL_GetRendererOutputSize(rl.r, &width, NULL);
+    return width;
+}
+
+RLAPI int GetRenderHeight(void) {
+    int height;
+    SDL_GetRendererOutputSize(rl.r, NULL, &height);
+    return height;
+}
+
+RLAPI int GetMonitorCount(void) {
+    return SDL_GetNumVideoDisplays();
+}
+
+RLAPI int GetCurrentMonitor(void) {
+    return SDL_GetWindowDisplayIndex(rl.w);
+}
+
 RLAPI void ClearBackground(Color color) {
     SDL_SetRenderDrawColor(rl.r, color.r, color.g, color.b, color.a);
     SDL_RenderClear(rl.r);

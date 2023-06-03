@@ -30,7 +30,13 @@ RLAPI void SetWindowMonitor(int monitor);
 RLAPI void SetWindowMinSize(int width, int height);
 RLAPI void SetWindowSize(int width, int height);
 RLAPI void SetWindowOpacity(float opacity);
-RLAPI void *GetWindowHandle(void);     
+RLAPI void *GetWindowHandle(void);
+RLAPI int GetScreenWidth(void);
+RLAPI int GetScreenHeight(void);
+RLAPI int GetRenderWidth(void);
+RLAPI int GetRenderHeight(void);
+RLAPI int GetMonitorCount(void);
+RLAPI int GetCurrentMonitor(void); 
 
 RLAPI void ClearBackground(Color color);
 RLAPI void BeginDrawing(void);
