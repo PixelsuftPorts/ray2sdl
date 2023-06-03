@@ -92,6 +92,9 @@ RLAPI bool ExportDataAsCode(const unsigned char *data, unsigned int size, const 
 RLAPI char *LoadFileText(const char *fileName);
 RLAPI void UnloadFileText(char *text);
 RLAPI bool SaveFileText(const char *fileName, char *text);
+RLAPI bool FileExists(const char *fileName);
+RLAPI bool DirectoryExists(const char *dirPath);
+RLAPI bool IsFileExtension(const char *fileName, const char *ext);
 
 RLAPI void ClearBackground(Color color);
 RLAPI void BeginDrawing(void);

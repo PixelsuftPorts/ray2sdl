@@ -194,3 +194,23 @@ RLAPI bool SaveFileText(const char *fileName, char *text) {
     }
     return true;
 }
+
+RLAPI bool FileExists(const char *fileName) {
+    SDL_RWops* file = SDL_RWFromFile(fileName, "rb");
+    if (file == NULL) {
+        TRACELOG(LOG_WARNING, "lol %s", SDL_GetError());
+        return false;
+    }
+    if (SDL_RWclose(file) < 0) {
+        TRACELOG(LOG_WARNING, "FILEIO: [%s] WTF Failed to close text file (%s)", fileName, SDL_GetError());
+    }
+    return true;
+}
+
+RLAPI bool DirectoryExists(const char *dirPath) {
+    return false;
+}
+
+RLAPI bool IsFileExtension(const char *fileName, const char *ext) {
+    return "";
+}
