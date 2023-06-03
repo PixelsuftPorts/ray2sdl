@@ -1,0 +1,14 @@
+.vscode
+.idea
+SDL2
+raylib
+build
+Release
+Debug
+x64
+upload.bat
+*.exe
+*.zip
+*.gz
+*.tar
+*.xz
