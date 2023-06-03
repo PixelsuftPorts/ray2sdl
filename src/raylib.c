@@ -308,36 +308,45 @@ RLAPI int GetScreenHeight(void) {
 
 RLAPI int GetRenderWidth(void) {
     int width;
-    if (SDL_GetRendererOutputSize(rl.r, &width, NULL) < 0)
+    if (SDL_GetRendererOutputSize(rl.r, &width, NULL) < 0) {
         TRACELOG(LOG_WARNING, "Failed to get renderer output size (%s)", SDL_GetError());
+        return 0;
+    }
     return width;
 }
 
 RLAPI int GetRenderHeight(void) {
     int height;
-    if (SDL_GetRendererOutputSize(rl.r, NULL, &height) < 0)
+    if (SDL_GetRendererOutputSize(rl.r, NULL, &height) < 0) {
         TRACELOG(LOG_WARNING, "Failed to get renderer output size (%s)", SDL_GetError());
+        return 0;
+    }
     return height;
 }
 
 RLAPI int GetMonitorCount(void) {
     int result = SDL_GetNumVideoDisplays();
-    if (result < 0)
+    if (result < 0) {
         TRACELOG(LOG_WARNING, "Failed to get monitor count (%s)", SDL_GetError());
+        return 0;
+    }
     return result;
 }
 
 RLAPI int GetCurrentMonitor(void) {
     int result = SDL_GetWindowDisplayIndex(rl.w);
-    if (result < 0)
+    if (result < 0) {
         TRACELOG(LOG_WARNING, "Failed to get current monitor index (%s)", SDL_GetError());
+        return 0;
+    }
     return result;
 }
 
 RLAPI Vector2 GetMonitorPosition(int monitor) {
     SDL_Rect rect;
-    if (SDL_GetDisplayBounds(monitor, &rect) < 0)
+    if (SDL_GetDisplayBounds(monitor, &rect) < 0) {
         TRACELOG(LOG_WARNING, "Failed to get monitor bounds (%s)", SDL_GetError());
+    }
     return VECLITERAL(Vector2){
         .x = (float)rect.x, .y = (float)rect.y
     };
@@ -345,46 +354,56 @@ RLAPI Vector2 GetMonitorPosition(int monitor) {
 
 RLAPI int GetMonitorWidth(int monitor) {
     SDL_DisplayMode dm;
-    if (SDL_GetCurrentDisplayMode(monitor, &dm) < 0)
+    if (SDL_GetCurrentDisplayMode(monitor, &dm) < 0) {
         TRACELOG(LOG_WARNING, "Failed to get monitor display mode (%s)", SDL_GetError());
+        return 0;
+    }
     return dm.w;
 }
 
 RLAPI int GetMonitorHeight(int monitor) {
     SDL_DisplayMode dm;
-    if (SDL_GetCurrentDisplayMode(monitor, &dm) < 0)
+    if (SDL_GetCurrentDisplayMode(monitor, &dm) < 0) {
         TRACELOG(LOG_WARNING, "Failed to get monitor display mode (%s)", SDL_GetError());
+        return 0;
+    }
     return dm.h;
 }
 
 RLAPI int GetMonitorPhysicalWidth(int monitor) {
     float hdpi;
     if (SDL_GetDisplayDPI(monitor, NULL, &hdpi, NULL) < 0) {
-        hdpi = 96.0f;
-        TRACELOG(LOG_WARNING, "Failed to get monitor DPI (%s)", SDL_GetError());
+        TRACELOG(LOG_WARNING, "Failed to get monitor horizontal DPI (%s)", SDL_GetError());
+        return 0;
     }
     SDL_DisplayMode dm;
-    if (SDL_GetDesktopDisplayMode(monitor, &dm) < 0)
-        TRACELOG(LOG_WARNING, "Failed to get monitor horizontal display mode (%s)", SDL_GetError());
+    if (SDL_GetDesktopDisplayMode(monitor, &dm) < 0) {
+        TRACELOG(LOG_WARNING, "Failed to get monitor display mode (%s)", SDL_GetError());
+        return 0;
+    }
     return (int)((float)dm.w * 25.35f / hdpi);
 }
 
 RLAPI int GetMonitorPhysicalHeight(int monitor) {
     float vdpi;
     if (SDL_GetDisplayDPI(monitor, NULL, NULL, &vdpi) < 0) {
-        vdpi = 96.0f;
         TRACELOG(LOG_WARNING, "Failed to get monitor vertical DPI (%s)", SDL_GetError());
+        return 0;
     }
     SDL_DisplayMode dm;
-    if (SDL_GetDesktopDisplayMode(monitor, &dm) < 0)
+    if (SDL_GetDesktopDisplayMode(monitor, &dm) < 0) {
         TRACELOG(LOG_WARNING, "Failed to get monitor display mode (%s)", SDL_GetError());
+        return 0;
+    }
     return (int)((float)dm.h * 25.35f / vdpi);
 }
 
 RLAPI int GetMonitorRefreshRate(int monitor) {
     SDL_DisplayMode dm;
-    if (SDL_GetCurrentDisplayMode(monitor, &dm) < 0)
+    if (SDL_GetCurrentDisplayMode(monitor, &dm) < 0) {
         TRACELOG(LOG_WARNING, "Failed to get monitor display mode (%s)", SDL_GetError());
+        return 0;
+    }
     return dm.refresh_rate;
 }
 
@@ -405,8 +424,10 @@ RLAPI Vector2 GetWindowScaleDPI(void) {
 
 RLAPI const char *GetMonitorName(int monitor) {
     const char* result = SDL_GetDisplayName(monitor);
-    if (result == NULL)
+    if (result == NULL) {
         TRACELOG(LOG_WARNING, "Failed to get monitor name (%s)", SDL_GetError());
+        return "";
+    }
     return result;
 }
 
@@ -419,8 +440,10 @@ RLAPI const char *GetClipboardText(void) {
     if (rl.clip_ptr)
         SDL_free(rl.clip_ptr);
     rl.clip_ptr = SDL_GetClipboardText();
-    if (SDL_strlen(rl.clip_ptr) <= 0)
+    if (SDL_strlen(rl.clip_ptr) <= 0) {
         TRACELOG(LOG_WARNING, "Failed to get clipboard text (%s)", SDL_GetError());
+        return NULL;
+    }
     return rl.clip_ptr;
 }
 
@@ -458,8 +481,10 @@ RLAPI void HideCursor(void) {
 
 RLAPI bool IsCursorHidden(void) {
     int result = SDL_ShowCursor(SDL_QUERY);
-    if (result < 0)
+    if (result < 0) {
         TRACELOG(LOG_WARNING, "Failed to get if cursor is hidden (%s)", SDL_GetError());
+        return false;
+    }
     return result == SDL_DISABLE;
 }
 
