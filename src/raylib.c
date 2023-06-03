@@ -4,17 +4,18 @@
 
 RLAPI void InitWindow(int width, int height, const char *title) {
     if (!rl.was_init) {
-        if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS) < 0) {
+        if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS | SDL_INIT_TIMER) < 0) {
             // TODO
         } 
         rl.was_init = true;
     }
     // TODO: FLAG_WINDOW_ALWAYS_RUN emulation
+    rl.fullscreen_mode = (rl.fl & FLAG_FULLSCREEN_MODE) ? SDL_WINDOW_FULLSCREEN : 0;
     rl.w = SDL_CreateWindow(
         title,
         SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
         width, height,
-        SDL_WINDOW_HIDDEN | (rl.fl & FLAG_FULLSCREEN_MODE ? SDL_WINDOW_FULLSCREEN : 0) |
+        SDL_WINDOW_HIDDEN | rl.fullscreen_mode |
         (rl.fl & FLAG_WINDOW_RESIZABLE ? SDL_WINDOW_RESIZABLE : 0) |
         (rl.fl & FLAG_WINDOW_UNDECORATED ? SDL_WINDOW_BORDERLESS : 0) |
         (rl.fl & FLAG_WINDOW_MINIMIZED ? SDL_WINDOW_MINIMIZED : 0) |
@@ -41,10 +42,20 @@ RLAPI void InitWindow(int width, int height, const char *title) {
 }
 
 void PollEvents() {
+    rl.w_resized = false;
     while (SDL_PollEvent(&rl.event)) {
         switch (rl.event.type) {
             case SDL_QUIT: {
                 rl.should_close = true;
+                break;
+            }
+            case SDL_WINDOWEVENT: {
+                switch (rl.event.window.event) {
+                    case SDL_WINDOWEVENT_RESIZED: {
+                        rl.w_resized = true;
+                        break;
+                    }
+                }
                 break;
             }
         }
@@ -72,6 +83,30 @@ RLAPI bool IsWindowReady(void) {
     return (bool)rl.w;
 }
 
+RLAPI bool IsWindowFullscreen(void) {
+    return (bool)rl.fullscreen_mode;
+}
+
+RLAPI bool IsWindowHidden(void) {
+    
+}
+
+RLAPI bool IsWindowMinimized(void) {
+
+}
+
+RLAPI bool IsWindowMaximized(void) {
+    
+}
+
+RLAPI bool IsWindowFocused(void) {
+    return SDL_GetMouseFocus() == rl.w && SDL_GetKeyboardFocus() == rl.w;
+}
+
+RLAPI bool IsWindowResized(void) {
+    return rl.w_resized;
+}
+
 RLAPI bool IsWindowState(unsigned int flag) {
     return (bool)(rl.fl & flag);
 }
@@ -81,8 +116,10 @@ RLAPI void SetWindowState(unsigned int flags) {
     rl.fl |= flags;
     if (diff & FLAG_WINDOW_HIDDEN)
         SDL_HideWindow(rl.w);
-    if (diff & FLAG_FULLSCREEN_MODE)
+    if (diff & FLAG_FULLSCREEN_MODE) {
+        rl.fullscreen_mode = SDL_WINDOW_FULLSCREEN;
         SDL_SetWindowFullscreen(rl.w, SDL_WINDOW_FULLSCREEN);
+    }
     if (diff & FLAG_WINDOW_RESIZABLE)
         SDL_SetWindowResizable(rl.w, SDL_TRUE);
     if (diff & SDL_WINDOW_BORDERLESS)
@@ -100,8 +137,10 @@ RLAPI void ClearWindowState(unsigned int flags) {
     unsigned int diff = rl.fl ^ flags;
     if (diff & FLAG_WINDOW_HIDDEN)
         SDL_ShowWindow(rl.w);
-    if (diff & FLAG_FULLSCREEN_MODE)
+    if (diff & FLAG_FULLSCREEN_MODE) {
+        rl.fullscreen_mode = 0;
         SDL_SetWindowFullscreen(rl.w, 0);
+    }
     if (diff & FLAG_WINDOW_RESIZABLE)
         SDL_SetWindowResizable(rl.w, SDL_FALSE);
     if (diff & SDL_WINDOW_BORDERLESS)
