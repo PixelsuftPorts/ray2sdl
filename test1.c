@@ -14,6 +14,9 @@ int main(void)
 
     while (!WindowShouldClose())
     {
+        if (IsWindowResized()) {
+            printf("Window Resized: [%ix%i]\n", GetScreenWidth(), GetScreenHeight());
+        }
         BeginDrawing();
         ClearBackground(BLACK);
             //DrawText("Congrats! You created your first window!", 190, 200, 20, LIGHTGRAY);
