@@ -274,6 +274,14 @@ RLAPI int GetCurrentMonitor(void) {
     return SDL_GetWindowDisplayIndex(rl.w);
 }
 
+RLAPI Vector2 GetMonitorPosition(int monitor) {
+    SDL_Rect rect;
+    SDL_GetDisplayBounds(monitor, &rect);
+    return VECLITERAL(Vector2){
+        .x = (float)rect.x, .y = (float)rect.y
+    };
+}
+
 RLAPI void ClearBackground(Color color) {
     SDL_SetRenderDrawColor(rl.r, color.r, color.g, color.b, color.a);
     SDL_RenderClear(rl.r);

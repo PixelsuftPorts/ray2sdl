@@ -36,7 +36,8 @@ RLAPI int GetScreenHeight(void);
 RLAPI int GetRenderWidth(void);
 RLAPI int GetRenderHeight(void);
 RLAPI int GetMonitorCount(void);
-RLAPI int GetCurrentMonitor(void); 
+RLAPI int GetCurrentMonitor(void);
+RLAPI Vector2 GetMonitorPosition(int monitor);
 
 RLAPI void ClearBackground(Color color);
 RLAPI void BeginDrawing(void);

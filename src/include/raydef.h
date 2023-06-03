@@ -49,6 +49,7 @@
 #else
     #define CLITERAL(type)      (type)
 #endif
+#define VECLITERAL(type) CLITERAL(type)
 
 #define RL_COLOR_TYPE
 #define RL_RECTANGLE_TYPE
