@@ -1,5 +1,6 @@
 #pragma once
 #include <SDL2/SDL.h>
+#include <rayconf.h>
 
 #define RAYLIB_VERSION_MAJOR 4
 #define RAYLIB_VERSION_MINOR 5
@@ -19,6 +20,12 @@
 
 #ifndef RLAPI
     #define RLAPI       // Functions defined as 'extern' by default (implicit specifiers)
+#endif
+
+#if defined(SUPPORT_TRACELOG)
+    #define TRACELOG(level, msg, ...) TraceLog(level, "[%s:%i %s] " msg, __FILE__, __LINE__, __func__, ##__VA_ARGS__)
+#else
+    #define TRACELOG(level, msg, ...) (void)0
 #endif
 
 #ifndef PI
@@ -804,7 +811,13 @@ typedef enum {
     NPATCH_THREE_PATCH_HORIZONTAL   // Npatch layout: 3x1 tiles
 } NPatchLayout;
 
-struct rl {
+typedef void (*TraceLogCallback)(int logLevel, const char *text, va_list args);
+typedef unsigned char *(*LoadFileDataCallback)(const char *fileName, unsigned int *bytesRead);
+typedef bool (*SaveFileDataCallback)(const char *fileName, void *data, unsigned int bytesToWrite);
+typedef char *(*LoadFileTextCallback)(const char *fileName);
+typedef bool (*SaveFileTextCallback)(const char *fileName, char *text);
+
+struct rl_type {
     SDL_Event event;
     SDL_Window* w;
     SDL_Renderer* r;
@@ -815,5 +828,16 @@ struct rl {
     bool was_init;
     bool should_close;
     bool need_to_swap;
+    int log_level;
+    TraceLogCallback traceLog;
+    LoadFileDataCallback loadFileData;
+    SaveFileDataCallback saveFileData;
+    LoadFileTextCallback loadFileText;
+    SaveFileTextCallback saveFileText;
 };
-static struct rl rl;
+
+static struct rl_type rl = {
+    .w = NULL, .r = NULL, .clip_ptr = NULL, .event_waiting = false, .w_resized = false, .was_init = false,
+    .should_close = false, .need_to_swap = false, .log_level = LOG_INFO, .traceLog = NULL, .loadFileData = NULL,
+    .saveFileData = NULL, .loadFileText = NULL, .saveFileText = NULL
+};

@@ -72,6 +72,9 @@ RLAPI void SetRandomSeed(unsigned int seed);
 RLAPI void TakeScreenshot(const char *fileName);
 RLAPI void SetConfigFlags(unsigned int flags);
 
+RLAPI void TraceLog(int logLevel, const char *text, ...);
+RLAPI void SetTraceLogLevel(int logLevel);
+
 RLAPI void ClearBackground(Color color);
 RLAPI void BeginDrawing(void);
 RLAPI void EndDrawing(void); 

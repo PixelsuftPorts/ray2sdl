@@ -1,3 +1,5 @@
+#include <stdio.h>
+#include <stdarg.h>
 #include <raylib.h>
 #include <raydef.h>
 #include <raydark.h>
@@ -6,6 +8,7 @@
 // TODO: Error Handling For Every Function
 
 RLAPI void InitWindow(int width, int height, const char *title) {
+    TRACELOG(LOG_INFO, "Hello");
     if (!rl.was_init) {
         if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS | SDL_INIT_TIMER) < 0) {
             // TODO
@@ -433,6 +436,47 @@ RLAPI void TakeScreenshot(const char *fileName) {
 
 RLAPI void SetConfigFlags(unsigned int flags) {
     rl.fl |= flags;
+}
+
+RLAPI void TraceLog(int logType, const char *text, ...) {
+    // TODO: log callbacks
+#ifdef SUPPORT_TRACELOG
+    if (logType < rl.log_level) return;
+
+    va_list args;
+    va_start(args, text);
+
+    if (rl.traceLog) {
+        rl.traceLog(logType, text, args);
+        va_end(args);
+        return;
+    }
+
+    char buffer[MAX_TRACELOG_MSG_LENGTH] = { 0 };
+    switch (logType)
+    {
+        case LOG_TRACE: strcpy(buffer, "TRACE: "); break;
+        case LOG_DEBUG: strcpy(buffer, "DEBUG: "); break;
+        case LOG_INFO: strcpy(buffer, "INFO: "); break;
+        case LOG_WARNING: strcpy(buffer, "WARNING: "); break;
+        case LOG_ERROR: strcpy(buffer, "ERROR: "); break;
+        case LOG_FATAL: strcpy(buffer, "FATAL: "); break;
+        default: break;
+    }
+
+    unsigned int textSize = (unsigned int)strlen(text);
+    memcpy(buffer + strlen(buffer), text, (textSize < (MAX_TRACELOG_MSG_LENGTH - 12))? textSize : (MAX_TRACELOG_MSG_LENGTH - 12));
+    strcat(buffer, "\n");
+    vprintf(buffer, args);
+    fflush(stdout);
+
+    if (logType == LOG_FATAL)
+        exit(EXIT_FAILURE);
+#endif
+}
+
+RLAPI void SetTraceLogLevel(int logLevel) {
+    rl.log_level = logLevel;
 }
 
 RLAPI void ClearBackground(Color color) {
