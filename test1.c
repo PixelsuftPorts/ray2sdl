@@ -12,7 +12,10 @@ int main(void)
     InitWindow(800, 450, "raylib [core] example - basic window");
 
     char* data = LoadFileText("test1.c");
-    printf("%s", data);
+    data[0] = '1';
+    data[1] = '2';
+    data[2] = '3';
+    SaveFileText("test.txt", data);
     UnloadFileText(data);
 
     while (!WindowShouldClose())

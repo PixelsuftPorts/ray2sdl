@@ -37,7 +37,7 @@ RLCAPI unsigned char *LoadFileData(const char *fileName, unsigned int *bytesRead
     }
     SDL_RWops* file = SDL_RWFromFile(fileName, "rb");
     if (file == NULL) {
-        TRACELOG(LOG_WARNING, "FILEIO: [%s] Failed to open file for reading (%s)", fileName, SDL_GetError());
+        TRACELOG(LOG_WARNING, "FILEIO: [%s] Failed to open file for reading bytes (%s)", fileName, SDL_GetError());
         return NULL;
     }
     Sint64 size = SDL_RWsize(file);
@@ -80,19 +80,17 @@ RLCAPI bool SaveFileData(const char *fileName, void *data, unsigned int bytesToW
     }
     SDL_RWops* file = SDL_RWFromFile(fileName, "wb");
     if (file == NULL) {
-        TRACELOG(LOG_WARNING, "FILEIO: [%s] Failed to open file for writing (%s)", fileName, SDL_GetError());
+        TRACELOG(LOG_WARNING, "FILEIO: [%s] Failed to open file for writing bytes (%s)", fileName, SDL_GetError());
         return false;
     }
-    size_t count = SDL_RWwrite(file, (const void*)data, 1, bytesToWrite);
+    size_t count = SDL_RWwrite(file, (const void*)data, 1, (size_t)bytesToWrite);
     if (count >= (size_t)bytesToWrite) {
         TRACELOG(LOG_INFO, "FILEIO: [%s] File saved successfully", fileName);
     }
-    else {
-        if (count > 0)
-            TRACELOG(LOG_WARNING, "FILEIO: [%s] File partially written (%s)", fileName, SDL_GetError());
-        else 
-            TRACELOG(LOG_WARNING, "FILEIO: [%s] Failed to write file (%s)", fileName, SDL_GetError());
-    }
+    else if (count > 0)
+        TRACELOG(LOG_WARNING, "FILEIO: [%s] File partially written (%s)", fileName, SDL_GetError());
+    else 
+        TRACELOG(LOG_WARNING, "FILEIO: [%s] Failed to write file (%s)", fileName, SDL_GetError());
     if (SDL_RWclose(file) < 0) {
         TRACELOG(LOG_WARNING, "FILEIO: [%s] Failed to close file (%s)", fileName, SDL_GetError());
         return false;
@@ -166,4 +164,33 @@ RLAPI void UnloadFileText(char *text) {
         return;
     }
     SDL_free(text);
+}
+
+RLAPI bool SaveFileText(const char *fileName, char *text) {
+    if (fileName == NULL) {
+        TRACELOG(LOG_WARNING, "FILEIO: File name provided is not valid");
+        return false;
+    }
+    if (rl.saveFileText) {
+        return rl.saveFileText(fileName, text);
+    }
+    SDL_RWops* file = SDL_RWFromFile(fileName, "w");
+    if (file == NULL) {
+        TRACELOG(LOG_WARNING, "FILEIO: [%s] Failed to open text file for writing (%s)", fileName, SDL_GetError());
+        return false;
+    }
+    size_t bytesToWrite = SDL_strlen(text);
+    size_t count = SDL_RWwrite(file, (const void*)text, 1, bytesToWrite);
+    if (count >= bytesToWrite) {
+        TRACELOG(LOG_INFO, "FILEIO: [%s] Text file saved successfully", fileName);
+    }
+    else if (count > 0)
+        TRACELOG(LOG_WARNING, "FILEIO: [%s] Text file partially written (%s)", fileName, SDL_GetError());
+    else 
+        TRACELOG(LOG_WARNING, "FILEIO: [%s] Failed to write text file (%s)", fileName, SDL_GetError());
+    if (SDL_RWclose(file) < 0) {
+        TRACELOG(LOG_WARNING, "FILEIO: [%s] Failed to close text file (%s)", fileName, SDL_GetError());
+        return false;
+    }
+    return true;
 }
