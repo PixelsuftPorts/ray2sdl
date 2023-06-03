@@ -7,8 +7,6 @@
 #include <stdarg.h>
 #endif
 
-// TODO: Error Handling For Every Function
-
 RLAPI void InitWindow(int width, int height, const char *title) {
     if (rl.first_init) {
         rl.first_init = false;
@@ -50,15 +48,17 @@ RLAPI void InitWindow(int width, int height, const char *title) {
     else {
         int mon = GetCurrentMonitor();
         SDL_RendererInfo info;
-        if (SDL_GetRendererInfo(rl.r, &info) < 0)
-            TRACELOG(LOG_WARNING, "Failed to get renderer info (%s)", SDL_GetError());
         TRACELOG(LOG_INFO, "DISPLAY: Device initialized successfully");
         TRACELOG(LOG_INFO, "     > Display size: %ix%i", GetMonitorWidth(mon), GetMonitorHeight(mon));
         TRACELOG(LOG_INFO, "     > Screen size:  %ix%i", GetScreenWidth(), GetScreenHeight());
         TRACELOG(LOG_INFO, "     > Render size:  %ix%i", GetRenderWidth(), GetRenderHeight());
-        TRACELOG(LOG_INFO, "RENDER: Information:");
-        TRACELOG(LOG_INFO, "     > Name:             %s", info.name);
-        TRACELOG(LOG_INFO, "     > Max texture size: %ix%i", info.max_texture_width, info.max_texture_width);
+        if (SDL_GetRendererInfo(rl.r, &info) < 0)
+            TRACELOG(LOG_WARNING, "Failed to get renderer info (%s)", SDL_GetError());
+        else {
+            TRACELOG(LOG_INFO, "RENDER: Information:");
+            TRACELOG(LOG_INFO, "     > Name:             %s", info.name);
+            TRACELOG(LOG_INFO, "     > Max texture size: %ix%i", info.max_texture_width, info.max_texture_width);
+        }
     }
     rl.should_close = false;
     rl.clip_ptr = NULL;
@@ -135,7 +135,7 @@ RLAPI bool WindowShouldClose(void) {
 
 RLAPI void CloseWindow(void) {
     if (rl.clip_ptr) {
-        RL_FREE(rl.clip_ptr);
+        SDL_free(rl.clip_ptr);
         rl.clip_ptr = NULL;
     }
     if (rl.w) {
@@ -221,8 +221,10 @@ RLAPI void ClearWindowState(unsigned int flags) {
         SDL_RestoreWindow(rl.w);
     if (diff & FLAG_WINDOW_TOPMOST)
         SDL_SetWindowAlwaysOnTop(rl.w, SDL_FALSE);
-    if (diff & FLAG_WINDOW_UNFOCUSED)
-        SDL_SetWindowInputFocus(rl.w);
+    if (diff & FLAG_WINDOW_UNFOCUSED) {
+        if (SDL_SetWindowInputFocus(rl.w) < 0)
+            TRACELOG(LOG_WARNING, "Failed to set input focus (%s)", SDL_GetError());
+    }
 }
 
 RLAPI void ToggleFullscreen(void) {
@@ -268,9 +270,8 @@ RLAPI void SetWindowMonitor(int monitor) {
         TRACELOG(LOG_WARNING, "Failed to get display mode (%s)", SDL_GetError());
         return;
     }
-    if (SDL_SetWindowDisplayMode(rl.w, &dm) < 0) { // Is this right? I have no second monitor to test.
+    if (SDL_SetWindowDisplayMode(rl.w, &dm) < 0) // Is this right? I have no second monitor to test.
         TRACELOG(LOG_WARNING, "Failed to set display mode (%s)", SDL_GetError());
-    }
 }
 
 RLAPI void SetWindowMinSize(int width, int height) {
@@ -282,9 +283,8 @@ RLAPI void SetWindowSize(int width, int height) {
 }
 
 RLAPI void SetWindowOpacity(float opacity) {
-    if (SDL_SetWindowOpacity(rl.w, opacity) < 0) {
+    if (SDL_SetWindowOpacity(rl.w, opacity) < 0)
         TRACELOG(LOG_WARNING, "Failed to set window opacity (%s)", SDL_GetError());
-    }
 }
 
 RLAPI void *GetWindowHandle(void) {
@@ -359,18 +359,22 @@ RLAPI int GetMonitorHeight(int monitor) {
 
 RLAPI int GetMonitorPhysicalWidth(int monitor) {
     float hdpi;
-    if (SDL_GetDisplayDPI(monitor, NULL, &hdpi, NULL) < 0)
+    if (SDL_GetDisplayDPI(monitor, NULL, &hdpi, NULL) < 0) {
+        hdpi = 96.0f;
         TRACELOG(LOG_WARNING, "Failed to get monitor DPI (%s)", SDL_GetError());
+    }
     SDL_DisplayMode dm;
     if (SDL_GetDesktopDisplayMode(monitor, &dm) < 0)
-        TRACELOG(LOG_WARNING, "Failed to get monitor display mode (%s)", SDL_GetError());
+        TRACELOG(LOG_WARNING, "Failed to get monitor horizontal display mode (%s)", SDL_GetError());
     return (int)((float)dm.w * 25.35f / hdpi);
 }
 
 RLAPI int GetMonitorPhysicalHeight(int monitor) {
     float vdpi;
-    if (SDL_GetDisplayDPI(monitor, NULL, NULL, &vdpi) < 0)
-        TRACELOG(LOG_WARNING, "Failed to get monitor DPI (%s)", SDL_GetError());
+    if (SDL_GetDisplayDPI(monitor, NULL, NULL, &vdpi) < 0) {
+        vdpi = 96.0f;
+        TRACELOG(LOG_WARNING, "Failed to get monitor vertical DPI (%s)", SDL_GetError());
+    }
     SDL_DisplayMode dm;
     if (SDL_GetDesktopDisplayMode(monitor, &dm) < 0)
         TRACELOG(LOG_WARNING, "Failed to get monitor display mode (%s)", SDL_GetError());
@@ -413,7 +417,7 @@ RLAPI void SetClipboardText(const char *text) {
 
 RLAPI const char *GetClipboardText(void) {
     if (rl.clip_ptr)
-        RL_FREE(rl.clip_ptr);
+        SDL_free(rl.clip_ptr);
     rl.clip_ptr = SDL_GetClipboardText();
     if (SDL_strlen(rl.clip_ptr) <= 0)
         TRACELOG(LOG_WARNING, "Failed to get clipboard text (%s)", SDL_GetError());
@@ -523,18 +527,18 @@ RLAPI void TraceLog(int logType, const char *text, ...) {
     char buffer[MAX_TRACELOG_MSG_LENGTH] = { 0 };
     switch (logType)
     {
-        case LOG_TRACE: strcpy(buffer, "TRACE: "); break;
-        case LOG_DEBUG: strcpy(buffer, "DEBUG: "); break;
-        case LOG_INFO: strcpy(buffer, "INFO: "); break;
-        case LOG_WARNING: strcpy(buffer, "WARNING: "); break;
-        case LOG_ERROR: strcpy(buffer, "ERROR: "); break;
-        case LOG_FATAL: strcpy(buffer, "FATAL: "); break;
+        case LOG_TRACE: SDL_strlcpy(buffer, "TRACE: ", MAX_TRACELOG_MSG_LENGTH); break;
+        case LOG_DEBUG: SDL_strlcpy(buffer, "DEBUG: ", MAX_TRACELOG_MSG_LENGTH); break;
+        case LOG_INFO: SDL_strlcpy(buffer, "INFO: ", MAX_TRACELOG_MSG_LENGTH); break;
+        case LOG_WARNING: SDL_strlcpy(buffer, "WARNING: ", MAX_TRACELOG_MSG_LENGTH); break;
+        case LOG_ERROR: SDL_strlcpy(buffer, "ERROR: ", MAX_TRACELOG_MSG_LENGTH); break;
+        case LOG_FATAL: SDL_strlcpy(buffer, "FATAL: ", MAX_TRACELOG_MSG_LENGTH); break;
         default: break;
     }
 
-    unsigned int textSize = (unsigned int)strlen(text);
-    memcpy(buffer + strlen(buffer), text, (textSize < (MAX_TRACELOG_MSG_LENGTH - 12))? textSize : (MAX_TRACELOG_MSG_LENGTH - 12));
-    strcat(buffer, "\n");
+    unsigned int textSize = (unsigned int)SDL_strlen(text);
+    SDL_memcpy(buffer + SDL_strlen(buffer), text, (textSize < (MAX_TRACELOG_MSG_LENGTH - 12))? textSize : (MAX_TRACELOG_MSG_LENGTH - 12));
+    SDL_strlcat(buffer, "\n", MAX_TRACELOG_MSG_LENGTH);
     vprintf(buffer, args);
     fflush(stdout);
 
