@@ -221,7 +221,9 @@ RLAPI void SetWindowPosition(int x, int y) {
 }
 
 RLAPI void SetWindowMonitor(int monitor) {
-    
+    SDL_DisplayMode dm;
+    SDL_GetCurrentDisplayMode(monitor, &dm); // Or SDL_GetDesktopDisplayMode?
+    SDL_SetWindowDisplayMode(rl.w, &dm); // Is this right? I have no second monitor to test.
 }
 
 RLAPI void SetWindowMinSize(int width, int height) {
