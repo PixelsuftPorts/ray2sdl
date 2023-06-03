@@ -9,13 +9,11 @@ RLAPI void InitWindow(int width, int height, const char *title) {
         } 
         rl.was_init = true;
     }
-    // TODO: FLAG_WINDOW_ALWAYS_RUN emulation
-    rl.fullscreen_mode = (rl.fl & FLAG_FULLSCREEN_MODE) ? SDL_WINDOW_FULLSCREEN : 0;
     rl.w = SDL_CreateWindow(
         title,
         SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
         width, height,
-        SDL_WINDOW_HIDDEN | rl.fullscreen_mode |
+        SDL_WINDOW_HIDDEN | ((rl.fl & FLAG_FULLSCREEN_MODE) ? SDL_WINDOW_FULLSCREEN : 0) |
         (rl.fl & FLAG_WINDOW_RESIZABLE ? SDL_WINDOW_RESIZABLE : 0) |
         (rl.fl & FLAG_WINDOW_UNDECORATED ? SDL_WINDOW_BORDERLESS : 0) |
         (rl.fl & FLAG_WINDOW_MINIMIZED ? SDL_WINDOW_MINIMIZED : 0) |
@@ -46,13 +44,42 @@ void PollEvents() {
     while (SDL_PollEvent(&rl.event)) {
         switch (rl.event.type) {
             case SDL_QUIT: {
-                rl.should_close = true;
+                // rl.should_close = true;
+                break;
+            }
+            case SDL_KEYDOWN: {
+                if (rl.event.key.keysym.sym == SDLK_ESCAPE)
+                    rl.should_close = true;
                 break;
             }
             case SDL_WINDOWEVENT: {
                 switch (rl.event.window.event) {
                     case SDL_WINDOWEVENT_RESIZED: {
                         rl.w_resized = true;
+                        break;
+                    }
+                    case SDL_WINDOWEVENT_MAXIMIZED: {
+                        rl.fl |= FLAG_WINDOW_MAXIMIZED;
+                        break;
+                    }
+                    case SDL_WINDOWEVENT_CLOSE: {
+                        rl.should_close = true;
+                        break;
+                    }
+                    case SDL_WINDOWEVENT_MINIMIZED: {
+                        rl.fl |= FLAG_WINDOW_MINIMIZED;
+                        break;
+                    }
+                    case SDL_WINDOWEVENT_RESTORED: {
+                        rl.fl &= ~(IsWindowMinimized() ? FLAG_WINDOW_MINIMIZED : FLAG_WINDOW_MAXIMIZED);
+                        break;
+                    }
+                    case SDL_WINDOWEVENT_SHOWN: {
+                        rl.fl &= ~FLAG_WINDOW_HIDDEN;
+                        break;
+                    }
+                    case SDL_WINDOWEVENT_HIDDEN: {
+                        rl.fl |= FLAG_WINDOW_HIDDEN;
                         break;
                     }
                 }
@@ -63,8 +90,15 @@ void PollEvents() {
 }
 
 RLAPI bool WindowShouldClose(void) {
-    PollEvents(); // hack
-    return rl.should_close;
+    while (!(rl.fl & FLAG_WINDOW_ALWAYS_RUN) && IsWindowMinimized()) {
+        PollEvents();
+    }
+    PollEvents();
+    if (rl.should_close) {
+        rl.should_close = false;
+        return true;
+    }
+    return false;
 }
 
 RLAPI void CloseWindow(void) {
@@ -84,19 +118,19 @@ RLAPI bool IsWindowReady(void) {
 }
 
 RLAPI bool IsWindowFullscreen(void) {
-    return (bool)rl.fullscreen_mode;
+    return (bool)(rl.fl & FLAG_FULLSCREEN_MODE);
 }
 
 RLAPI bool IsWindowHidden(void) {
-    
+    return (bool)(rl.fl & FLAG_WINDOW_HIDDEN);
 }
 
 RLAPI bool IsWindowMinimized(void) {
-
+    return (bool)(rl.fl & FLAG_WINDOW_MINIMIZED);
 }
 
 RLAPI bool IsWindowMaximized(void) {
-    
+    return (bool)(rl.fl & FLAG_WINDOW_MAXIMIZED);
 }
 
 RLAPI bool IsWindowFocused(void) {
@@ -116,10 +150,8 @@ RLAPI void SetWindowState(unsigned int flags) {
     rl.fl |= flags;
     if (diff & FLAG_WINDOW_HIDDEN)
         SDL_HideWindow(rl.w);
-    if (diff & FLAG_FULLSCREEN_MODE) {
-        rl.fullscreen_mode = SDL_WINDOW_FULLSCREEN;
+    if (diff & FLAG_FULLSCREEN_MODE)
         SDL_SetWindowFullscreen(rl.w, SDL_WINDOW_FULLSCREEN);
-    }
     if (diff & FLAG_WINDOW_RESIZABLE)
         SDL_SetWindowResizable(rl.w, SDL_TRUE);
     if (diff & SDL_WINDOW_BORDERLESS)
@@ -137,10 +169,8 @@ RLAPI void ClearWindowState(unsigned int flags) {
     unsigned int diff = rl.fl ^ flags;
     if (diff & FLAG_WINDOW_HIDDEN)
         SDL_ShowWindow(rl.w);
-    if (diff & FLAG_FULLSCREEN_MODE) {
-        rl.fullscreen_mode = 0;
+    if (diff & FLAG_FULLSCREEN_MODE)
         SDL_SetWindowFullscreen(rl.w, 0);
-    }
     if (diff & FLAG_WINDOW_RESIZABLE)
         SDL_SetWindowResizable(rl.w, SDL_FALSE);
     if (diff & SDL_WINDOW_BORDERLESS)

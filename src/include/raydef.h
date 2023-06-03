@@ -808,7 +808,6 @@ struct rl {
     SDL_Window* w;
     SDL_Renderer* r;
     unsigned int fl;
-    int fullscreen_mode;
     bool w_resized;
     bool was_init;
     bool should_close;
