@@ -37,6 +37,7 @@ RLAPI void InitWindow(int width, int height, const char *title) {
     }
     CheckDarkMode(rl.w);
     rl.should_close = false;
+    rl.clip_ptr = NULL;
     if (!(rl.fl & FLAG_WINDOW_HIDDEN))
         SDL_ShowWindow(rl.w);
 }
@@ -91,11 +92,16 @@ void PollEvents() {
     }
 }
 
-RLAPI bool WindowShouldClose(void) {
+void WaitEvents() {
     while (!(rl.fl & FLAG_WINDOW_ALWAYS_RUN) && IsWindowMinimized()) {
         PollEvents();
     }
     PollEvents();
+}
+
+RLAPI bool WindowShouldClose(void) {
+    if (!rl.event_waiting)
+        WaitEvents();
     if (rl.should_close) {
         rl.should_close = false;
         return true;
@@ -104,6 +110,10 @@ RLAPI bool WindowShouldClose(void) {
 }
 
 RLAPI void CloseWindow(void) {
+    if (rl.clip_ptr) {
+        RL_FREE(rl.clip_ptr);
+        rl.clip_ptr = NULL;
+    }
     if (rl.w) {
         SDL_DestroyWindow(rl.w);
         rl.w = NULL;
@@ -282,6 +292,78 @@ RLAPI Vector2 GetMonitorPosition(int monitor) {
     };
 }
 
+RLAPI int GetMonitorWidth(int monitor) {
+    SDL_DisplayMode dm;
+    SDL_GetCurrentDisplayMode(monitor, &dm);
+    return dm.w;
+}
+
+RLAPI int GetMonitorHeight(int monitor) {
+    SDL_DisplayMode dm;
+    SDL_GetCurrentDisplayMode(monitor, &dm);
+    return dm.h;
+}
+
+RLAPI int GetMonitorPhysicalWidth(int monitor) {
+    float hdpi;
+    SDL_GetDisplayDPI(monitor, NULL, &hdpi, NULL);
+    SDL_DisplayMode dm;
+    SDL_GetDesktopDisplayMode(monitor, &dm);
+    return (int)((float)dm.w * 25.35f / hdpi);
+}
+
+RLAPI int GetMonitorPhysicalHeight(int monitor) {
+    float vdpi;
+    SDL_GetDisplayDPI(monitor, NULL, NULL, &vdpi);
+    SDL_DisplayMode dm;
+    SDL_GetDesktopDisplayMode(monitor, &dm);
+    return (int)((float)dm.h * 25.35f / vdpi);
+}
+
+RLAPI int GetMonitorRefreshRate(int monitor) {
+    SDL_DisplayMode dm;
+    SDL_GetCurrentDisplayMode(monitor, &dm);
+    return dm.refresh_rate;
+}
+
+RLAPI Vector2 GetWindowPosition(void) {
+    int x, y;
+    SDL_GetWindowPosition(rl.w, &x, &y);
+    return VECLITERAL(Vector2){
+        .x = (float)x, .y = (float)y
+    };
+}
+
+RLAPI Vector2 GetWindowScaleDPI(void) {
+    return VECLITERAL(Vector2){
+        .x = GetRenderWidth() / GetScreenWidth(),
+        .y = GetRenderHeight() / GetScreenHeight()
+    };
+}
+
+RLAPI const char *GetMonitorName(int monitor) {
+    return SDL_GetDisplayName(monitor);
+}
+
+RLAPI void SetClipboardText(const char *text) {
+    SDL_SetClipboardText(text);
+}
+
+RLAPI const char *GetClipboardText(void) {
+    if (rl.clip_ptr)
+        RL_FREE(rl.clip_ptr);
+    rl.clip_ptr = SDL_GetClipboardText();
+    return rl.clip_ptr;
+}
+
+RLAPI void EnableEventWaiting(void) {
+    rl.event_waiting = true;
+}
+
+RLAPI void DisableEventWaiting(void) {
+    rl.event_waiting = false;
+}
+
 RLAPI void ClearBackground(Color color) {
     SDL_SetRenderDrawColor(rl.r, color.r, color.g, color.b, color.a);
     SDL_RenderClear(rl.r);
@@ -293,4 +375,6 @@ RLAPI void BeginDrawing(void) {
 
 RLAPI void EndDrawing(void) {
     SDL_RenderPresent(rl.r);
+    if (rl.event_waiting)
+        WaitEvents();
 }

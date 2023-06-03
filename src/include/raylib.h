@@ -38,6 +38,18 @@ RLAPI int GetRenderHeight(void);
 RLAPI int GetMonitorCount(void);
 RLAPI int GetCurrentMonitor(void);
 RLAPI Vector2 GetMonitorPosition(int monitor);
+RLAPI int GetMonitorWidth(int monitor);
+RLAPI int GetMonitorHeight(int monitor);
+RLAPI int GetMonitorPhysicalWidth(int monitor);
+RLAPI int GetMonitorPhysicalHeight(int monitor);
+RLAPI int GetMonitorRefreshRate(int monitor);
+RLAPI Vector2 GetWindowPosition(void);
+RLAPI Vector2 GetWindowScaleDPI(void);
+RLAPI const char *GetMonitorName(int monitor);
+RLAPI void SetClipboardText(const char *text);
+RLAPI const char *GetClipboardText(void);
+RLAPI void EnableEventWaiting(void);
+RLAPI void DisableEventWaiting(void);
 
 RLAPI void ClearBackground(Color color);
 RLAPI void BeginDrawing(void);

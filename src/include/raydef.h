@@ -808,7 +808,9 @@ struct rl {
     SDL_Event event;
     SDL_Window* w;
     SDL_Renderer* r;
+    char* clip_ptr;
     unsigned int fl;
+    bool event_waiting;
     bool w_resized;
     bool was_init;
     bool should_close;
