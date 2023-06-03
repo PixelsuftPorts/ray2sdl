@@ -145,3 +145,25 @@ RLCAPI bool ExportDataAsCode(const unsigned char *data, unsigned int size, const
 */
     return success;
 }
+
+RLAPI char *LoadFileText(const char *fileName) {
+    if (fileName == NULL) {
+        TRACELOG(LOG_WARNING, "FILEIO: File name provided is not valid");
+        return NULL;
+    }
+    if (rl.loadFileText) {
+        return rl.loadFileText(fileName);
+    }
+    char* result = SDL_LoadFile(fileName, NULL);
+    if (result == NULL)
+        TRACELOG(LOG_WARNING, "FILEIO: [%s] Failed read file as text (%s)", fileName, SDL_GetError());
+    return result;
+}
+
+RLAPI void UnloadFileText(char *text) {
+    if (text == NULL) {
+        TRACELOG(LOG_WARNING, "FILEIO: NULL pointer passed");
+        return;
+    }
+    SDL_free(text);
+}

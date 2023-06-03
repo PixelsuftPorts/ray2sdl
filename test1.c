@@ -11,11 +11,9 @@ int main(void)
     SetConfigFlags(FLAG_WINDOW_ALWAYS_RUN | FLAG_VSYNC_HINT | FLAG_WINDOW_HIGHDPI | FLAG_WINDOW_RESIZABLE);
     InitWindow(800, 450, "raylib [core] example - basic window");
 
-    unsigned int bytes_read;
-    unsigned char* data = LoadFileData(".gitignore", &bytes_read);
-    data[bytes_read - 10] = '\0';
-    ExportDataAsCode(data, (unsigned int)strlen((char*)data), "test.h");
-    UnloadFileData(data);
+    char* data = LoadFileText("test1.c");
+    printf("%s", data);
+    UnloadFileText(data);
 
     while (!WindowShouldClose())
     {

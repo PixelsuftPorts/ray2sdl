@@ -89,6 +89,8 @@ RLAPI unsigned char *LoadFileData(const char *fileName, unsigned int *bytesRead)
 RLAPI void UnloadFileData(unsigned char *data);
 RLAPI bool SaveFileData(const char *fileName, void *data, unsigned int bytesToWrite);
 RLAPI bool ExportDataAsCode(const unsigned char *data, unsigned int size, const char *fileName);
+RLAPI char *LoadFileText(const char *fileName);
+RLAPI void UnloadFileText(char *text);
 
 RLAPI void ClearBackground(Color color);
 RLAPI void BeginDrawing(void);
