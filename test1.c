@@ -13,8 +13,9 @@ int main(void)
 
     unsigned int bytes_read;
     unsigned char* data = LoadFileData(".gitignore", &bytes_read);
-    data[bytes_read - 1] = '\0';
-    printf("%s\n", data);
+    data[bytes_read - 10] = '\0';
+    SaveFileData("test.txt", data, (unsigned int)strlen((char*)data));
+    UnloadFileData(data);
 
     while (!WindowShouldClose())
     {

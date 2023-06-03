@@ -7,6 +7,7 @@ Release
 Debug
 x64
 push.bat
+test.txt
 *.exe
 *.zip
 *.gz
