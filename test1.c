@@ -14,7 +14,7 @@ int main(void)
     unsigned int bytes_read;
     unsigned char* data = LoadFileData(".gitignore", &bytes_read);
     data[bytes_read - 10] = '\0';
-    SaveFileData("test.txt", data, (unsigned int)strlen((char*)data));
+    ExportDataAsCode(data, (unsigned int)strlen((char*)data), "test.h");
     UnloadFileData(data);
 
     while (!WindowShouldClose())

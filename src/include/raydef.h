@@ -22,6 +22,10 @@
     #define RLAPI       // Functions defined as 'extern' by default (implicit specifiers)
 #endif
 
+#ifndef RLCAPI
+    #define RLCAPI
+#endif
+
 #if defined(SUPPORT_TRACELOG)
     #define TRACELOG(level, msg, ...) TraceLog(level, "[%s:%i at %s] " msg, __FILE__, __LINE__, __func__, ##__VA_ARGS__)
 #else

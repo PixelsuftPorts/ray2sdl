@@ -1,29 +1,30 @@
+#include <stdio.h>
 #include <raylib.h>
 #include <raydef.h>
 #include <raydark.h>
 #include <rayconf.h>
 
-RLAPI void SetTraceLogCallback(TraceLogCallback callback) {
+RLCAPI void SetTraceLogCallback(TraceLogCallback callback) {
     rl.traceLog = callback;
 }
 
-RLAPI void SetLoadFileDataCallback(LoadFileDataCallback callback) {
+RLCAPI void SetLoadFileDataCallback(LoadFileDataCallback callback) {
     rl.loadFileData = callback;
 }
 
-RLAPI void SetSaveFileDataCallback(SaveFileDataCallback callback) {
+RLCAPI void SetSaveFileDataCallback(SaveFileDataCallback callback) {
     rl.saveFileData = callback;
 }
 
-RLAPI void SetLoadFileTextCallback(LoadFileTextCallback callback) {
+RLCAPI void SetLoadFileTextCallback(LoadFileTextCallback callback) {
     rl.loadFileText = callback;
 }
 
-RLAPI void SetSaveFileTextCallback(SaveFileTextCallback callback) {
+RLCAPI void SetSaveFileTextCallback(SaveFileTextCallback callback) {
     rl.saveFileText = callback;
 }
 
-RLAPI unsigned char *LoadFileData(const char *fileName, unsigned int *bytesRead) {
+RLCAPI unsigned char *LoadFileData(const char *fileName, unsigned int *bytesRead) {
     unsigned char *data = NULL;
     *bytesRead = 0;
     if (fileName == NULL) {
@@ -61,7 +62,7 @@ RLAPI unsigned char *LoadFileData(const char *fileName, unsigned int *bytesRead)
     return data;
 }
 
-RLAPI void UnloadFileData(unsigned char *data) {
+RLCAPI void UnloadFileData(unsigned char *data) {
     if (data == NULL) {
         TRACELOG(LOG_WARNING, "FILEIO: NULL pointer passed");
         return;
@@ -69,7 +70,7 @@ RLAPI void UnloadFileData(unsigned char *data) {
     SDL_free(data);
 }
 
-RLAPI bool SaveFileData(const char *fileName, void *data, unsigned int bytesToWrite) {
+RLCAPI bool SaveFileData(const char *fileName, void *data, unsigned int bytesToWrite) {
     if (fileName == NULL) {
         TRACELOG(LOG_WARNING, "FILEIO: File name provided is not valid");
         return false;
@@ -97,4 +98,50 @@ RLAPI bool SaveFileData(const char *fileName, void *data, unsigned int bytesToWr
         return false;
     }
     return true;
+}
+
+RLCAPI bool ExportDataAsCode(const unsigned char *data, unsigned int size, const char *fileName)
+{
+    bool success = false;
+
+#ifndef TEXT_BYTES_PER_LINE
+    #define TEXT_BYTES_PER_LINE     20
+#endif
+
+    // NOTE: Text data buffer size is estimated considering raw data size in bytes
+    // and requiring 6 char bytes for every byte: "0x00, "
+    /*char *txtData = (char *)SDL_calloc(size*6 + 2000, sizeof(char));
+
+    int byteCount = 0;
+    byteCount += sprintf(txtData + byteCount, "////////////////////////////////////////////////////////////////////////////////////////\n");
+    byteCount += sprintf(txtData + byteCount, "//                                                                                    //\n");
+    byteCount += sprintf(txtData + byteCount, "// DataAsCode exporter v1.0 - Raw data exported as an array of bytes                  //\n");
+    byteCount += sprintf(txtData + byteCount, "//                                                                                    //\n");
+    byteCount += sprintf(txtData + byteCount, "// more info and bugs-report:  github.com/raysan5/raylib                              //\n");
+    byteCount += sprintf(txtData + byteCount, "// feedback and support:       ray[at]raylib.com                                      //\n");
+    byteCount += sprintf(txtData + byteCount, "//                                                                                    //\n");
+    byteCount += sprintf(txtData + byteCount, "// Copyright (c) 2022-$YEAR Ramon Santamaria (@raysan5)                               //\n");
+    byteCount += sprintf(txtData + byteCount, "//                                                                                    //\n");
+    byteCount += sprintf(txtData + byteCount, "////////////////////////////////////////////////////////////////////////////////////////\n\n");
+
+    // Get file name from path and convert variable name to uppercase
+    char varFileName[256] = { 0 };
+    strcpy(varFileName, GetFileNameWithoutExt(fileName));
+    for (int i = 0; varFileName[i] != '\0'; i++) if ((varFileName[i] >= 'a') && (varFileName[i] <= 'z')) { varFileName[i] = varFileName[i] - 32; }
+
+    byteCount += sprintf(txtData + byteCount, "#define %s_DATA_SIZE     %i\n\n", varFileName, size);
+
+    byteCount += sprintf(txtData + byteCount, "static unsigned char %s_DATA[%s_DATA_SIZE] = { ", varFileName, varFileName);
+    for (unsigned int i = 0; i < size - 1; i++) byteCount += sprintf(txtData + byteCount, ((i%TEXT_BYTES_PER_LINE == 0)? "0x%x,\n" : "0x%x, "), data[i]);
+    byteCount += sprintf(txtData + byteCount, "0x%x };\n", data[size - 1]);
+
+    // NOTE: Text data size exported is determined by '\0' (NULL) character
+    success = SaveFileText(fileName, txtData);
+
+    SDL_free(txtData);
+
+    if (success != 0) TRACELOG(LOG_INFO, "FILEIO: [%s] Data as code exported successfully", fileName);
+    else TRACELOG(LOG_WARNING, "FILEIO: [%s] Failed to export data as code", fileName);
+*/
+    return success;
 }
