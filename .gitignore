@@ -6,7 +6,7 @@ build
 Release
 Debug
 x64
-upload.bat
+push.bat
 *.exe
 *.zip
 *.gz
