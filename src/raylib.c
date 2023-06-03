@@ -239,7 +239,7 @@ RLAPI void SetWindowOpacity(float opacity) {
 }
 
 RLAPI void *GetWindowHandle(void) {
-    return NULL;
+    return GetHandleBySDLWindow(rl.w);
 }
 
 RLAPI void ClearBackground(Color color) {

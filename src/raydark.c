@@ -4,6 +4,15 @@
 #include <stdbool.h>
 #endif
 
+void* GetHandleBySDLWindow(SDL_Window* window) {
+#ifdef _WIN32
+    SDL_SysWMinfo wm_info;
+    SDL_VERSION(&wm_info.version);
+    SDL_GetWindowWMInfo(window, &wm_info);
+    return (void*)wm_info.info.win.window;
+#endif
+}
+
 void CheckDarkMode(SDL_Window* window) {
 #ifdef _WIN32
     HMODULE dwm = LoadLibraryA("dwmapi.dll");
@@ -23,10 +32,7 @@ void CheckDarkMode(SDL_Window* window) {
         FreeLibrary(dwm);
         return;
     }
-    SDL_SysWMinfo wm_info;
-    SDL_VERSION(&wm_info.version);
-    SDL_GetWindowWMInfo(window, &wm_info);
-    HWND hwnd = (HWND)wm_info.info.win.window;
+    HWND hwnd = (HWND)GetHandleBySDLWindow(window);
     BOOL dark_mode = 1;
     if (!DwmSetWindowAttribute(hwnd, 20, &dark_mode, sizeof(BOOL))) {
         dark_mode = 1;
