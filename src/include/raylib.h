@@ -79,6 +79,15 @@ RLAPI void *MemRealloc(void *ptr, unsigned int size);
 RLAPI void MemFree(void *ptr);
 RLAPI void OpenURL(const char *url);
 
+RLAPI void SetTraceLogCallback(TraceLogCallback callback);
+RLAPI void SetLoadFileDataCallback(LoadFileDataCallback callback);
+RLAPI void SetSaveFileDataCallback(SaveFileDataCallback callback);
+RLAPI void SetLoadFileTextCallback(LoadFileTextCallback callback);
+RLAPI void SetSaveFileTextCallback(SaveFileTextCallback callback); 
+
+RLAPI unsigned char *LoadFileData(const char *fileName, unsigned int *bytesRead);
+RLAPI void UnloadFileData(unsigned char *data);
+
 RLAPI void ClearBackground(Color color);
 RLAPI void BeginDrawing(void);
 RLAPI void EndDrawing(void); 

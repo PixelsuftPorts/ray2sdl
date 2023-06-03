@@ -11,6 +11,11 @@ int main(void)
     SetConfigFlags(FLAG_WINDOW_ALWAYS_RUN | FLAG_VSYNC_HINT | FLAG_WINDOW_HIGHDPI | FLAG_WINDOW_RESIZABLE);
     InitWindow(800, 450, "raylib [core] example - basic window");
 
+    unsigned int bytes_read;
+    unsigned char* data = LoadFileData(".gitignore", &bytes_read);
+    data[bytes_read - 1] = '\0';
+    printf("%s\n", data);
+
     while (!WindowShouldClose())
     {
         if (IsWindowResized()) {
