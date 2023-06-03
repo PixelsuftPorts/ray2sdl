@@ -43,22 +43,23 @@ RLAPI void InitWindow(int width, int height, const char *title) {
         2, // TODO
         SDL_RENDERER_ACCELERATED | (rl.fl & FLAG_VSYNC_HINT ? SDL_RENDERER_PRESENTVSYNC : 0)
     );
+    CheckDarkMode(rl.w);
     if (rl.r == NULL) {
         TRACELOG(LOG_ERROR, "Failed to create renderer (%s)", SDL_GetError());
     }
     else {
         int mon = GetCurrentMonitor();
         SDL_RendererInfo info;
-        SDL_GetRendererInfo(rl.r, &info);
+        if (SDL_GetRendererInfo(rl.r, &info) < 0)
+            TRACELOG(LOG_WARNING, "Failed to get renderer info (%s)", SDL_GetError());
         TRACELOG(LOG_INFO, "DISPLAY: Device initialized successfully");
         TRACELOG(LOG_INFO, "     > Display size: %ix%i", GetMonitorWidth(mon), GetMonitorHeight(mon));
         TRACELOG(LOG_INFO, "     > Screen size:  %ix%i", GetScreenWidth(), GetScreenHeight());
         TRACELOG(LOG_INFO, "     > Render size:  %ix%i", GetRenderWidth(), GetRenderHeight());
         TRACELOG(LOG_INFO, "RENDER: Information:");
         TRACELOG(LOG_INFO, "     > Name:             %s", info.name);
-        TRACELOG(LOG_INFO, "     > Max Texture Size: %ix%i", info.max_texture_width, info.max_texture_width);
+        TRACELOG(LOG_INFO, "     > Max texture size: %ix%i", info.max_texture_width, info.max_texture_width);
     }
-    CheckDarkMode(rl.w);
     rl.should_close = false;
     rl.clip_ptr = NULL;
     if (!(rl.fl & FLAG_WINDOW_HIDDEN))
@@ -146,6 +147,7 @@ RLAPI void CloseWindow(void) {
         SDL_Quit();
         rl.was_init = false;
     }
+    TRACELOG(LOG_INFO, "Window closed successfully");
 }
 
 RLAPI bool IsWindowReady(void) {
@@ -185,8 +187,11 @@ RLAPI void SetWindowState(unsigned int flags) {
     rl.fl |= flags;
     if (diff & FLAG_WINDOW_HIDDEN)
         SDL_HideWindow(rl.w);
-    if (diff & FLAG_FULLSCREEN_MODE)
-        SDL_SetWindowFullscreen(rl.w, SDL_WINDOW_FULLSCREEN);
+    if (diff & FLAG_FULLSCREEN_MODE) {
+        if (SDL_SetWindowFullscreen(rl.w, SDL_WINDOW_FULLSCREEN) < 0) {
+            TRACELOG(LOG_WARNING, "Failed to enable fullscreen (%s)", SDL_GetError());
+        }
+    }
     if (diff & FLAG_WINDOW_RESIZABLE)
         SDL_SetWindowResizable(rl.w, SDL_TRUE);
     if (diff & SDL_WINDOW_BORDERLESS)
@@ -204,8 +209,10 @@ RLAPI void ClearWindowState(unsigned int flags) {
     unsigned int diff = rl.fl ^ flags;
     if (diff & FLAG_WINDOW_HIDDEN)
         SDL_ShowWindow(rl.w);
-    if (diff & FLAG_FULLSCREEN_MODE)
-        SDL_SetWindowFullscreen(rl.w, 0);
+    if (diff & FLAG_FULLSCREEN_MODE) {
+        if (SDL_SetWindowFullscreen(rl.w, 0) < 0)
+            TRACELOG(LOG_WARNING, "Failed to disable fullscreen (%s)", SDL_GetError());
+    }
     if (diff & FLAG_WINDOW_RESIZABLE)
         SDL_SetWindowResizable(rl.w, SDL_FALSE);
     if (diff & SDL_WINDOW_BORDERLESS)
@@ -221,11 +228,13 @@ RLAPI void ClearWindowState(unsigned int flags) {
 RLAPI void ToggleFullscreen(void) {
     if (IsWindowFullscreen()) {
         rl.fl &= ~FLAG_FULLSCREEN_MODE;
-        SDL_SetWindowFullscreen(rl.w, 0);
+        if (SDL_SetWindowFullscreen(rl.w, 0) < 0)
+            TRACELOG(LOG_WARNING, "Failed to disable fullscreen (%s)", SDL_GetError());
     }
     else {
         rl.fl |= FLAG_FULLSCREEN_MODE;
-        SDL_SetWindowFullscreen(rl.w, SDL_WINDOW_FULLSCREEN);
+        if (SDL_SetWindowFullscreen(rl.w, SDL_WINDOW_FULLSCREEN) < 0)
+            TRACELOG(LOG_WARNING, "Failed to enable fullscreen (%s)", SDL_GetError());
     }
 }
 
@@ -255,8 +264,13 @@ RLAPI void SetWindowPosition(int x, int y) {
 
 RLAPI void SetWindowMonitor(int monitor) {
     SDL_DisplayMode dm;
-    SDL_GetCurrentDisplayMode(monitor, &dm); // Or SDL_GetDesktopDisplayMode?
-    SDL_SetWindowDisplayMode(rl.w, &dm); // Is this right? I have no second monitor to test.
+    if (SDL_GetCurrentDisplayMode(monitor, &dm) < 0) { // Or SDL_GetDesktopDisplayMode?
+        TRACELOG(LOG_WARNING, "Failed to get display mode (%s)", SDL_GetError());
+        return;
+    }
+    if (SDL_SetWindowDisplayMode(rl.w, &dm) < 0) { // Is this right? I have no second monitor to test.
+        TRACELOG(LOG_WARNING, "Failed to set display mode (%s)", SDL_GetError());
+    }
 }
 
 RLAPI void SetWindowMinSize(int width, int height) {
@@ -268,11 +282,16 @@ RLAPI void SetWindowSize(int width, int height) {
 }
 
 RLAPI void SetWindowOpacity(float opacity) {
-    SDL_SetWindowOpacity(rl.w, opacity);
+    if (SDL_SetWindowOpacity(rl.w, opacity) < 0) {
+        TRACELOG(LOG_WARNING, "Failed to set window opacity (%s)", SDL_GetError());
+    }
 }
 
 RLAPI void *GetWindowHandle(void) {
-    return GetHandleBySDLWindow(rl.w);
+    void* handle = GetHandleBySDLWindow(rl.w);
+    if (handle == NULL)
+        TRACELOG(LOG_WARNING, "Failed to get window handle (%s)", SDL_GetError());
+    return handle;
 }
 
 RLAPI int GetScreenWidth(void) {
@@ -289,27 +308,36 @@ RLAPI int GetScreenHeight(void) {
 
 RLAPI int GetRenderWidth(void) {
     int width;
-    SDL_GetRendererOutputSize(rl.r, &width, NULL);
+    if (SDL_GetRendererOutputSize(rl.r, &width, NULL) < 0)
+        TRACELOG(LOG_WARNING, "Failed to get renderer output size (%s)", SDL_GetError());
     return width;
 }
 
 RLAPI int GetRenderHeight(void) {
     int height;
-    SDL_GetRendererOutputSize(rl.r, NULL, &height);
+    if (SDL_GetRendererOutputSize(rl.r, NULL, &height) < 0)
+        TRACELOG(LOG_WARNING, "Failed to get renderer output size (%s)", SDL_GetError());
     return height;
 }
 
 RLAPI int GetMonitorCount(void) {
-    return SDL_GetNumVideoDisplays();
+    int result = SDL_GetNumVideoDisplays();
+    if (result < 0)
+        TRACELOG(LOG_WARNING, "Failed to get monitor count (%s)", SDL_GetError());
+    return result;
 }
 
 RLAPI int GetCurrentMonitor(void) {
-    return SDL_GetWindowDisplayIndex(rl.w);
+    int result = SDL_GetWindowDisplayIndex(rl.w);
+    if (result < 0)
+        TRACELOG(LOG_WARNING, "Failed to get current monitor index (%s)", SDL_GetError());
+    return result;
 }
 
 RLAPI Vector2 GetMonitorPosition(int monitor) {
     SDL_Rect rect;
-    SDL_GetDisplayBounds(monitor, &rect);
+    if (SDL_GetDisplayBounds(monitor, &rect) < 0)
+        TRACELOG(LOG_WARNING, "Failed to get monitor bounds (%s)", SDL_GetError());
     return VECLITERAL(Vector2){
         .x = (float)rect.x, .y = (float)rect.y
     };
@@ -317,35 +345,42 @@ RLAPI Vector2 GetMonitorPosition(int monitor) {
 
 RLAPI int GetMonitorWidth(int monitor) {
     SDL_DisplayMode dm;
-    SDL_GetCurrentDisplayMode(monitor, &dm);
+    if (SDL_GetCurrentDisplayMode(monitor, &dm) < 0)
+        TRACELOG(LOG_WARNING, "Failed to get monitor display mode (%s)", SDL_GetError());
     return dm.w;
 }
 
 RLAPI int GetMonitorHeight(int monitor) {
     SDL_DisplayMode dm;
-    SDL_GetCurrentDisplayMode(monitor, &dm);
+    if (SDL_GetCurrentDisplayMode(monitor, &dm) < 0)
+        TRACELOG(LOG_WARNING, "Failed to get monitor display mode (%s)", SDL_GetError());
     return dm.h;
 }
 
 RLAPI int GetMonitorPhysicalWidth(int monitor) {
     float hdpi;
-    SDL_GetDisplayDPI(monitor, NULL, &hdpi, NULL);
+    if (SDL_GetDisplayDPI(monitor, NULL, &hdpi, NULL) < 0)
+        TRACELOG(LOG_WARNING, "Failed to get monitor DPI (%s)", SDL_GetError());
     SDL_DisplayMode dm;
-    SDL_GetDesktopDisplayMode(monitor, &dm);
+    if (SDL_GetDesktopDisplayMode(monitor, &dm) < 0)
+        TRACELOG(LOG_WARNING, "Failed to get monitor display mode (%s)", SDL_GetError());
     return (int)((float)dm.w * 25.35f / hdpi);
 }
 
 RLAPI int GetMonitorPhysicalHeight(int monitor) {
     float vdpi;
-    SDL_GetDisplayDPI(monitor, NULL, NULL, &vdpi);
+    if (SDL_GetDisplayDPI(monitor, NULL, NULL, &vdpi) < 0)
+        TRACELOG(LOG_WARNING, "Failed to get monitor DPI (%s)", SDL_GetError());
     SDL_DisplayMode dm;
-    SDL_GetDesktopDisplayMode(monitor, &dm);
+    if (SDL_GetDesktopDisplayMode(monitor, &dm) < 0)
+        TRACELOG(LOG_WARNING, "Failed to get monitor display mode (%s)", SDL_GetError());
     return (int)((float)dm.h * 25.35f / vdpi);
 }
 
 RLAPI int GetMonitorRefreshRate(int monitor) {
     SDL_DisplayMode dm;
-    SDL_GetCurrentDisplayMode(monitor, &dm);
+    if (SDL_GetCurrentDisplayMode(monitor, &dm) < 0)
+        TRACELOG(LOG_WARNING, "Failed to get monitor display mode (%s)", SDL_GetError());
     return dm.refresh_rate;
 }
 
@@ -365,17 +400,23 @@ RLAPI Vector2 GetWindowScaleDPI(void) {
 }
 
 RLAPI const char *GetMonitorName(int monitor) {
-    return SDL_GetDisplayName(monitor);
+    const char* result = SDL_GetDisplayName(monitor);
+    if (result == NULL)
+        TRACELOG(LOG_WARNING, "Failed to get monitor name (%s)", SDL_GetError());
+    return result;
 }
 
 RLAPI void SetClipboardText(const char *text) {
-    SDL_SetClipboardText(text);
+    if (SDL_SetClipboardText(text) < 0)
+        TRACELOG(LOG_WARNING, "Failed to set clipboard text (%s)", SDL_GetError());
 }
 
 RLAPI const char *GetClipboardText(void) {
     if (rl.clip_ptr)
         RL_FREE(rl.clip_ptr);
     rl.clip_ptr = SDL_GetClipboardText();
+    if (SDL_strlen(rl.clip_ptr) <= 0)
+        TRACELOG(LOG_WARNING, "Failed to get clipboard text (%s)", SDL_GetError());
     return rl.clip_ptr;
 }
 
@@ -402,23 +443,31 @@ RLAPI void WaitTime(double seconds) {
 }
 
 RLAPI void ShowCursor(void) {
-    SDL_ShowCursor(SDL_ENABLE);
+    if (SDL_ShowCursor(SDL_ENABLE) < 0)
+        TRACELOG(LOG_WARNING, "Failed to show cursor (%s)", SDL_GetError());
 }
 
 RLAPI void HideCursor(void) {
-    SDL_ShowCursor(SDL_DISABLE);
+    if (SDL_ShowCursor(SDL_DISABLE) < 0)
+        TRACELOG(LOG_WARNING, "Failed to hide cursor (%s)", SDL_GetError());
 }
 
 RLAPI bool IsCursorHidden(void) {
-    return SDL_ShowCursor(SDL_QUERY) == SDL_DISABLE;
+    int result = SDL_ShowCursor(SDL_QUERY);
+    if (result < 0)
+        TRACELOG(LOG_WARNING, "Failed to get if cursor is hidden (%s)", SDL_GetError());
+    return result == SDL_DISABLE;
 }
 
 RLAPI void EnableCursor(void) {
-    SDL_SetRelativeMouseMode(SDL_FALSE); // I don't this it's good. Maybe add to config different things?
+    if (SDL_SetRelativeMouseMode(SDL_FALSE) < 0) { // I don't this it's good. Maybe add to config different things?
+        TRACELOG(LOG_WARNING, "Failed to enable cursor (%s)", SDL_GetError());
+    }
 }
 
 RLAPI void DisableCursor(void) {
-    SDL_SetRelativeMouseMode(SDL_TRUE);
+    if (SDL_SetRelativeMouseMode(SDL_TRUE) < 0)
+        TRACELOG(LOG_WARNING, "Failed to disable cursor (%s)", SDL_GetError());
 }
 
 RLAPI bool IsCursorOnScreen(void) {
@@ -499,13 +548,16 @@ RLAPI void SetTraceLogLevel(int logLevel) {
 }
 
 RLAPI void ClearBackground(Color color) {
-    SDL_SetRenderDrawColor(rl.r, color.r, color.g, color.b, color.a);
-    SDL_RenderClear(rl.r);
+    if (SDL_SetRenderDrawColor(rl.r, color.r, color.g, color.b, color.a) < 0)
+        TRACELOG(LOG_WARNING, "Failed to set draw color (%s)", SDL_GetError());
+    if (SDL_RenderClear(rl.r) < 0)
+        TRACELOG(LOG_WARNING, "Failed to clear render (%s)", SDL_GetError());
 }
 
 RLAPI void BeginDrawing(void) {
     rl.need_to_swap = true;
-    SDL_SetRenderTarget(rl.r, NULL);
+    if (SDL_SetRenderTarget(rl.r, NULL) < 0)
+        TRACELOG(LOG_WARNING, "Failed to set main target (%s)", SDL_GetError());
 }
 
 RLAPI void EndDrawing(void) {

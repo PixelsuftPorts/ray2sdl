@@ -7,7 +7,8 @@
 void* GetHandleBySDLWindow(SDL_Window* window) {
     SDL_SysWMinfo wm_info;
     SDL_VERSION(&wm_info.version);
-    SDL_GetWindowWMInfo(window, &wm_info);
+    if (SDL_GetWindowWMInfo(window, &wm_info) == SDL_FALSE)
+        return NULL;
 #ifdef SDL_VIDEO_DRIVER_WINDOWS
     return (void*)wm_info.info.win.window;
 #endif
@@ -58,12 +59,13 @@ void CheckDarkMode(SDL_Window* window) {
     DwmSetWindowAttributePTR DwmSetWindowAttribute = (DwmSetWindowAttributePTR)GetProcAddress(dwm, "DwmSetWindowAttribute");
     typedef bool (WINAPI *ShouldAppsUseDarkModePTR)();
     ShouldAppsUseDarkModePTR ShouldAppsUseDarkMode = (ShouldAppsUseDarkModePTR)GetProcAddress(uxtheme, MAKEINTRESOURCEA(132));
-    if (!DwmSetWindowAttribute || !ShouldAppsUseDarkMode || !ShouldAppsUseDarkMode()) {
+    void* handle = GetHandleBySDLWindow(window);
+    if (handle == NULL || !DwmSetWindowAttribute || !ShouldAppsUseDarkMode || !ShouldAppsUseDarkMode()) {
         FreeLibrary(uxtheme);
         FreeLibrary(dwm);
         return;
     }
-    HWND hwnd = (HWND)GetHandleBySDLWindow(window);
+    HWND hwnd = (HWND)handle;
     BOOL dark_mode = 1;
     if (!DwmSetWindowAttribute(hwnd, 20, &dark_mode, sizeof(BOOL))) {
         dark_mode = 1;
