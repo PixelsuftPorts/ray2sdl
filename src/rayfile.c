@@ -1,8 +1,10 @@
 #include <stdio.h>
 #include <raylib.h>
 #include <raydef.h>
-#include <raydark.h>
 #include <rayconf.h>
+#ifndef _MSC_VER
+#include <dirent.h>
+#endif
 
 RLCAPI void SetTraceLogCallback(TraceLogCallback callback) {
     rl.traceLog = callback;
@@ -202,7 +204,6 @@ RLAPI bool FileExists(const char *fileName) {
     }
     SDL_RWops* file = SDL_RWFromFile(fileName, "rb");
     if (file == NULL) {
-        TRACELOG(LOG_WARNING, "lol %s", SDL_GetError());
         return false;
     }
     if (SDL_RWclose(file) < 0) {
@@ -211,8 +212,47 @@ RLAPI bool FileExists(const char *fileName) {
     return true;
 }
 
+#ifdef _MSC_VER
+DIR *opendir(const char *name)
+{
+    DIR *dir = 0;
+
+    if (name && name[0])
+    {
+        size_t base_length = SDL_strlen(name);
+        
+        // Search pattern must end with suitable wildcard
+        const char *all = SDL_strchr("/\\", name[base_length - 1]) ? "*" : "/*";
+
+        if ((dir = (DIR *)SDL_malloc(sizeof *dir)) != 0 &&
+            (dir->name = (char *)SDL_malloc(base_length + strlen(all) + 1)) != 0)
+        {
+            SDL_strlcat(SDL_strlcpy(dir->name, name, MAX_FILEPATH_LENGTH), all, MAX_FILEPATH_LENGTH);
+
+            if ((dir->handle = (handle_type) _findfirst(dir->name, &dir->info)) != -1)
+            {
+                dir->result.d_name = 0;
+            }
+            else  // rollback
+            {
+                SDL_free(dir->name);
+                SDL_free(dir);
+                dir = 0;
+            }
+        }
+        else  // rollback
+        {
+            SDL_free(dir);
+            dir   = 0;
+        }
+    }
+
+    return dir;
+}
+#endif
+
 RLAPI bool DirectoryExists(const char *dirPath) {
-    if (fileName == NULL) {
+    if (dirPath == NULL) {
         TRACELOG(LOG_WARNING, "FILEIO: NULL pointer passed");
         return false;
     }
