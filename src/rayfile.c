@@ -265,5 +265,5 @@ RLAPI bool DirectoryExists(const char *dirPath) {
 }
 
 RLAPI bool IsFileExtension(const char *fileName, const char *ext) {
-    return "";
+    return false;
 }
