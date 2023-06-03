@@ -55,6 +55,13 @@ RLAPI void SwapScreenBuffer(void);
 RLAPI void PollInputEvents(void);
 RLAPI void WaitTime(double seconds); 
 
+RLAPI void ShowCursor(void);
+RLAPI void HideCursor(void);
+RLAPI bool IsCursorHidden(void);
+RLAPI void EnableCursor(void);
+RLAPI void DisableCursor(void);
+RLAPI bool IsCursorOnScreen(void);
+
 RLAPI void ClearBackground(Color color);
 RLAPI void BeginDrawing(void);
 RLAPI void EndDrawing(void); 

@@ -379,6 +379,30 @@ RLAPI void WaitTime(double seconds) {
     while ((double)(SDL_GetTicks64() - timer_start) < seconds * 1000.0) {}
 }
 
+RLAPI void ShowCursor(void) {
+    SDL_ShowCursor(SDL_ENABLE);
+}
+
+RLAPI void HideCursor(void) {
+    SDL_ShowCursor(SDL_DISABLE);
+}
+
+RLAPI bool IsCursorHidden(void) {
+    return SDL_ShowCursor(SDL_QUERY) == SDL_DISABLE;
+}
+
+RLAPI void EnableCursor(void) {
+    SDL_SetRelativeMouseMode(SDL_FALSE); // I don't this it's good. Maybe add to config different things?
+}
+
+RLAPI void DisableCursor(void) {
+    SDL_SetRelativeMouseMode(SDL_TRUE);
+}
+
+RLAPI bool IsCursorOnScreen(void) {
+    return true; // TODO
+}
+
 RLAPI void ClearBackground(Color color) {
     SDL_SetRenderDrawColor(rl.r, color.r, color.g, color.b, color.a);
     SDL_RenderClear(rl.r);
