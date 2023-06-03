@@ -20,6 +20,10 @@ RLAPI bool IsWindowResized(void);
 RLAPI bool IsWindowState(unsigned int flag);
 RLAPI void SetWindowState(unsigned int flags);
 RLAPI void ClearWindowState(unsigned int flags);
+RLAPI void ToggleFullscreen(void);
+RLAPI void MaximizeWindow(void);
+RLAPI void MinimizeWindow(void);
+RLAPI void RestoreWindow(void);
 
 RLAPI void ClearBackground(Color color);
 RLAPI void BeginDrawing(void);

@@ -183,6 +183,29 @@ RLAPI void ClearWindowState(unsigned int flags) {
         SDL_SetWindowInputFocus(rl.w);
 }
 
+RLAPI void ToggleFullscreen(void) {
+    if (IsWindowFullscreen()) {
+        rl.fl &= ~FLAG_FULLSCREEN_MODE;
+        SDL_SetWindowFullscreen(rl.w, 0);
+    }
+    else {
+        rl.fl |= FLAG_FULLSCREEN_MODE;
+        SDL_SetWindowFullscreen(rl.w, SDL_WINDOW_FULLSCREEN);
+    }
+}
+
+RLAPI void MaximizeWindow(void) {
+    SDL_MaximizeWindow(rl.w);
+}
+
+RLAPI void MinimizeWindow(void) {
+    SDL_MinimizeWindow(rl.w);
+}
+
+RLAPI void RestoreWindow(void) {
+    SDL_RestoreWindow(rl.w);
+}
+
 RLAPI void ClearBackground(Color color) {
     SDL_SetRenderDrawColor(rl.r, color.r, color.g, color.b, color.a);
     SDL_RenderClear(rl.r);
