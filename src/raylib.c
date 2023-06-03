@@ -576,6 +576,29 @@ RLAPI void SetTraceLogLevel(int logLevel) {
     rl.log_level = logLevel;
 }
 
+RLAPI void *MemAlloc(unsigned int size) {
+    void *ptr = SDL_calloc(size, 1);
+    if (ptr == NULL)
+        TRACELOG(LOG_ERROR, "Failed to allocate memory");
+    return ptr;
+}
+
+RLAPI void *MemRealloc(void *ptr, unsigned int size) {
+    void *ret = SDL_realloc(ptr, size);
+    if (ret == NULL)
+        TRACELOG(LOG_ERROR, "Failed to reallocate memory");
+    return ret;
+}
+
+RLAPI void MemFree(void *ptr) {
+    SDL_free(ptr);
+}
+
+RLAPI void OpenURL(const char *url) {
+    if (SDL_OpenURL(url) < 0)
+        TRACELOG(LOG_WARNING, "Failed to open URL (%s)", SDL_GetError());
+}
+
 RLAPI void ClearBackground(Color color) {
     if (SDL_SetRenderDrawColor(rl.r, color.r, color.g, color.b, color.a) < 0)
         TRACELOG(LOG_WARNING, "Failed to set draw color (%s)", SDL_GetError());

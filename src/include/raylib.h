@@ -74,6 +74,10 @@ RLAPI void SetConfigFlags(unsigned int flags);
 
 RLAPI void TraceLog(int logLevel, const char *text, ...);
 RLAPI void SetTraceLogLevel(int logLevel);
+RLAPI void *MemAlloc(unsigned int size);
+RLAPI void *MemRealloc(void *ptr, unsigned int size);
+RLAPI void MemFree(void *ptr);
+RLAPI void OpenURL(const char *url);
 
 RLAPI void ClearBackground(Color color);
 RLAPI void BeginDrawing(void);
