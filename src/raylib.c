@@ -1,6 +1,7 @@
 #include <raylib.h>
 #include <raydef.h>
 #include <raydark.h>
+#include <rayconf.h>
 
 // TODO: Error Handling For Every Function
 
@@ -364,17 +365,33 @@ RLAPI void DisableEventWaiting(void) {
     rl.event_waiting = false;
 }
 
+RLAPI void SwapScreenBuffer(void) {
+    rl.need_to_swap = false;
+    SDL_RenderPresent(rl.r);
+}
+
+RLAPI void PollInputEvents(void) {
+    PollEvents(); // Crude.
+}
+
+RLAPI void WaitTime(double seconds) {
+    Uint64 timer_start = SDL_GetTicks64();
+    while ((double)(SDL_GetTicks64() - timer_start) < seconds * 1000.0) {}
+}
+
 RLAPI void ClearBackground(Color color) {
     SDL_SetRenderDrawColor(rl.r, color.r, color.g, color.b, color.a);
     SDL_RenderClear(rl.r);
 }
 
 RLAPI void BeginDrawing(void) {
+    rl.need_to_swap = true;
     SDL_SetRenderTarget(rl.r, NULL);
 }
 
 RLAPI void EndDrawing(void) {
-    SDL_RenderPresent(rl.r);
+    if (rl.need_to_swap)
+        SDL_RenderPresent(rl.r);
     if (rl.event_waiting)
         WaitEvents();
 }

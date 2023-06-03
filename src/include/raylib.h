@@ -51,6 +51,10 @@ RLAPI const char *GetClipboardText(void);
 RLAPI void EnableEventWaiting(void);
 RLAPI void DisableEventWaiting(void);
 
+RLAPI void SwapScreenBuffer(void);
+RLAPI void PollInputEvents(void);
+RLAPI void WaitTime(double seconds); 
+
 RLAPI void ClearBackground(Color color);
 RLAPI void BeginDrawing(void);
 RLAPI void EndDrawing(void); 

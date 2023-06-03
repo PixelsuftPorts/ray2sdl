@@ -814,5 +814,6 @@ struct rl {
     bool w_resized;
     bool was_init;
     bool should_close;
+    bool need_to_swap;
 };
 static struct rl rl;
