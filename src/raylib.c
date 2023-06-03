@@ -8,7 +8,9 @@
 // TODO: Error Handling For Every Function
 
 RLAPI void InitWindow(int width, int height, const char *title) {
-    TRACELOG(LOG_INFO, "Hello");
+    if (rl.first_init) {
+        rl.first_init = false;
+    }
     if (!rl.was_init) {
         if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS | SDL_INIT_TIMER) < 0) {
             // TODO

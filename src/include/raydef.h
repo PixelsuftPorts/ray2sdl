@@ -819,25 +819,29 @@ typedef bool (*SaveFileTextCallback)(const char *fileName, char *text);
 
 struct rl_type {
     SDL_Event event;
+    TraceLogCallback traceLog;
+    LoadFileDataCallback loadFileData;
+    SaveFileDataCallback saveFileData;
+    LoadFileTextCallback loadFileText;
+    SaveFileTextCallback saveFileText;
     SDL_Window* w;
     SDL_Renderer* r;
     char* clip_ptr;
     unsigned int fl;
+    bool first_init;
     bool event_waiting;
     bool w_resized;
     bool was_init;
     bool should_close;
     bool need_to_swap;
     int log_level;
-    TraceLogCallback traceLog;
-    LoadFileDataCallback loadFileData;
-    SaveFileDataCallback saveFileData;
-    LoadFileTextCallback loadFileText;
-    SaveFileTextCallback saveFileText;
 };
 
+#ifdef __GNUC__
+__attribute__((unused)) 
+#endif
 static struct rl_type rl = {
     .w = NULL, .r = NULL, .clip_ptr = NULL, .event_waiting = false, .w_resized = false, .was_init = false,
     .should_close = false, .need_to_swap = false, .log_level = LOG_INFO, .traceLog = NULL, .loadFileData = NULL,
-    .saveFileData = NULL, .loadFileText = NULL, .saveFileText = NULL
+    .saveFileData = NULL, .loadFileText = NULL, .saveFileText = NULL, .first_init = true
 };
