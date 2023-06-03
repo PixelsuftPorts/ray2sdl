@@ -400,7 +400,39 @@ RLAPI void DisableCursor(void) {
 }
 
 RLAPI bool IsCursorOnScreen(void) {
-    return true; // TODO
+    int x, y, w, h;
+    SDL_GetMouseState(&x, &y);
+    SDL_GetWindowSize(rl.w, &w, &h);
+    return (x >= 0) && (y >= 0) && (x < w) && (y < h);
+}
+
+RLAPI void SetTargetFPS(int fps) {} // TODO this
+RLAPI int GetFPS(void) {return 0;}
+RLAPI float GetFrameTime(void) {return 1.0f / 60.0f;}
+
+RLAPI double GetTime(void) {
+    return (double)SDL_GetTicks64() / 1000.0; // TODO: from InitWindow
+}
+
+RLAPI int GetRandomValue(int min, int max) {
+    if (min > max) {
+        int tmp = max;
+        max = min;
+        min = tmp;
+    }
+    return (int)((float)rand() / (float)(RAND_MAX + 1) * (float)(max - min + 1)) + min;
+}
+
+RLAPI void SetRandomSeed(unsigned int seed) {
+    srand(seed);
+}
+
+RLAPI void TakeScreenshot(const char *fileName) {
+    // TODO
+}
+
+RLAPI void SetConfigFlags(unsigned int flags) {
+    rl.fl |= flags;
 }
 
 RLAPI void ClearBackground(Color color) {

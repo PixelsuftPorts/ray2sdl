@@ -62,6 +62,16 @@ RLAPI void EnableCursor(void);
 RLAPI void DisableCursor(void);
 RLAPI bool IsCursorOnScreen(void);
 
+RLAPI void SetTargetFPS(int fps);
+RLAPI int GetFPS(void);
+RLAPI float GetFrameTime(void);
+RLAPI double GetTime(void);
+
+RLAPI int GetRandomValue(int min, int max);
+RLAPI void SetRandomSeed(unsigned int seed);
+RLAPI void TakeScreenshot(const char *fileName);
+RLAPI void SetConfigFlags(unsigned int flags);
+
 RLAPI void ClearBackground(Color color);
 RLAPI void BeginDrawing(void);
 RLAPI void EndDrawing(void); 
