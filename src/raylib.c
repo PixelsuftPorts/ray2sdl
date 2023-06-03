@@ -2,6 +2,8 @@
 #include <raydef.h>
 #include <raydark.h>
 
+// TODO: Error Handling For Every Function
+
 RLAPI void InitWindow(int width, int height, const char *title) {
     if (!rl.was_init) {
         if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS | SDL_INIT_TIMER) < 0) {
@@ -208,6 +210,34 @@ RLAPI void RestoreWindow(void) {
     SDL_RestoreWindow(rl.w);
     rl.fl &= ~FLAG_WINDOW_MAXIMIZED;
     rl.fl &= ~FLAG_WINDOW_MINIMIZED;
+}
+
+RLAPI void SetWindowTitle(const char *title) {
+    SDL_SetWindowTitle(rl.w, title);
+}
+
+RLAPI void SetWindowPosition(int x, int y) {
+    SDL_SetWindowPosition(rl.w, x, y);
+}
+
+RLAPI void SetWindowMonitor(int monitor) {
+    
+}
+
+RLAPI void SetWindowMinSize(int width, int height) {
+    SDL_SetWindowMinimumSize(rl.w, width, height);
+}
+
+RLAPI void SetWindowSize(int width, int height) {
+    SDL_SetWindowSize(rl.w, width, height);
+}
+
+RLAPI void SetWindowOpacity(float opacity) {
+    SDL_SetWindowOpacity(rl.w, opacity);
+}
+
+RLAPI void *GetWindowHandle(void) {
+    return NULL;
 }
 
 RLAPI void ClearBackground(Color color) {

@@ -24,6 +24,13 @@ RLAPI void ToggleFullscreen(void);
 RLAPI void MaximizeWindow(void);
 RLAPI void MinimizeWindow(void);
 RLAPI void RestoreWindow(void);
+RLAPI void SetWindowTitle(const char *title);
+RLAPI void SetWindowPosition(int x, int y);
+RLAPI void SetWindowMonitor(int monitor);
+RLAPI void SetWindowMinSize(int width, int height);
+RLAPI void SetWindowSize(int width, int height);
+RLAPI void SetWindowOpacity(float opacity);
+RLAPI void *GetWindowHandle(void);     
 
 RLAPI void ClearBackground(Color color);
 RLAPI void BeginDrawing(void);
