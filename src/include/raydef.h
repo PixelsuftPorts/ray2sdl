@@ -958,6 +958,8 @@ struct rl_type {
     SaveFileDataCallback saveFileData;
     LoadFileTextCallback loadFileText;
     SaveFileTextCallback saveFileText;
+    Vector2 wheel_move;
+    SDL_Cursor* cursor;
     SDL_Window* w;
     SDL_Renderer* r;
     const Uint8* kbd_array;

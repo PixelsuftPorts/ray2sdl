@@ -79,6 +79,7 @@ RLCAPI void InitWindow(int width, int height, const char *title) {
 
 void PollEvents() {
     rl.w_resized = false;
+    rl.wheel_move.x = rl.wheel_move.y = 0.0f;
     SDL_memset(rl.mousepress_array, 0, 8);
 #ifdef HANDLE_KEY_PRESS
     if (rl.keypress_array)
@@ -147,6 +148,16 @@ void PollEvents() {
                 }
                 break;
             }
+            case SDL_MOUSEWHEEL: {
+#if SDL_VERSION_ATLEAST(2, 0, 18)
+                rl.wheel_move.x += rl.event.wheel.preciseX;
+                rl.wheel_move.y += rl.event.wheel.preciseY;
+#else
+                rl.wheel_move.x += (float)rl.event.wheel.x;
+                rl.wheel_move.y += (float)rl.event.wheel.y;
+#endif
+                break;
+            }
             case SDL_DROPFILE: {
 #ifdef SUPPORT_FILES_DROPPING
                 RegisterFileDrop(rl.event.drop.file);
@@ -189,6 +200,10 @@ RLCAPI void CloseWindow(void) {
         rl.keypress_array = NULL;
     }
 #endif
+    if (rl.cursor) {
+        SDL_FreeCursor(rl.cursor);
+        rl.cursor = NULL;
+    }
     if (rl.clip_ptr) {
         SDL_free(rl.clip_ptr);
         rl.clip_ptr = NULL;

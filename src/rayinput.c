@@ -99,14 +99,18 @@ RLCAPI void SetMousePosition(int x, int y) {
 }
 
 RLCAPI void SetMouseOffset(int offsetX, int offsetY) {
-
+//TODO
 }
 
 RLCAPI void SetMouseScale(float scaleX, float scaleY) {}
 
-RLCAPI float GetMouseWheelMove(void) {}
+RLCAPI float GetMouseWheelMove(void) {
+    return rl.wheel_move.y;
+}
 
-RLCAPI Vector2 GetMouseWheelMoveV(void) {}
+RLCAPI Vector2 GetMouseWheelMoveV(void) {
+    return rl.wheel_move;
+}
 
 RLCAPI void SetMouseCursor(int cursor) {
     SDL_Cursor* cursor_handle = cursor >= 0 ? SDL_CreateSystemCursor(cursor) : SDL_GetDefaultCursor();
@@ -115,4 +119,7 @@ RLCAPI void SetMouseCursor(int cursor) {
         return;
     }
     SDL_SetCursor(cursor_handle);
+    if (rl.cursor)
+        SDL_FreeCursor(rl.cursor);
+    rl.cursor = cursor >= 0 ? cursor_handle : NULL;
 }
