@@ -141,6 +141,12 @@ RLAPI float GetMouseWheelMove(void);
 RLAPI Vector2 GetMouseWheelMoveV(void);
 RLAPI void SetMouseCursor(int cursor);
 
+RLAPI int GetTouchX(void);
+RLAPI int GetTouchY(void);
+RLAPI Vector2 GetTouchPosition(int index);
+RLAPI int GetTouchPointId(int index);
+RLAPI int GetTouchPointCount(void);
+
 RLAPI void ClearBackground(Color color);
 RLAPI void BeginDrawing(void);
 RLAPI void EndDrawing(void); 

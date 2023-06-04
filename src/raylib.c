@@ -71,6 +71,9 @@ RLCAPI void InitWindow(int width, int height, const char *title) {
         TRACELOG(LOG_WARNING, "Failed to allocate keypress array");
     }
 #endif
+    rl.touch_dev = SDL_GetTouchDevice(TOUCH_DEVICE_ID);
+    if (rl.touch_dev > 0)
+        TRACELOG(LOG_INFO, "TOUCH: Device with id %lld and index %i initialized successfully", (long long)rl.touch_dev, TOUCH_DEVICE_ID);
     rl.should_close = false;
     rl.clip_ptr = NULL;
     if (!(rl.fl & FLAG_WINDOW_HIDDEN))
@@ -92,10 +95,18 @@ void PollEvents() {
                 break;
             }
             case SDL_MOUSEBUTTONDOWN: {
+#ifndef EMULATE_MOUSE_WITH_TOUCH
+                if (rl.event.button.which == SDL_TOUCH_MOUSEID)
+                    break;
+#endif 
                 rl.mousepress_array[rl.event.button.button] = 1;
                 break;
             }
             case SDL_MOUSEBUTTONUP: {
+#ifndef EMULATE_MOUSE_WITH_TOUCH
+                if (rl.event.button.which == SDL_TOUCH_MOUSEID)
+                    break;
+#endif 
                 rl.mousepress_array[rl.event.button.button] = 2;
                 break;
             }

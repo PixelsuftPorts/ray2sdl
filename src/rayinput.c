@@ -123,3 +123,54 @@ RLCAPI void SetMouseCursor(int cursor) {
         SDL_FreeCursor(rl.cursor);
     rl.cursor = cursor >= 0 ? cursor_handle : NULL;
 }
+
+RLCAPI int GetTouchX(void) {
+    SDL_Finger* result = SDL_GetTouchFinger(rl.touch_dev, 0);
+    if (result == NULL)
+        TRACELOG(LOG_WARNING, "Failed to get touch finger");
+    return result->x;
+}
+
+RLCAPI int GetTouchY(void) {
+    if (!rl.touch_dev) {
+        TRACELOG(LOG_WARNING, "Device is not opened");
+        return 0;
+    }
+    SDL_Finger* result = SDL_GetTouchFinger(rl.touch_dev, 0);
+    if (result == NULL)
+        TRACELOG(LOG_WARNING, "Failed to get touch finger");
+    return result->y;
+}
+
+RLCAPI Vector2 GetTouchPosition(int index) {
+    if (!rl.touch_dev) {
+        TRACELOG(LOG_WARNING, "Device is not opened");
+        return VECLITERAL(Vector2){.x = 0.0f, .y = 0.0f};
+    }
+    SDL_Finger* result = SDL_GetTouchFinger(rl.touch_dev, 0);
+    if (result == NULL)
+        TRACELOG(LOG_WARNING, "Failed to get touch finger");
+    return VECLITERAL(Vector2){.x = (float)result->x, .y = (float)result->y};
+}
+
+RLCAPI int GetTouchPointId(int index) {
+    if (!rl.touch_dev) {
+        TRACELOG(LOG_WARNING, "Device is not opened");
+        return 0;
+    }
+    SDL_Finger* result = SDL_GetTouchFinger(rl.touch_dev, index);
+    if (result == NULL)
+        TRACELOG(LOG_WARNING, "Failed to get touch finger");
+    return result->id;
+}
+
+RLCAPI int GetTouchPointCount(void) {
+    if (!rl.touch_dev) {
+        TRACELOG(LOG_WARNING, "Device is not opened");
+        return 0;
+    }
+    int result = SDL_GetNumTouchFingers(rl.touch_dev);
+    if (!result)
+        TRACELOG(LOG_WARNING, "Failed to get num of touch fingers (%s)", SDL_GetError());
+    return result;
+}
