@@ -5,6 +5,15 @@
 #ifndef _MSC_VER
 #include <dirent.h>
 #endif
+#if defined(_WIN32)
+    #include <direct.h>
+    #define GETCWD _getcwd
+    #define CHDIR _chdir
+#else
+    #include <unistd.h>
+    #define GETCWD getcwd
+    #define CHDIR chdir
+#endif
 
 RLCAPI void SetTraceLogCallback(TraceLogCallback callback) {
     rl.traceLog = callback;
@@ -299,7 +308,11 @@ RLCAPI const char *GetPrevDirectoryPath(const char *dirPath) {
 }
 
 RLCAPI const char *GetWorkingDirectory(void) {
-    return "";
+    static char currentDir[MAX_FILEPATH_LENGTH] = { 0 };
+    char *path = GETCWD(currentDir, MAX_FILEPATH_LENGTH - 1);
+    if (path == NULL)
+        TRACELOG(LOG_WARNING, "FILEIO: Failed to get CWD");
+    return path;
 }
 
 RLCAPI const char *GetApplicationDirectory(void) {
