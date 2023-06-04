@@ -7,6 +7,12 @@
 extern "C" {
 #endif
 
+/*
+What is not done?
+cameras and modes, All 3D, fps clock, shaders,
+gestures, gamecontrollers (I don't have them lol) and some other things
+*/
+
 RLAPI void InitWindow(int width, int height, const char *title);
 RLAPI bool WindowShouldClose(void);
 RLAPI void CloseWindow(void);

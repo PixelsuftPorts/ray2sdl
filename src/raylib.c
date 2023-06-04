@@ -680,13 +680,6 @@ RLCAPI void OpenURL(const char *url) {
         TRACELOG(LOG_WARNING, "Failed to open URL (%s)", SDL_GetError());
 }
 
-RLCAPI void ClearBackground(Color color) {
-    if (SDL_SetRenderDrawColor(rl.r, color.r, color.g, color.b, color.a) < 0)
-        TRACELOG(LOG_WARNING, "Failed to set draw color (%s)", SDL_GetError());
-    if (SDL_RenderClear(rl.r) < 0)
-        TRACELOG(LOG_WARNING, "Failed to clear render (%s)", SDL_GetError());
-}
-
 RLCAPI void BeginDrawing(void) {
     rl.need_to_swap = true;
     if (SDL_SetRenderTarget(rl.r, NULL) < 0)
