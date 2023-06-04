@@ -105,9 +105,10 @@ extern "C" {
 #define BLEND_WARN() TRACELOG(LOG_WARNING, "Failed to apply blend with color (%s)", SDL_GetError())
 #define DRAW_WARN() TRACELOG(LOG_WARNING, "Failed to draw (%s)", SDL_GetError())
 
-#define APPLY_BLEND(color) (\
-    SDL_SetRenderDrawBlendMode(rl.r, color.a >= 255 ? SDL_BLENDMODE_NONE : SDL_BLENDMODE_BLEND) |\
-    SDL_SetRenderDrawColor(rl.r, color.r, color.g, color.b, color.a))
+#define APPLY_BLEND_RGBA(r, g, b, a) (\
+    SDL_SetRenderDrawBlendMode(rl.r, a >= 255 ? SDL_BLENDMODE_NONE : SDL_BLENDMODE_BLEND) |\
+    SDL_SetRenderDrawColor(rl.r, r, g, b, a))
+#define APPLY_BLEND(color) APPLY_BLEND_RGBA(color.r, color.g, color.b, color.a)
 
 #if (defined(__STDC__) && __STDC_VERSION__ >= 199901L) || (defined(_MSC_VER) && _MSC_VER >= 1800)
     #include <stdbool.h>
