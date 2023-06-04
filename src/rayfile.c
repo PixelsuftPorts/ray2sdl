@@ -395,6 +395,7 @@ RLAPI void UnloadDroppedFiles(FilePathList files) {
         SDL_free(files.paths[i]);
     }
     SDL_free(files.paths);
+    // Bruh
     files.capacity = rl.drops.capacity = 0;
     files.count = rl.drops.count = 0;
     files.paths = rl.drops.paths = NULL;

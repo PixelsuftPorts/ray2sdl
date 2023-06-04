@@ -20,11 +20,6 @@ RLCAPI void InitWindow(int width, int height, const char *title) {
         } 
         rl.was_init = true;
     } 
-#ifdef SUPPORT_FILES_DROPPING
-    rl.drops.capacity = 0;
-    rl.drops.count = 0;
-    rl.drops.paths = NULL;
-#endif
     rl.w = SDL_CreateWindow(
         title,
         SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
@@ -146,10 +141,8 @@ RLCAPI bool WindowShouldClose(void) {
 
 RLCAPI void CloseWindow(void) {
 #ifdef SUPPORT_FILES_DROPPING
-    if (rl.drops.capacity > 0) {
-        // TODO: clear paths
-        SDL_free(rl.drops.paths);
-    }
+    if (rl.drops.capacity && rl.drops.paths)
+        UnloadDroppedFiles(rl.drops);
 #endif
     if (rl.clip_ptr) {
         SDL_free(rl.clip_ptr);
