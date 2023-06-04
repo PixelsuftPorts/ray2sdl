@@ -1,11 +1,14 @@
 .vscode
 .idea
+.cache
+b.bat
 SDL2
 raylib
 build
 Release
 Debug
 x64
+test
 push.bat
 test.txt
 test.h
