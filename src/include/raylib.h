@@ -161,6 +161,9 @@ RLAPI void DrawLineEx(Vector2 startPos, Vector2 endPos, float thick, Color color
 // TODO: Beizer Curves
 RLAPI void DrawLineStrip(Vector2 *points, int pointCount, Color color);
 RLAPI void DrawCircle(int centerX, int centerY, float radius, Color color);
+RLAPI void DrawCircleGradient(int centerX, int centerY, float radius, Color color1, Color color2);
+RLAPI void DrawCircleSector(Vector2 center, float radius, float startAngle, float endAngle, int segments, Color color);
+RLAPI void DrawCircleSectorLines(Vector2 center, float radius, float startAngle, float endAngle, int segments, Color color);
 RLAPI void DrawCircleV(Vector2 center, float radius, Color color);
 
 RLAPI void ClearBackground(Color color);

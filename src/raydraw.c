@@ -58,11 +58,40 @@ RLCAPI void DrawLineStrip(Vector2 *points, int pointCount, Color color) {
         DRAW_WARN();
 }
 
+RLCAPI void DrawCircleGradient(int centerX, int centerY, float radius, Color color1, Color color2) {
+    // TODO
+    DrawCircleV(
+        VECLITERAL(Vector2){ (float)centerX, (float)centerY },
+        radius,
+        CLITERAL(Color) { color1.r / 2 + color2.r / 2, color1.g / 2 + color2.g / 2, color1.b / 2 + color2.b / 2, color1.a / 2 + color2.a / 2 }
+    );
+}
+
+RLCAPI void DrawCircleSector(Vector2 center, float radius, float startAngle, float endAngle, int segments, Color color) {
+    if (radius <= 0.0f)
+        radius = 0.1f;
+    startAngle -= 135.0f;
+    endAngle -= 135.0f;
+    if (startAngle < 0.0f)
+        startAngle += 360.0f;
+    if (endAngle < 0.0f)
+        endAngle += 360.0f;
+    if (filledPieRGBA(
+        (Sint16)center.x, (Sint16)center.y, (Sint16)radius, (Sint16)(startAngle), (Sint16)endAngle,
+        color.r, color.g, color.b, color.a
+    ) < 0)
+        GFX_WARN();
+}
+
+RLCAPI void DrawCircleSectorLines(Vector2 center, float radius, float startAngle, float endAngle, int segments, Color color) {
+
+}
+
 RLCAPI void DrawCircleV(Vector2 center, float radius, Color color) {
     if (radius <= 0.0f)
         radius = 0.1f;
     if (filledCircleRGBA(
-        (Sint16)center.x, (Sint16)center.y, (Sint16)radius, color.r, color.g, color.b, color.a
+        (Sint16)center.x, (Sint16)center.y, radius, color.r, color.g, color.b, color.a
     ) < 0)
         GFX_WARN();
 }
