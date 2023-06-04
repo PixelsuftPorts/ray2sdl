@@ -130,3 +130,31 @@ RLAPI void DrawEllipseLines(int centerX, int centerY, float radiusH, float radiu
     ) < 0)
         GFX_WARN();
 }
+
+RLCAPI void DrawRing(Vector2 center, float innerRadius, float outerRadius, float startAngle, float endAngle, int segments, Color color) {
+    DrawRingLines(center, innerRadius, outerRadius, startAngle, endAngle, segments, color); // TODO
+}
+
+RLCAPI void DrawRingLines(Vector2 center, float innerRadius, float outerRadius, float startAngle, float endAngle, int segments, Color color) {
+    if (startAngle == endAngle)
+        return;
+    startAngle -= 135.0f;
+    endAngle -= 135.0f;
+    if (startAngle < 0.0f)
+        startAngle += 360.0f;
+    if (endAngle < 0.0f)
+        endAngle += 360.0f;
+    if (outerRadius <= 0.0f)
+        outerRadius = 0.1f;
+    if (arcRGBA(
+        (Sint16)center.x, (Sint16)center.y, (Sint16)innerRadius, (Sint16)startAngle, (Sint16)endAngle,
+        color.r, color.g, color.b, color.a
+    ) < 0)
+        GFX_WARN();
+    // TODO: connect these lines
+    if (arcRGBA(
+        (Sint16)center.x, (Sint16)center.y, (Sint16)outerRadius, (Sint16)startAngle, (Sint16)endAngle,
+        color.r, color.g, color.b, color.a
+    ) < 0)
+        GFX_WARN();
+}
