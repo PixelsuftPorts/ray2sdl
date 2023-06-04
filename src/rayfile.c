@@ -291,7 +291,11 @@ RLCAPI const char *GetDirectoryPath(const char *filePath) {
 }
 
 RLCAPI const char *GetPrevDirectoryPath(const char *dirPath) {
-    return "";
+    if (dirPath == NULL) {
+        TRACELOG(LOG_WARNING, "FILEIO: NULL pointer passed");
+        return NULL;
+    }
+    return GetDirectoryPath(dirPath); // LOL
 }
 
 RLCAPI const char *GetWorkingDirectory(void) {
