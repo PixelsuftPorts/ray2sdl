@@ -54,23 +54,49 @@ RLCAPI int GetCharPressed(void) {
     return 0;
 }
 
-RLCAPI bool IsMouseButtonPressed(int button) {}
+RLCAPI bool IsMouseButtonPressed(int button) { // TODO: I don't think it's good to make these functions to be safe
+    return rl.mousepress_array[button] == 1;
+}
 
-RLCAPI bool IsMouseButtonDown(int button) {}
+RLCAPI bool IsMouseButtonDown(int button) {
+    return (bool)(SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(button));
+}
 
-RLCAPI bool IsMouseButtonReleased(int button) {}
+RLCAPI bool IsMouseButtonReleased(int button) {
+    return rl.mousepress_array[button] == 2;
+}
 
-RLCAPI bool IsMouseButtonUp(int button) {}
+RLCAPI bool IsMouseButtonUp(int button) {
+    return !(SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(button));
+}
 
-RLCAPI int GetMouseX(void) {}
+RLCAPI int GetMouseX(void) {
+    int x;
+    SDL_GetMouseState(&x, NULL);
+    return x;
+}
 
-RLCAPI int GetMouseY(void) {}
+RLCAPI int GetMouseY(void) {
+    int y;
+    SDL_GetMouseState(NULL, &y);
+    return y;
+}
 
-RLCAPI Vector2 GetMousePosition(void) {}
+RLCAPI Vector2 GetMousePosition(void) {
+    int x, y;
+    SDL_GetMouseState(&x, &y);
+    return VECLITERAL(Vector2) {.x = y, .y = y};
+}
 
-RLCAPI Vector2 GetMouseDelta(void) {}
+RLCAPI Vector2 GetMouseDelta(void) {
+    int x, y;
+    SDL_GetRelativeMouseState(&x, &y);
+    return VECLITERAL(Vector2) {.x = y, .y = y};
+}
 
-RLCAPI void SetMousePosition(int x, int y) {}
+RLCAPI void SetMousePosition(int x, int y) {
+    SDL_WarpMouseInWindow(rl.w, x, y);
+}
 
 RLCAPI void SetMouseOffset(int offsetX, int offsetY) {}
 

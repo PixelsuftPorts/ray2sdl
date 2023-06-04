@@ -454,13 +454,13 @@ typedef enum {
 
 // Mouse buttons
 typedef enum {
-    MOUSE_BUTTON_LEFT    = 0,       // Mouse button left
-    MOUSE_BUTTON_RIGHT   = 1,       // Mouse button right
-    MOUSE_BUTTON_MIDDLE  = 2,       // Mouse button middle (pressed wheel)
-    MOUSE_BUTTON_SIDE    = 3,       // Mouse button side (advanced mouse device)
-    MOUSE_BUTTON_EXTRA   = 4,       // Mouse button extra (advanced mouse device)
-    MOUSE_BUTTON_FORWARD = 5,       // Mouse button forward (advanced mouse device)
-    MOUSE_BUTTON_BACK    = 6,       // Mouse button back (advanced mouse device)
+    MOUSE_BUTTON_LEFT    = SDL_BUTTON_LEFT,       // Mouse button left
+    MOUSE_BUTTON_RIGHT   = SDL_BUTTON_RIGHT,       // Mouse button right
+    MOUSE_BUTTON_MIDDLE  = SDL_BUTTON_MIDDLE,       // Mouse button middle (pressed wheel)
+    MOUSE_BUTTON_SIDE    = SDL_BUTTON_X1,       // Mouse button side (advanced mouse device)
+    MOUSE_BUTTON_EXTRA   = SDL_BUTTON_X2,       // Mouse button extra (advanced mouse device)
+    MOUSE_BUTTON_FORWARD = SDL_BUTTON_X1,       // Mouse button forward (advanced mouse device)
+    MOUSE_BUTTON_BACK    = SDL_BUTTON_X2,       // Mouse button back (advanced mouse device)
 } MouseButton;
 
 // Mouse cursor
@@ -961,6 +961,7 @@ struct rl_type {
     SDL_Window* w;
     SDL_Renderer* r;
     const Uint8* kbd_array;
+    Uint8 mousepress_array[8];
 #ifdef HANDLE_KEY_PRESS
     Uint8* keypress_array;
 #endif

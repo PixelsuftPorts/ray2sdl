@@ -27,6 +27,9 @@ int main(void)
         if (IsKeyPressed(KEY_SPACE)) {
             printf("Space Down\n");
         }
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            printf("Click at %ix%i\n", GetMouseX(), GetMouseY());
+        }
         BeginDrawing();
         ClearBackground(BLACK);
             //DrawText("Congrats! You created your first window!", 190, 200, 20, LIGHTGRAY);

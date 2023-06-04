@@ -9,6 +9,7 @@
 
 RLCAPI void InitWindow(int width, int height, const char *title) {
     if (!rl.not_first_init) {
+        // TODO: clean need things when not first init maybe?
         SDL_memset(&rl, 0, sizeof(rl));
         rl.not_first_init = true;
         rl.log_level = LOG_INFO;
@@ -78,6 +79,7 @@ RLCAPI void InitWindow(int width, int height, const char *title) {
 
 void PollEvents() {
     rl.w_resized = false;
+    SDL_memset(rl.mousepress_array, 0, 8);
 #ifdef HANDLE_KEY_PRESS
     if (rl.keypress_array)
         SDL_memset(rl.keypress_array, 0, rl.num_kbd_keys);
@@ -86,6 +88,14 @@ void PollEvents() {
         switch (rl.event.type) {
             case SDL_QUIT: {
                 // rl.should_close = true;
+                break;
+            }
+            case SDL_MOUSEBUTTONDOWN: {
+                rl.mousepress_array[rl.event.button.button] = 1;
+                break;
+            }
+            case SDL_MOUSEBUTTONUP: {
+                rl.mousepress_array[rl.event.button.button] = 2;
                 break;
             }
             case SDL_KEYDOWN: {
