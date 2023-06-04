@@ -465,7 +465,7 @@ typedef enum {
 
 // Mouse cursor
 typedef enum {
-    MOUSE_CURSOR_DEFAULT       = 0,     // Default pointer shape
+    MOUSE_CURSOR_DEFAULT       = -1,     // Default pointer shape
     MOUSE_CURSOR_ARROW         = SDL_SYSTEM_CURSOR_ARROW,     // Arrow shape
     MOUSE_CURSOR_IBEAM         = SDL_SYSTEM_CURSOR_IBEAM,     // Text writing cursor shape
     MOUSE_CURSOR_CROSSHAIR     = SDL_SYSTEM_CURSOR_CROSSHAIR,     // Cross shape

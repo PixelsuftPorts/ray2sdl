@@ -29,6 +29,10 @@ int main(void)
         }
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
             printf("Click at %ix%i\n", GetMouseX(), GetMouseY());
+            SetMouseCursor(MOUSE_CURSOR_POINTING_HAND);
+        }
+        else if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
+            SetMouseCursor(MOUSE_CURSOR_DEFAULT);
         }
         BeginDrawing();
         ClearBackground(BLACK);

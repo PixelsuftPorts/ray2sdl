@@ -98,7 +98,9 @@ RLCAPI void SetMousePosition(int x, int y) {
     SDL_WarpMouseInWindow(rl.w, x, y);
 }
 
-RLCAPI void SetMouseOffset(int offsetX, int offsetY) {}
+RLCAPI void SetMouseOffset(int offsetX, int offsetY) {
+
+}
 
 RLCAPI void SetMouseScale(float scaleX, float scaleY) {}
 
@@ -106,4 +108,11 @@ RLCAPI float GetMouseWheelMove(void) {}
 
 RLCAPI Vector2 GetMouseWheelMoveV(void) {}
 
-RLCAPI void SetMouseCursor(int cursor) {}
+RLCAPI void SetMouseCursor(int cursor) {
+    SDL_Cursor* cursor_handle = cursor >= 0 ? SDL_CreateSystemCursor(cursor) : SDL_GetDefaultCursor();
+    if (cursor_handle == NULL) {
+        TRACELOG(LOG_WARNING, "Failed to set get system cursor (%s)", SDL_GetError());
+        return;
+    }
+    SDL_SetCursor(cursor_handle);
+}
