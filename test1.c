@@ -10,6 +10,7 @@ int main(void)
 {
     SetConfigFlags(FLAG_WINDOW_ALWAYS_RUN | FLAG_VSYNC_HINT | FLAG_WINDOW_HIGHDPI | FLAG_WINDOW_RESIZABLE);
     InitWindow(800, 450, "raylib [core] example - basic window");
+    SetExitKey(KEY_Q);
 
     while (!WindowShouldClose())
     {

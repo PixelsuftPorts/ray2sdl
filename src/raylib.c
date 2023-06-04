@@ -79,7 +79,11 @@ void PollEvents() {
                 break;
             }
             case SDL_KEYDOWN: {
+#ifdef USE_SCANCODES
+                if (rl.event.key.keysym.scancode == rl.exit_key)
+#else
                 if (rl.event.key.keysym.sym == rl.exit_key)
+#endif
                     rl.should_close = true;
                 break;
             }
