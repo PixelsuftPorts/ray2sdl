@@ -1,4 +1,4 @@
-/* 
+/*
 
 raygfx.c: graphics primitives for SDL
 
@@ -36,11 +36,11 @@ Pixelsuf's Hands -- pixelsuft.github.io
 
 /* Set up for C function definitions, even when using C++ */
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
-
-	/* ---- Function Prototypes */
+    /* ---- Function Prototypes */
 
 /*#ifdef _MSC_VER
 #  if defined(DLL_EXPORT) && !defined(LIBSDL2_GFX_DLL_IMPORT)
@@ -55,153 +55,153 @@ extern "C" {
 #  define RAYGFXAPI extern
 #endif*/
 #define RAYGFXAPI
-/* Pixel */
+    /* Pixel */
 
-RAYGFXAPI int pixelRGBA(Sint16 x, Sint16 y, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+    RAYGFXAPI int pixelRGBA(Sint16 x, Sint16 y, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 
-/* Horizontal line */
+    /* Horizontal line */
 
-RAYGFXAPI int hlineRGBA(Sint16 x1, Sint16 x2, Sint16 y, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+    RAYGFXAPI int hlineRGBA(Sint16 x1, Sint16 x2, Sint16 y, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 
-/* Vertical line */
+    /* Vertical line */
 
-RAYGFXAPI int vlineRGBA(Sint16 x, Sint16 y1, Sint16 y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+    RAYGFXAPI int vlineRGBA(Sint16 x, Sint16 y1, Sint16 y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 
-/* Rectangle */
+    /* Rectangle */
 
-RAYGFXAPI int rectangleRGBA(Sint16 x1, Sint16 y1,
-    Sint16 x2, Sint16 y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+    RAYGFXAPI int rectangleRGBA(Sint16 x1, Sint16 y1,
+                                Sint16 x2, Sint16 y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 
-/* Rounded-Corner Rectangle */
+    /* Rounded-Corner Rectangle */
 
-RAYGFXAPI int roundedRectangleRGBA(Sint16 x1, Sint16 y1,
-    Sint16 x2, Sint16 y2, Sint16 rad, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+    RAYGFXAPI int roundedRectangleRGBA(Sint16 x1, Sint16 y1,
+                                       Sint16 x2, Sint16 y2, Sint16 rad, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 
-/* Filled rectangle (Box) */
+    /* Filled rectangle (Box) */
 
-RAYGFXAPI int boxRGBA(Sint16 x1, Sint16 y1, Sint16 x2,
-    Sint16 y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+    RAYGFXAPI int boxRGBA(Sint16 x1, Sint16 y1, Sint16 x2,
+                          Sint16 y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 
-/* Rounded-Corner Filled rectangle (Box) */
+    /* Rounded-Corner Filled rectangle (Box) */
 
-RAYGFXAPI int roundedBoxRGBA(Sint16 x1, Sint16 y1, Sint16 x2,
-    Sint16 y2, Sint16 rad, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+    RAYGFXAPI int roundedBoxRGBA(Sint16 x1, Sint16 y1, Sint16 x2,
+                                 Sint16 y2, Sint16 rad, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 
-/* Line */
+    /* Line */
 
-RAYGFXAPI int lineRGBA(Sint16 x1, Sint16 y1,
-    Sint16 x2, Sint16 y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+    RAYGFXAPI int lineRGBA(Sint16 x1, Sint16 y1,
+                           Sint16 x2, Sint16 y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 
-/* AA Line */
+    /* AA Line */
 
-RAYGFXAPI int aalineRGBA(Sint16 x1, Sint16 y1,
-    Sint16 x2, Sint16 y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+    RAYGFXAPI int aalineRGBA(Sint16 x1, Sint16 y1,
+                             Sint16 x2, Sint16 y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 
-/* Thick Line */
-RAYGFXAPI int thickLineRGBA(Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2, 
-    Uint8 width, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+    /* Thick Line */
+    RAYGFXAPI int thickLineRGBA(Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2,
+                                Uint8 width, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 
-/* Circle */
+    /* Circle */
 
-RAYGFXAPI int circleRGBA(Sint16 x, Sint16 y, Sint16 rad, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+    RAYGFXAPI int circleRGBA(Sint16 x, Sint16 y, Sint16 rad, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 
-/* Arc */
+    /* Arc */
 
-RAYGFXAPI int arcRGBA(Sint16 x, Sint16 y, Sint16 rad, Sint16 start, Sint16 end, 
-    Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+    RAYGFXAPI int arcRGBA(Sint16 x, Sint16 y, Sint16 rad, Sint16 start, Sint16 end,
+                          Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 
-/* AA Circle */
+    /* AA Circle */
 
-RAYGFXAPI int aacircleRGBA(Sint16 x, Sint16 y,
-    Sint16 rad, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+    RAYGFXAPI int aacircleRGBA(Sint16 x, Sint16 y,
+                               Sint16 rad, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 
-/* Filled Circle */
+    /* Filled Circle */
 
-RAYGFXAPI int filledCircleRGBA(Sint16 x, Sint16 y,
-    Sint16 rad, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+    RAYGFXAPI int filledCircleRGBA(Sint16 x, Sint16 y,
+                                   Sint16 rad, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 
-/* Ellipse */
+    /* Ellipse */
 
-RAYGFXAPI int ellipseRGBA(Sint16 x, Sint16 y,
-    Sint16 rx, Sint16 ry, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+    RAYGFXAPI int ellipseRGBA(Sint16 x, Sint16 y,
+                              Sint16 rx, Sint16 ry, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 
-/* AA Ellipse */
+    /* AA Ellipse */
 
-RAYGFXAPI int aaellipseRGBA(Sint16 x, Sint16 y,
-    Sint16 rx, Sint16 ry, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+    RAYGFXAPI int aaellipseRGBA(Sint16 x, Sint16 y,
+                                Sint16 rx, Sint16 ry, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 
-/* Filled Ellipse */
+    /* Filled Ellipse */
 
-RAYGFXAPI int filledEllipseRGBA(Sint16 x, Sint16 y,
-    Sint16 rx, Sint16 ry, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+    RAYGFXAPI int filledEllipseRGBA(Sint16 x, Sint16 y,
+                                    Sint16 rx, Sint16 ry, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 
-/* Pie */
+    /* Pie */
 
-RAYGFXAPI int pieRGBA(Sint16 x, Sint16 y, Sint16 rad,
-    Sint16 start, Sint16 end, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+    RAYGFXAPI int pieRGBA(Sint16 x, Sint16 y, Sint16 rad,
+                          Sint16 start, Sint16 end, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 
-/* Filled Pie */
+    /* Filled Pie */
 
-RAYGFXAPI int filledPieRGBA(Sint16 x, Sint16 y, Sint16 rad,
-    Sint16 start, Sint16 end, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+    RAYGFXAPI int filledPieRGBA(Sint16 x, Sint16 y, Sint16 rad,
+                                Sint16 start, Sint16 end, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 
-/* Trigon */
+    /* Trigon */
 
-RAYGFXAPI int trigonRGBA(Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2, Sint16 x3, Sint16 y3,
-    Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+    RAYGFXAPI int trigonRGBA(Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2, Sint16 x3, Sint16 y3,
+                             Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 
-/* AA-Trigon */
+    /* AA-Trigon */
 
-RAYGFXAPI int aatrigonRGBA( Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2, Sint16 x3, Sint16 y3,
-    Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+    RAYGFXAPI int aatrigonRGBA(Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2, Sint16 x3, Sint16 y3,
+                               Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 
-/* Filled Trigon */
+    /* Filled Trigon */
 
-RAYGFXAPI int filledTrigonRGBA(Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2, Sint16 x3, Sint16 y3,
-    Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+    RAYGFXAPI int filledTrigonRGBA(Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2, Sint16 x3, Sint16 y3,
+                                   Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 
-/* Polygon */
+    /* Polygon */
 
-RAYGFXAPI int polygonRGBA(const Sint16 * vx, const Sint16 * vy,
-    int n, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+    RAYGFXAPI int polygonRGBA(const Sint16 *vx, const Sint16 *vy,
+                              int n, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 
-/* AA-Polygon */
+    /* AA-Polygon */
 
-RAYGFXAPI int aapolygonRGBA(const Sint16 * vx, const Sint16 * vy,
-    int n, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+    RAYGFXAPI int aapolygonRGBA(const Sint16 *vx, const Sint16 *vy,
+                                int n, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 
-/* Filled Polygon */
+    /* Filled Polygon */
 
-RAYGFXAPI int filledPolygonRGBA(const Sint16 * vx,
-    const Sint16 * vy, int n, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+    RAYGFXAPI int filledPolygonRGBA(const Sint16 *vx,
+                                    const Sint16 *vy, int n, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 
-/* Textured Polygon */
+    /* Textured Polygon */
 
-RAYGFXAPI int texturedPolygon(const Sint16 * vx, const Sint16 * vy, int n, SDL_Surface * texture,int texture_dx,int texture_dy);
+    RAYGFXAPI int texturedPolygon(const Sint16 *vx, const Sint16 *vy, int n, SDL_Surface *texture, int texture_dx, int texture_dy);
 
-/* Bezier */
+    /* Bezier */
 
-RAYGFXAPI int bezierRGBA(const Sint16 * vx, const Sint16 * vy,
-    int n, int s, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
-RAYGFXAPI double _evaluateBezier(double *data, int ndata, double t);
-/* Richard Russell's additions */
+    RAYGFXAPI int bezierRGBA(const Sint16 *vx, const Sint16 *vy,
+                             int n, int s, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+    RAYGFXAPI double _evaluateBezier(double *data, int ndata, double t);
+    /* Richard Russell's additions */
 
-RAYGFXAPI int thickEllipseRGBA(Sint16 xc, Sint16 yc, Sint16 xr, Sint16 yr, Uint8 r, Uint8 g, Uint8 b, Uint8 a, Uint8 thick);
-RAYGFXAPI int thickArcRGBA(Sint16 xc, Sint16 yc, Sint16 rad, Sint16 start, Sint16 end, Uint8 r, Uint8 g, Uint8 b, Uint8 a, Uint8 thick);
-RAYGFXAPI int thickCircleRGBA(Sint16 x, Sint16 y, Sint16 rad, Uint8 r, Uint8 g, Uint8 b, Uint8 a, Uint8 thick);
-RAYGFXAPI int filledPolyBezierRGBA(const Sint16 *x, const Sint16 *y, int n, int s, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+    RAYGFXAPI int thickEllipseRGBA(Sint16 xc, Sint16 yc, Sint16 xr, Sint16 yr, Uint8 r, Uint8 g, Uint8 b, Uint8 a, Uint8 thick);
+    RAYGFXAPI int thickArcRGBA(Sint16 xc, Sint16 yc, Sint16 rad, Sint16 start, Sint16 end, Uint8 r, Uint8 g, Uint8 b, Uint8 a, Uint8 thick);
+    RAYGFXAPI int thickCircleRGBA(Sint16 x, Sint16 y, Sint16 rad, Uint8 r, Uint8 g, Uint8 b, Uint8 a, Uint8 thick);
+    RAYGFXAPI int filledPolyBezierRGBA(const Sint16 *x, const Sint16 *y, int n, int s, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 
-RAYGFXAPI int aaFilledEllipseRGBA(float cx, float cy, float rx, float ry, Uint8 r, Uint8 g, Uint8 b, Uint8 a); 
-RAYGFXAPI int aaFilledPolygonRGBA(const double * vx, const double * vy, int n, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
-RAYGFXAPI int aaFilledPieRGBA(float cx, float cy, float rx, float ry,
-    float start, float end, Uint32 chord, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+    RAYGFXAPI int aaFilledEllipseRGBA(float cx, float cy, float rx, float ry, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+    RAYGFXAPI int aaFilledPolygonRGBA(const double *vx, const double *vy, int n, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+    RAYGFXAPI int aaFilledPieRGBA(float cx, float cy, float rx, float ry,
+                                  float start, float end, Uint32 chord, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 
-RAYGFXAPI int aaArcRGBA(float cx, float cy, float rx, float ry,
-    float start, float end, float thick, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
-RAYGFXAPI int aaBezierRGBA(double *x, double *y, int n, int s, float thick, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
-RAYGFXAPI int aaFilledPolyBezierRGBA(double *x, double *y, int n, int s, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+    RAYGFXAPI int aaArcRGBA(float cx, float cy, float rx, float ry,
+                            float start, float end, float thick, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+    RAYGFXAPI int aaBezierRGBA(double *x, double *y, int n, int s, float thick, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+    RAYGFXAPI int aaFilledPolyBezierRGBA(double *x, double *y, int n, int s, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 
-	/* Ends C function definitions when using C++ */
+    /* Ends C function definitions when using C++ */
 #ifdef __cplusplus
 }
 #endif
