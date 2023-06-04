@@ -134,7 +134,6 @@ int pixelRGBAWeight(Sint16 x, Sint16 y, Uint8 r, Uint8 g, Uint8 b, Uint8 a, Uint
 int hline(Sint16 x1, Sint16 x2, Sint16 y)
 {
     return SDL_RenderDrawLine(rl.r, x1, y, x2, y);
-    ;
 }
 
 /*!
@@ -174,7 +173,6 @@ int hlineRGBA(Sint16 x1, Sint16 x2, Sint16 y, Uint8 r, Uint8 g, Uint8 b, Uint8 a
 int vline(Sint16 x, Sint16 y1, Sint16 y2)
 {
     return SDL_RenderDrawLine(rl.r, x, y1, x, y2);
-    ;
 }
 
 /*!
@@ -3608,7 +3606,7 @@ static int LineStyle = -1;
 
 \returns Returns 0 on success, -1 on failure.
 */
-int thickLineRGBA(Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2, Uint8 width, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
+int thickLineRGBA(Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2, float width, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
 {
     int result;
     int wh;
@@ -3616,7 +3614,7 @@ int thickLineRGBA(Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2, Uint8 width, Uint8
     /* Special case: thick "point" */
     if ((x1 == x2) && (y1 == y2))
     {
-        wh = width / 2;
+        wh = (int)(width / 2.0f);
         return boxRGBA(x1 - wh, y1 - wh, x2 + wh, y2 + wh, r, g, b, a);
     }
 
