@@ -333,3 +333,73 @@ RLCAPI bool ChangeDirectory(const char *dir) {
 RLCAPI bool IsPathFile(const char *path) {
     return FileExists(path); // I don't think it's correct
 }
+
+RLAPI FilePathList LoadDirectoryFiles(const char *dirPath) {
+    // TODO
+    FilePathList result = { 0 };
+    return result;
+}
+
+RLAPI FilePathList LoadDirectoryFilesEx(const char *basePath, const char *filter, bool scanSubdirs) {
+    FilePathList result = { 0 };
+    return result;
+}
+
+RLAPI void UnloadDirectoryFiles(FilePathList files) {
+
+}
+
+RLAPI void RegisterFileDrop(char* fp) {
+    if (rl.drops.capacity <= 0) {
+        rl.drops.count = 0;
+        rl.drops.paths = (char**)SDL_malloc(MAX_FILEPATH_CAPACITY);
+        if (rl.drops.paths == NULL) {
+            TRACELOG(LOG_WARNING, "Failed to allocate drops paths");
+            return;
+        }
+        rl.drops.capacity = MAX_FILEPATH_CAPACITY;
+    }
+    else if (rl.drops.count >= rl.drops.capacity) {
+        TRACELOG(LOG_WARNING, "No free drop paths");
+        return;
+    }
+    rl.drops.paths[rl.drops.count] = fp;
+    rl.drops.count++;
+}
+
+RLAPI bool IsFileDropped(void) {
+#ifdef SUPPORT_FILES_DROPPING
+    return (bool)rl.drops.count;
+#else
+    return false;
+#endif
+}
+
+RLAPI FilePathList LoadDroppedFiles(void) {
+#ifdef SUPPORT_FILES_DROPPING
+    return rl.drops;
+#else
+    FilePathList result = { 0 };
+    return result;
+#endif
+}
+
+RLAPI void UnloadDroppedFiles(FilePathList files) {
+    if (files.capacity <= 0 || files.paths == NULL) {
+        TRACELOG(LOG_WARNING, "Passed inavid FilePathList");
+        return;
+    }
+    for (size_t i = 0; i < files.count; i++) {
+        if (files.paths[i] == NULL)
+            continue;
+        SDL_free(files.paths[i]);
+    }
+    SDL_free(files.paths);
+    files.capacity = rl.drops.capacity = 0;
+    files.count = rl.drops.count = 0;
+    files.paths = rl.drops.paths = NULL;
+}
+
+RLAPI long GetFileModTime(const char *fileName) {
+    return 0;
+}

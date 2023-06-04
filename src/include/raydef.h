@@ -822,6 +822,9 @@ typedef char *(*LoadFileTextCallback)(const char *fileName);
 typedef bool (*SaveFileTextCallback)(const char *fileName, char *text);
 
 struct rl_type {
+#ifdef SUPPORT_FILES_DROPPING
+    FilePathList drops;
+#endif
     SDL_Event event;
     TraceLogCallback traceLog;
     LoadFileDataCallback loadFileData;

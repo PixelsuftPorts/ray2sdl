@@ -16,6 +16,13 @@ int main(void)
         if (IsWindowResized()) {
             printf("Window Resized: [%ix%i]\n", GetScreenWidth(), GetScreenHeight());
         }
+        if (IsFileDropped()) {
+            FilePathList files = LoadDroppedFiles();
+            for (size_t i = 0; i < files.count; i++) {
+                printf("File dropped: %s\n", files.paths[i]);
+            }
+            UnloadDroppedFiles(files);
+        }
         BeginDrawing();
         ClearBackground(BLACK);
             //DrawText("Congrats! You created your first window!", 190, 200, 20, LIGHTGRAY);

@@ -104,6 +104,14 @@ RLAPI const char *GetWorkingDirectory(void);
 RLAPI const char *GetApplicationDirectory(void);
 RLAPI bool ChangeDirectory(const char *dir);
 RLAPI bool IsPathFile(const char *path);
+RLAPI FilePathList LoadDirectoryFiles(const char *dirPath);
+RLAPI FilePathList LoadDirectoryFilesEx(const char *basePath, const char *filter, bool scanSubdirs);
+RLAPI void UnloadDirectoryFiles(FilePathList files);
+RLAPI void RegisterFileDrop(char* fp);
+RLAPI bool IsFileDropped(void);
+RLAPI FilePathList LoadDroppedFiles(void);
+RLAPI void UnloadDroppedFiles(FilePathList files);
+RLAPI long GetFileModTime(const char *fileName);
 
 RLAPI void ClearBackground(Color color);
 RLAPI void BeginDrawing(void);
