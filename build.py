@@ -1,4 +1,5 @@
 # Pixelsuft Build System
+# Please, don't try to read this shift
 import os
 import sys
 import json
