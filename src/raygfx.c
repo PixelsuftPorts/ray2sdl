@@ -3364,7 +3364,7 @@ static void x_varthick_line(int style,
     E_diag = -2 * dx;
     E_square = 2 * dy;
     length = dx + 1;
-    D = sqrt(dx * dx + dy * dy);
+    D = SDL_sqrt(dx * dx + dy * dy);
     w_left = thickness * D + 0.5;
     w_right = 2.0 * thickness * D + 0.5;
     w_right -= w_left;
@@ -3475,7 +3475,7 @@ static void y_varthick_line(int style,
     E_diag = -2 * dy;
     E_square = 2 * dx;
     length = dy + 1;
-    D = sqrt(dx * dx + dy * dy);
+    D = SDL_sqrt(dx * dx + dy * dy);
     w_left = thickness * D + 0.5;
     w_right = 2.0 * thickness * D + 0.5;
     w_right -= w_left;
