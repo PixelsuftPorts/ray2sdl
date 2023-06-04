@@ -36,7 +36,7 @@ int main(void)
         }
         BeginDrawing();
         ClearBackground(BLACK);
-        DrawCircle(200, 200, 50.0f, RED);
+        DrawCircle(GetMouseX(), GetMouseY(), 10.0f, RED);
             //DrawText("Congrats! You created your first window!", 190, 200, 20, LIGHTGRAY);
         EndDrawing();
     }
