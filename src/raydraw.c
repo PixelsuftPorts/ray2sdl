@@ -17,12 +17,26 @@ RLCAPI void ClearBackground(Color color) {
 #define DRAW_WARN() TRACELOG(LOG_WARNING, "Failed to draw (%s)", SDL_GetError())
 
 RLCAPI void DrawPixel(int posX, int posY, Color color) {
-    DrawPixelV((Vector2){ (float)posX, (float)posY }, color);
+    DrawPixelV(VECLITERAL(Vector2){ (float)posX, (float)posY }, color);
+}
+
+RLCAPI void DrawLine(int startPosX, int startPosY, int endPosX, int endPosY, Color color) {
+    DrawLineV(
+        VECLITERAL(Vector2){ (float)startPosX, (float)startPosY },
+        VECLITERAL(Vector2){ (float)endPosX, (float)endPosY }, color
+    );
 }
 
 RLCAPI void DrawPixelV(Vector2 position, Color color) {
     if (APPLY_BLEND(color) < 0)
         BLEND_WARN();
     if (SDL_RenderDrawPointF(rl.r, position.x, position.y) < 0)
+        DRAW_WARN();
+}
+
+RLCAPI void DrawLineV(Vector2 startPos, Vector2 endPos, Color color) {
+    if (APPLY_BLEND(color) < 0)
+        BLEND_WARN();
+    if (SDL_RenderDrawLineF(rl.r, startPos.x, startPos.y, endPos.x, endPos.y) < 0)
         DRAW_WARN();
 }
