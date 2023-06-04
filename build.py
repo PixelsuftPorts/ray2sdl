@@ -38,9 +38,10 @@ class App:
         for fn in self.c_fns:
             fp = self.p('src', fn)
             f_hash = self.hash_file(fp)
-            if self.rebuild or fn not in self.config['cache'] or not f_hash == self.config['cache'][fn]:
+            new_fn = os.path.join('src', fn)
+            if self.rebuild or new_fn not in self.config['cache'] or not f_hash == self.config['cache'][new_fn]:
                 self.to_build.append({
-                    'fn': os.path.join('src', fn),
+                    'fn': new_fn,
                     'fp': fp,
                     'out': self.pc(fn + '.o'),
                     'hash': f_hash
