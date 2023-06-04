@@ -165,6 +165,9 @@ RLAPI void DrawCircleGradient(int centerX, int centerY, float radius, Color colo
 RLAPI void DrawCircleSector(Vector2 center, float radius, float startAngle, float endAngle, int segments, Color color);
 RLAPI void DrawCircleSectorLines(Vector2 center, float radius, float startAngle, float endAngle, int segments, Color color);
 RLAPI void DrawCircleV(Vector2 center, float radius, Color color);
+RLAPI void DrawCircleLines(int centerX, int centerY, float radius, Color color);
+RLAPI void DrawEllipse(int centerX, int centerY, float radiusH, float radiusV, Color color);
+RLAPI void DrawEllipseLines(int centerX, int centerY, float radiusH, float radiusV, Color color);
 
 RLAPI void ClearBackground(Color color);
 RLAPI void BeginDrawing(void);

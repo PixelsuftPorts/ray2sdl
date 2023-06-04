@@ -107,3 +107,26 @@ RLCAPI void DrawCircleV(Vector2 center, float radius, Color color) {
     ) < 0)
         GFX_WARN();
 }
+
+RLCAPI void DrawCircleLines(int centerX, int centerY, float radius, Color color) {
+    if (radius <= 0.0f)
+        radius = 0.1f;
+    if (circleRGBA(
+        (Sint16)centerX, (Sint16)centerY, radius, color.r, color.g, color.b, color.a
+    ) < 0)
+        GFX_WARN();
+}
+
+RLAPI void DrawEllipse(int centerX, int centerY, float radiusH, float radiusV, Color color) {
+    if (filledEllipseRGBA(
+        (Sint16)centerX, (Sint16)centerY, radiusH, radiusV, color.r, color.g, color.b, color.a
+    ) < 0)
+        GFX_WARN();
+}
+
+RLAPI void DrawEllipseLines(int centerX, int centerY, float radiusH, float radiusV, Color color) {
+    if (ellipseRGBA(
+        (Sint16)centerX, (Sint16)centerY, radiusH, radiusV, color.r, color.g, color.b, color.a
+    ) < 0)
+        GFX_WARN();
+}

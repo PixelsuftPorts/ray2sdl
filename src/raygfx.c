@@ -1044,14 +1044,6 @@ int arcRGBA(Sint16 x, Sint16 y, Sint16 rad, Sint16 start, Sint16 end, Uint8 r, U
     double dstart, dend, temp = 0.;
 
     /*
-     * Special case for rad=0 - draw a point
-     */
-    if (rad == 0)
-    {
-        return (pixelRGBA(x, y, r, g, b, a));
-    }
-
-    /*
      Octant labelling
 
       \ 5 | 6 /
@@ -1349,38 +1341,30 @@ int filledCircleRGBA(Sint16 x, Sint16 y, float rad, Uint8 r, Uint8 g, Uint8 b, U
 
 \returns Returns 0 on success, -1 on failure.
 */
-int ellipseRGBA(Sint16 x, Sint16 y, Sint16 rx, Sint16 ry, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
+int ellipseRGBA(Sint16 x, Sint16 y, float rx, float ry, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
 {
     int result;
-    int ix, iy;
-    int h, i, j, k;
-    int oh, oi, oj, ok;
-    int xmh, xph, ypk, ymk;
-    int xmi, xpi, ymj, ypj;
-    int xmj, xpj, ymi, ypi;
-    int xmk, xpk, ymh, yph;
-
-    /*
-     * Sanity check radii
-     */
-    if ((rx < 0) || (ry < 0))
-    {
-        return (-1);
-    }
+    float ix, iy;
+    float h, i, j, k;
+    float oh, oi, oj, ok;
+    float xmh, xph, ypk, ymk;
+    float xmi, xpi, ymj, ypj;
+    float xmj, xpj, ymi, ypi;
+    float xmk, xpk, ymh, yph;
 
     /*
      * Special case for rx=0 - draw a vline
      */
-    if (rx == 0)
+    if (rx == 0.0f)
     {
-        return (vlineRGBA(x, y - ry, y + ry, r, g, b, a));
+        return (vlineRGBA(x, y - (Sint16)ry, y + (Sint16)ry, r, g, b, a));
     }
     /*
      * Special case for ry=0 - draw a hline
      */
-    if (ry == 0)
+    if (ry == 0.0f)
     {
-        return (hlineRGBA(x - rx, x + rx, y, r, g, b, a));
+        return (hlineRGBA(x - (Sint16)rx, x + (Sint16)rx, y, r, g, b, a));
     }
 
     /*
@@ -1392,57 +1376,57 @@ int ellipseRGBA(Sint16 x, Sint16 y, Sint16 rx, Sint16 ry, Uint8 r, Uint8 g, Uint
     /*
      * Init vars
      */
-    oh = oi = oj = ok = 0xFFFF;
+    oh = oi = oj = ok = (Sint16)0xFFFF;
 
     /*
      * Draw
      */
-    if (rx > ry)
+    if (rx >= ry)
     {
-        ix = 0;
-        iy = rx * 64;
+        ix = 0.0f;
+        iy = rx * 64.0f;
 
         do
         {
-            h = (ix + 32) >> 6;
-            i = (iy + 32) >> 6;
+            h = (float)(((int)ix + 32) >> 6);
+            i = (float)(((int)iy + 32) >> 6);
             j = (h * ry) / rx;
             k = (i * ry) / rx;
 
             if (((ok != k) && (oj != k)) || ((oj != j) && (ok != j)) || (k != j))
             {
-                xph = x + h;
-                xmh = x - h;
+                xph = (float)x + h;
+                xmh = (float)x - h;
                 if (k > 0)
                 {
-                    ypk = y + k;
-                    ymk = y - k;
-                    result |= pixel(xmh, ypk);
-                    result |= pixel(xph, ypk);
-                    result |= pixel(xmh, ymk);
-                    result |= pixel(xph, ymk);
+                    ypk = (float)y + k;
+                    ymk = (float)y - k;
+                    result |= pixel((Sint16)xmh, (Sint16)ypk);
+                    result |= pixel((Sint16)xph, (Sint16)ypk);
+                    result |= pixel((Sint16)xmh, (Sint16)ymk);
+                    result |= pixel((Sint16)xph, (Sint16)ymk);
                 }
                 else
                 {
-                    result |= pixel(xmh, y);
-                    result |= pixel(xph, y);
+                    result |= pixel((Sint16)xmh, y);
+                    result |= pixel((Sint16)xph, y);
                 }
                 ok = k;
-                xpi = x + i;
-                xmi = x - i;
+                xpi = (float)x + i;
+                xmi = (float)x - i;
                 if (j > 0)
                 {
-                    ypj = y + j;
-                    ymj = y - j;
-                    result |= pixel(xmi, ypj);
-                    result |= pixel(xpi, ypj);
-                    result |= pixel(xmi, ymj);
-                    result |= pixel(xpi, ymj);
+                    ypj = (float)y + j;
+                    ymj = (float)y - j;
+                    result |= pixel((Sint16)xmi, (Sint16)ypj);
+                    result |= pixel((Sint16)xpi, (Sint16)ypj);
+                    result |= pixel((Sint16)xmi, (Sint16)ymj);
+                    result |= pixel((Sint16)xpi, (Sint16)ymj);
                 }
                 else
                 {
-                    result |= pixel(xmi, y);
-                    result |= pixel(xpi, y);
+                    result |= pixel((Sint16)xmi, y);
+                    result |= pixel((Sint16)xpi, y);
                 }
                 oj = j;
             }
@@ -1454,50 +1438,50 @@ int ellipseRGBA(Sint16 x, Sint16 y, Sint16 rx, Sint16 ry, Uint8 r, Uint8 g, Uint
     }
     else
     {
-        ix = 0;
-        iy = ry * 64;
+        ix = 0.0f;
+        iy = ry * 64.0f;
 
         do
         {
-            h = (ix + 32) >> 6;
-            i = (iy + 32) >> 6;
+            h = (float)(((int)ix + 32) >> 6);
+            i = (float)(((int)iy + 32) >> 6);
             j = (h * rx) / ry;
             k = (i * rx) / ry;
 
             if (((oi != i) && (oh != i)) || ((oh != h) && (oi != h) && (i != h)))
             {
-                xmj = x - j;
-                xpj = x + j;
+                xmj = (float)x - j;
+                xpj = (float)x + j;
                 if (i > 0)
                 {
-                    ypi = y + i;
-                    ymi = y - i;
-                    result |= pixel(xmj, ypi);
-                    result |= pixel(xpj, ypi);
-                    result |= pixel(xmj, ymi);
-                    result |= pixel(xpj, ymi);
+                    ypi = (float)y + i;
+                    ymi = (float)y - i;
+                    result |= pixel((Sint16)xmj, (Sint16)ypi);
+                    result |= pixel((Sint16)xpj, (Sint16)ypi);
+                    result |= pixel((Sint16)xmj, (Sint16)ymi);
+                    result |= pixel((Sint16)xpj, (Sint16)ymi);
                 }
                 else
                 {
-                    result |= pixel(xmj, y);
-                    result |= pixel(xpj, y);
+                    result |= pixel((Sint16)xmj, y);
+                    result |= pixel((Sint16)xpj, y);
                 }
                 oi = i;
-                xmk = x - k;
-                xpk = x + k;
+                xmk = (float)x - k;
+                xpk = (float)x + k;
                 if (h > 0)
                 {
-                    yph = y + h;
-                    ymh = y - h;
-                    result |= pixel(xmk, yph);
-                    result |= pixel(xpk, yph);
-                    result |= pixel(xmk, ymh);
-                    result |= pixel(xpk, ymh);
+                    yph = (float)y + h;
+                    ymh = (float)y - h;
+                    result |= pixel((Sint16)xmk, (Sint16)yph);
+                    result |= pixel((Sint16)xpk, (Sint16)yph);
+                    result |= pixel((Sint16)xmk, (Sint16)ymh);
+                    result |= pixel((Sint16)xpk, (Sint16)ymh);
                 }
                 else
                 {
-                    result |= pixel(xmk, y);
-                    result |= pixel(xpk, y);
+                    result |= pixel((Sint16)xmk, y);
+                    result |= pixel((Sint16)xpk, y);
                 }
                 oh = h;
             }
@@ -1929,14 +1913,6 @@ int _pieRGBA(Sint16 x, Sint16 y, float rad, float start, float end, Uint8 r, Uin
      */
     //start = start % 360;
     //end = end % 360;
-
-    /*
-     * Special case for rad=0 - draw a point
-     */
-    if (rad == 0.0f)
-    {
-        return (pixelRGBA(x, y, r, g, b, a));
-    }
 
     /*
      * Variable setup

@@ -123,7 +123,7 @@ extern "C"
     /* Ellipse */
 
     RAYGFXAPI int ellipseRGBA(Sint16 x, Sint16 y,
-                              Sint16 rx, Sint16 ry, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+                              float rx, float ry, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 
     /* AA Ellipse */
 
