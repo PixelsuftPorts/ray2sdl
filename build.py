@@ -122,7 +122,8 @@ class App:
     @staticmethod
     def hash_file(path: str) -> str:
         stat = os.stat(path)
-        return f'{stat.st_size}_{stat.st_ctime_ns}'
+        stat.st_atime
+        return f'{stat.st_size}_{stat.st_mtime}'
 
     def get_flags(self) -> list:
         if self.is_win:
