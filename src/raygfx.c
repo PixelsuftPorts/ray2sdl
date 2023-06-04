@@ -1350,7 +1350,7 @@ int aacircleRGBA(Sint16 x, Sint16 y, Sint16 rad, Uint8 r, Uint8 g, Uint8 b, Uint
 
 \returns Returns 0 on success, -1 on failure.
 */
-int filledCircleRGBA(Sint16 x, Sint16 y, Sint16 rad, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
+int filledCircleRGBA(Sint16 x, Sint16 y, float rad, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
 {
     return filledEllipseRGBA(x, y, rad, rad, r, g, b, a);
 }
@@ -1776,7 +1776,7 @@ int aaellipseRGBA(Sint16 x, Sint16 y, Sint16 rx, Sint16 ry, Uint8 r, Uint8 g, Ui
 
 \returns Returns 0 on success, -1 on failure.
 */
-int filledEllipseRGBA(Sint16 x, Sint16 y, Sint16 rx, Sint16 ry, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
+int filledEllipseRGBA(Sint16 x, Sint16 y, float rx, float ry, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
 {
     int result;
     int ix, iy;
@@ -1788,26 +1788,18 @@ int filledEllipseRGBA(Sint16 x, Sint16 y, Sint16 rx, Sint16 ry, Uint8 r, Uint8 g
     int xmk, xpk;
 
     /*
-     * Sanity check radii
-     */
-    if ((rx < 0) || (ry < 0))
-    {
-        return (-1);
-    }
-
-    /*
      * Special case for rx=0 - draw a vline
      */
-    if (rx == 0)
+    if (rx == 0.0f)
     {
-        return (vlineRGBA(x, y - ry, y + ry, r, g, b, a));
+        return (vlineRGBA(x, y - (Sint16)ry, y + (Sint16)ry, r, g, b, a));
     }
     /*
      * Special case for ry=0 - draw a hline
      */
-    if (ry == 0)
+    if (ry == 0.0f)
     {
-        return (hlineRGBA(x - rx, x + rx, y, r, g, b, a));
+        return (hlineRGBA(x - (Sint16)rx, x + (Sint16)rx, y, r, g, b, a));
     }
 
     /*
@@ -1824,17 +1816,17 @@ int filledEllipseRGBA(Sint16 x, Sint16 y, Sint16 rx, Sint16 ry, Uint8 r, Uint8 g
     /*
      * Draw
      */
-    if (rx > ry)
+    if (rx >= ry)
     {
         ix = 0;
-        iy = rx * 64;
+        iy = (int)rx * 64;
 
         do
         {
             h = (ix + 32) >> 6;
             i = (iy + 32) >> 6;
-            j = (h * ry) / rx;
-            k = (i * ry) / rx;
+            j = (h * ry) / (int)rx;
+            k = (i * ry) / (int)rx;
 
             if ((ok != k) && (oj != k))
             {
@@ -1867,22 +1859,22 @@ int filledEllipseRGBA(Sint16 x, Sint16 y, Sint16 rx, Sint16 ry, Uint8 r, Uint8 g
                 oj = j;
             }
 
-            ix = ix + iy / rx;
-            iy = iy - ix / rx;
+            ix = ix + iy / (int)rx;
+            iy = iy - ix / (int)rx;
 
         } while (i > h);
     }
     else
     {
         ix = 0;
-        iy = ry * 64;
+        iy = (int)ry * 64;
 
         do
         {
             h = (ix + 32) >> 6;
             i = (iy + 32) >> 6;
-            j = (h * rx) / ry;
-            k = (i * rx) / ry;
+            j = (h * rx) / (int)ry;
+            k = (i * rx) / (int)ry;
 
             if ((oi != i) && (oh != i))
             {
@@ -1915,8 +1907,8 @@ int filledEllipseRGBA(Sint16 x, Sint16 y, Sint16 rx, Sint16 ry, Uint8 r, Uint8 g
                 oh = h;
             }
 
-            ix = ix + iy / ry;
-            iy = iy - ix / ry;
+            ix = ix + iy / (int)ry;
+            iy = iy - ix / (int)ry;
 
         } while (i > h);
     }

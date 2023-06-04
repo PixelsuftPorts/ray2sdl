@@ -48,7 +48,7 @@ RLCAPI void DrawLineEx(Vector2 startPos, Vector2 endPos, float thick, Color colo
         (Sint16)startPos.x, (Sint16)startPos.y, (Sint16)endPos.x, (Sint16)endPos.y,
         thick, color.r, color.g, color.b, color.a
     ) < 0)
-        DRAW_WARN();
+        GFX_WARN();
 }
 
 RLCAPI void DrawLineStrip(Vector2 *points, int pointCount, Color color) {
@@ -59,8 +59,10 @@ RLCAPI void DrawLineStrip(Vector2 *points, int pointCount, Color color) {
 }
 
 RLCAPI void DrawCircleV(Vector2 center, float radius, Color color) {
+    if (radius <= 0.0f)
+        radius = 0.1f;
     if (filledCircleRGBA(
         (Sint16)center.x, (Sint16)center.y, (Sint16)radius, color.r, color.g, color.b, color.a
     ) < 0)
-        DRAW_WARN();
+        GFX_WARN();
 }

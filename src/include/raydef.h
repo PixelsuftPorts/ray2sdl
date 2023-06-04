@@ -104,6 +104,7 @@ extern "C" {
 
 #define BLEND_WARN() TRACELOG(LOG_WARNING, "Failed to apply blend with color (%s)", SDL_GetError())
 #define DRAW_WARN() TRACELOG(LOG_WARNING, "Failed to draw (%s)", SDL_GetError())
+#define GFX_WARN() TRACELOG(LOG_WARNING, "Failed to draw complex graphics (%s)", SDL_GetError())
 
 #define APPLY_BLEND_RGBA(color_r, color_g, color_b, color_a) (\
     SDL_SetRenderDrawBlendMode(rl.r, (color_a) >= 255 ? SDL_BLENDMODE_NONE : SDL_BLENDMODE_BLEND) |\
