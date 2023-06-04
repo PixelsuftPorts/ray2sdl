@@ -69,22 +69,6 @@ int pixel(SDL_Renderer *renderer, Sint16 x, Sint16 y)
 \param renderer The renderer to draw on.
 \param x X (horizontal) coordinate of the pixel.
 \param y Y (vertical) coordinate of the pixel.
-\param color The color value of the pixel to draw (0xAABBGGRR). 
-
-\returns Returns 0 on success, -1 on failure.
-*/
-int pixelColor(SDL_Renderer * renderer, Sint16 x, Sint16 y, Uint32 color)
-{
-	Uint8 *c = (Uint8 *)&color; 
-	return pixelRGBA(renderer, x, y, c[0], c[1], c[2], c[3]);
-}
-
-/*!
-\brief Draw pixel with blending enabled if a<255.
-
-\param renderer The renderer to draw on.
-\param x X (horizontal) coordinate of the pixel.
-\param y Y (vertical) coordinate of the pixel.
 \param r The red color value of the pixel to draw. 
 \param g The green color value of the pixel to draw.
 \param b The blue color value of the pixel to draw.
@@ -148,24 +132,6 @@ int hline(SDL_Renderer * renderer, Sint16 x1, Sint16 x2, Sint16 y)
 	return SDL_RenderDrawLine(renderer, x1, y, x2, y);;
 }
 
-
-/*!
-\brief Draw horizontal line with blending.
-
-\param renderer The renderer to draw on.
-\param x1 X coordinate of the first point (i.e. left) of the line.
-\param x2 X coordinate of the second point (i.e. right) of the line.
-\param y Y coordinate of the points of the line.
-\param color The color value of the line to draw (0xAABBGGRR). 
-
-\returns Returns 0 on success, -1 on failure.
-*/
-int hlineColor(SDL_Renderer * renderer, Sint16 x1, Sint16 x2, Sint16 y, Uint32 color)
-{
-	Uint8 *c = (Uint8 *)&color; 
-	return hlineRGBA(renderer, x1, x2, y, c[0], c[1], c[2], c[3]);
-}
-
 /*!
 \brief Draw horizontal line with blending.
 
@@ -213,23 +179,6 @@ int vline(SDL_Renderer * renderer, Sint16 x, Sint16 y1, Sint16 y2)
 \param x X coordinate of the points of the line.
 \param y1 Y coordinate of the first point (i.e. top) of the line.
 \param y2 Y coordinate of the second point (i.e. bottom) of the line.
-\param color The color value of the line to draw (0xAABBGGRR). 
-
-\returns Returns 0 on success, -1 on failure.
-*/
-int vlineColor(SDL_Renderer * renderer, Sint16 x, Sint16 y1, Sint16 y2, Uint32 color)
-{
-	Uint8 *c = (Uint8 *)&color; 
-	return vlineRGBA(renderer, x, y1, y2, c[0], c[1], c[2], c[3]);
-}
-
-/*!
-\brief Draw vertical line with blending.
-
-\param renderer The renderer to draw on.
-\param x X coordinate of the points of the line.
-\param y1 Y coordinate of the first point (i.e. top) of the line.
-\param y2 Y coordinate of the second point (i.e. bottom) of the line.
 \param r The red value of the line to draw. 
 \param g The green value of the line to draw. 
 \param b The blue value of the line to draw. 
@@ -247,24 +196,6 @@ int vlineRGBA(SDL_Renderer * renderer, Sint16 x, Sint16 y1, Sint16 y2, Uint8 r, 
 }
 
 /* ---- Rectangle */
-
-/*!
-\brief Draw rectangle with blending.
-
-\param renderer The renderer to draw on.
-\param x1 X coordinate of the first point (i.e. top right) of the rectangle.
-\param y1 Y coordinate of the first point (i.e. top right) of the rectangle.
-\param x2 X coordinate of the second point (i.e. bottom left) of the rectangle.
-\param y2 Y coordinate of the second point (i.e. bottom left) of the rectangle.
-\param color The color value of the rectangle to draw (0xAABBGGRR). 
-
-\returns Returns 0 on success, -1 on failure.
-*/
-int rectangleColor(SDL_Renderer * renderer, Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2, Uint32 color)
-{
-	Uint8 *c = (Uint8 *)&color; 
-	return rectangleRGBA(renderer, x1, y1, x2, y2, c[0], c[1], c[2], c[3]);
-}
 
 /*!
 \brief Draw rectangle with blending.
@@ -339,25 +270,6 @@ int rectangleRGBA(SDL_Renderer * renderer, Sint16 x1, Sint16 y1, Sint16 x2, Sint
 }
 
 /* ---- Rounded Rectangle */
-
-/*!
-\brief Draw rounded-corner rectangle with blending.
-
-\param renderer The renderer to draw on.
-\param x1 X coordinate of the first point (i.e. top right) of the rectangle.
-\param y1 Y coordinate of the first point (i.e. top right) of the rectangle.
-\param x2 X coordinate of the second point (i.e. bottom left) of the rectangle.
-\param y2 Y coordinate of the second point (i.e. bottom left) of the rectangle.
-\param rad The radius of the corner arc.
-\param color The color value of the rectangle to draw (0xAABBGGRR). 
-
-\returns Returns 0 on success, -1 on failure.
-*/
-int roundedRectangleColor(SDL_Renderer * renderer, Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2, Sint16 rad, Uint32 color)
-{
-	Uint8 *c = (Uint8 *)&color; 
-	return roundedRectangleRGBA(renderer, x1, y1, x2, y2, rad, c[0], c[1], c[2], c[3]);
-}
 
 /*!
 \brief Draw rounded-corner rectangle with blending.
@@ -484,25 +396,6 @@ int roundedRectangleRGBA(SDL_Renderer * renderer, Sint16 x1, Sint16 y1, Sint16 x
 }
 
 /* ---- Rounded Box */
-
-/*!
-\brief Draw rounded-corner box (filled rectangle) with blending.
-
-\param renderer The renderer to draw on.
-\param x1 X coordinate of the first point (i.e. top right) of the box.
-\param y1 Y coordinate of the first point (i.e. top right) of the box.
-\param x2 X coordinate of the second point (i.e. bottom left) of the box.
-\param y2 Y coordinate of the second point (i.e. bottom left) of the box.
-\param rad The radius of the corner arcs of the box.
-\param color The color value of the box to draw (0xAABBGGRR). 
-
-\returns Returns 0 on success, -1 on failure.
-*/
-int roundedBoxColor(SDL_Renderer * renderer, Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2, Sint16 rad, Uint32 color)
-{
-	Uint8 *c = (Uint8 *)&color; 
-	return roundedBoxRGBA(renderer, x1, y1, x2, y2, rad, c[0], c[1], c[2], c[3]);
-}
 
 /*!
 \brief Draw rounded-corner box (filled rectangle) with blending.
@@ -691,24 +584,6 @@ int roundedBoxRGBA(SDL_Renderer * renderer, Sint16 x1, Sint16 y1, Sint16 x2,
 \param y1 Y coordinate of the first point (i.e. top right) of the box.
 \param x2 X coordinate of the second point (i.e. bottom left) of the box.
 \param y2 Y coordinate of the second point (i.e. bottom left) of the box.
-\param color The color value of the box to draw (0xAABBGGRR). 
-
-\returns Returns 0 on success, -1 on failure.
-*/
-int boxColor(SDL_Renderer * renderer, Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2, Uint32 color)
-{
-	Uint8 *c = (Uint8 *)&color; 
-	return boxRGBA(renderer, x1, y1, x2, y2, c[0], c[1], c[2], c[3]);
-}
-
-/*!
-\brief Draw box (filled rectangle) with blending.
-
-\param renderer The renderer to draw on.
-\param x1 X coordinate of the first point (i.e. top right) of the box.
-\param y1 Y coordinate of the first point (i.e. top right) of the box.
-\param x2 X coordinate of the second point (i.e. bottom left) of the box.
-\param y2 Y coordinate of the second point (i.e. bottom left) of the box.
 \param r The red value of the box to draw. 
 \param g The green value of the box to draw. 
 \param b The blue value of the box to draw. 
@@ -792,24 +667,6 @@ int line(SDL_Renderer * renderer, Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2)
 	* Draw
 	*/
 	return SDL_RenderDrawLine(renderer, x1, y1, x2, y2);
-}
-
-/*!
-\brief Draw line with alpha blending.
-
-\param renderer The renderer to draw on.
-\param x1 X coordinate of the first point of the line.
-\param y1 Y coordinate of the first point of the line.
-\param x2 X coordinate of the second point of the line.
-\param y2 Y coordinate of the seond point of the line.
-\param color The color value of the line to draw (0xAABBGGRR). 
-
-\returns Returns 0 on success, -1 on failure.
-*/
-int lineColor(SDL_Renderer * renderer, Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2, Uint32 color)
-{
-	Uint8 *c = (Uint8 *)&color; 
-	return lineRGBA(renderer, x1, y1, x2, y2, c[0], c[1], c[2], c[3]);
 }
 
 /*!
@@ -1072,24 +929,6 @@ int _aalineRGBA(SDL_Renderer * renderer, Sint16 x1, Sint16 y1, Sint16 x2, Sint16
 \param y1 Y coordinate of the first point of the aa-line.
 \param x2 X coordinate of the second point of the aa-line.
 \param y2 Y coordinate of the second point of the aa-line.
-\param color The color value of the aa-line to draw (0xAABBGGRR).
-
-\returns Returns 0 on success, -1 on failure.
-*/
-int aalineColor(SDL_Renderer * renderer, Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2, Uint32 color)
-{
-	Uint8 *c = (Uint8 *)&color; 
-	return _aalineRGBA(renderer, x1, y1, x2, y2, c[0], c[1], c[2], c[3], 1);
-}
-
-/*!
-\brief Draw anti-aliased line with alpha blending.
-
-\param renderer The renderer to draw on.
-\param x1 X coordinate of the first point of the aa-line.
-\param y1 Y coordinate of the first point of the aa-line.
-\param x2 X coordinate of the second point of the aa-line.
-\param y2 Y coordinate of the second point of the aa-line.
 \param r The red value of the aa-line to draw. 
 \param g The green value of the aa-line to draw. 
 \param b The blue value of the aa-line to draw. 
@@ -1111,23 +950,6 @@ int aalineRGBA(SDL_Renderer * renderer, Sint16 x1, Sint16 y1, Sint16 x2, Sint16 
 \param x X coordinate of the center of the circle.
 \param y Y coordinate of the center of the circle.
 \param rad Radius in pixels of the circle.
-\param color The color value of the circle to draw (0xAABBGGRR). 
-
-\returns Returns 0 on success, -1 on failure.
-*/
-int circleColor(SDL_Renderer * renderer, Sint16 x, Sint16 y, Sint16 rad, Uint32 color)
-{
-	Uint8 *c = (Uint8 *)&color; 
-	return ellipseRGBA(renderer, x, y, rad, rad, c[0], c[1], c[2], c[3]);
-}
-
-/*!
-\brief Draw circle with blending.
-
-\param renderer The renderer to draw on.
-\param x X coordinate of the center of the circle.
-\param y Y coordinate of the center of the circle.
-\param rad Radius in pixels of the circle.
 \param r The red value of the circle to draw. 
 \param g The green value of the circle to draw. 
 \param b The blue value of the circle to draw. 
@@ -1141,25 +963,6 @@ int circleRGBA(SDL_Renderer * renderer, Sint16 x, Sint16 y, Sint16 rad, Uint8 r,
 }
 
 /* ----- Arc */
-
-/*!
-\brief Arc with blending.
-
-\param renderer The renderer to draw on.
-\param x X coordinate of the center of the arc.
-\param y Y coordinate of the center of the arc.
-\param rad Radius in pixels of the arc.
-\param start Starting radius in degrees of the arc. 0 degrees is right, increasing clockwise.
-\param end Ending radius in degrees of the arc. 0 degrees is right, increasing clockwise.
-\param color The color value of the arc to draw (0xAABBGGRR). 
-
-\returns Returns 0 on success, -1 on failure.
-*/
-int arcColor(SDL_Renderer * renderer, Sint16 x, Sint16 y, Sint16 rad, Sint16 start, Sint16 end, Uint32 color)
-{
-	Uint8 *c = (Uint8 *)&color; 
-	return arcRGBA(renderer, x, y, rad, start, end, c[0], c[1], c[2], c[3]);
-}
 
 /*!
 \brief Arc with blending.
@@ -1409,23 +1212,6 @@ int arcRGBA(SDL_Renderer * renderer, Sint16 x, Sint16 y, Sint16 rad, Sint16 star
 \param x X coordinate of the center of the aa-circle.
 \param y Y coordinate of the center of the aa-circle.
 \param rad Radius in pixels of the aa-circle.
-\param color The color value of the aa-circle to draw (0xAABBGGRR). 
-
-\returns Returns 0 on success, -1 on failure.
-*/
-int aacircleColor(SDL_Renderer * renderer, Sint16 x, Sint16 y, Sint16 rad, Uint32 color)
-{
-	Uint8 *c = (Uint8 *)&color; 
-	return aaellipseRGBA(renderer, x, y, rad, rad, c[0], c[1], c[2], c[3]);
-}
-
-/*!
-\brief Draw anti-aliased circle with blending.
-
-\param renderer The renderer to draw on.
-\param x X coordinate of the center of the aa-circle.
-\param y Y coordinate of the center of the aa-circle.
-\param rad Radius in pixels of the aa-circle.
 \param r The red value of the aa-circle to draw. 
 \param g The green value of the aa-circle to draw. 
 \param b The blue value of the aa-circle to draw. 
@@ -1450,23 +1236,6 @@ int aacircleRGBA(SDL_Renderer * renderer, Sint16 x, Sint16 y, Sint16 rad, Uint8 
 \param x X coordinate of the center of the filled circle.
 \param y Y coordinate of the center of the filled circle.
 \param rad Radius in pixels of the filled circle.
-\param color The color value of the filled circle to draw (0xAABBGGRR). 
-
-\returns Returns 0 on success, -1 on failure.
-*/
-int filledCircleColor(SDL_Renderer * renderer, Sint16 x, Sint16 y, Sint16 rad, Uint32 color)
-{
-	Uint8 *c = (Uint8 *)&color; 
-	return filledEllipseRGBA(renderer, x, y, rad, rad, c[0], c[1], c[2], c[3]);
-}
-
-/*!
-\brief Draw filled circle with blending.
-
-\param renderer The renderer to draw on.
-\param x X coordinate of the center of the filled circle.
-\param y Y coordinate of the center of the filled circle.
-\param rad Radius in pixels of the filled circle.
 \param r The red value of the filled circle to draw. 
 \param g The green value of the filled circle to draw. 
 \param b The blue value of the filled circle to draw. 
@@ -1480,24 +1249,6 @@ int filledCircleRGBA(SDL_Renderer * renderer, Sint16 x, Sint16 y, Sint16 rad, Ui
 }
 
 /* ----- Ellipse */
-
-/*!
-\brief Draw ellipse with blending.
-
-\param renderer The renderer to draw on.
-\param x X coordinate of the center of the ellipse.
-\param y Y coordinate of the center of the ellipse.
-\param rx Horizontal radius in pixels of the ellipse.
-\param ry Vertical radius in pixels of the ellipse.
-\param color The color value of the ellipse to draw (0xAABBGGRR). 
-
-\returns Returns 0 on success, -1 on failure.
-*/
-int ellipseColor(SDL_Renderer * renderer, Sint16 x, Sint16 y, Sint16 rx, Sint16 ry, Uint32 color)
-{
-	Uint8 *c = (Uint8 *)&color; 
-	return ellipseRGBA(renderer, x, y, rx, ry, c[0], c[1], c[2], c[3]);
-}
 
 /*!
 \brief Draw ellipse with blending.
@@ -1656,24 +1407,6 @@ int ellipseRGBA(SDL_Renderer * renderer, Sint16 x, Sint16 y, Sint16 rx, Sint16 r
 }
 
 /* ----- AA Ellipse */
-
-/*!
-\brief Draw anti-aliased ellipse with blending.
-
-\param renderer The renderer to draw on.
-\param x X coordinate of the center of the aa-ellipse.
-\param y Y coordinate of the center of the aa-ellipse.
-\param rx Horizontal radius in pixels of the aa-ellipse.
-\param ry Vertical radius in pixels of the aa-ellipse.
-\param color The color value of the aa-ellipse to draw (0xAABBGGRR). 
-
-\returns Returns 0 on success, -1 on failure.
-*/
-int aaellipseColor(SDL_Renderer * renderer, Sint16 x, Sint16 y, Sint16 rx, Sint16 ry, Uint32 color)
-{
-	Uint8 *c = (Uint8 *)&color; 
-	return aaellipseRGBA(renderer, x, y, rx, ry, c[0], c[1], c[2], c[3]);
-}
 
 /*!
 \brief Draw anti-aliased ellipse with blending.
@@ -1872,24 +1605,6 @@ int aaellipseRGBA(SDL_Renderer * renderer, Sint16 x, Sint16 y, Sint16 rx, Sint16
 }
 
 /* ---- Filled Ellipse */
-
-/*!
-\brief Draw filled ellipse with blending.
-
-\param renderer The renderer to draw on.
-\param x X coordinate of the center of the filled ellipse.
-\param y Y coordinate of the center of the filled ellipse.
-\param rx Horizontal radius in pixels of the filled ellipse.
-\param ry Vertical radius in pixels of the filled ellipse.
-\param color The color value of the filled ellipse to draw (0xAABBGGRR). 
-
-\returns Returns 0 on success, -1 on failure.
-*/
-int filledEllipseColor(SDL_Renderer * renderer, Sint16 x, Sint16 y, Sint16 rx, Sint16 ry, Uint32 color)
-{
-	Uint8 *c = (Uint8 *)&color; 
-	return filledEllipseRGBA(renderer, x, y, rx, ry, c[0], c[1], c[2], c[3]);
-}
 
 /*!
 \brief Draw filled ellipse with blending.
@@ -2164,26 +1879,6 @@ int _pieRGBA(SDL_Renderer * renderer, Sint16 x, Sint16 y, Sint16 rad, Sint16 sta
 \param rad Radius in pixels of the pie.
 \param start Starting radius in degrees of the pie.
 \param end Ending radius in degrees of the pie.
-\param color The color value of the pie to draw (0xAABBGGRR). 
-
-\returns Returns 0 on success, -1 on failure.
-*/
-int pieColor(SDL_Renderer * renderer, Sint16 x, Sint16 y, Sint16 rad, 
-	Sint16 start, Sint16 end, Uint32 color) 
-{
-	Uint8 *c = (Uint8 *)&color; 
-	return _pieRGBA(renderer, x, y, rad, start, end, c[0], c[1], c[2], c[3], 0);
-}
-
-/*!
-\brief Draw pie (outline) with alpha blending.
-
-\param renderer The renderer to draw on.
-\param x X coordinate of the center of the pie.
-\param y Y coordinate of the center of the pie.
-\param rad Radius in pixels of the pie.
-\param start Starting radius in degrees of the pie.
-\param end Ending radius in degrees of the pie.
 \param r The red value of the pie to draw. 
 \param g The green value of the pie to draw. 
 \param b The blue value of the pie to draw. 
@@ -2195,25 +1890,6 @@ int pieRGBA(SDL_Renderer * renderer, Sint16 x, Sint16 y, Sint16 rad,
 	Sint16 start, Sint16 end, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
 {
 	return _pieRGBA(renderer, x, y, rad, start, end, r, g, b, a, 0);
-}
-
-/*!
-\brief Draw filled pie with alpha blending.
-
-\param renderer The renderer to draw on.
-\param x X coordinate of the center of the filled pie.
-\param y Y coordinate of the center of the filled pie.
-\param rad Radius in pixels of the filled pie.
-\param start Starting radius in degrees of the filled pie.
-\param end Ending radius in degrees of the filled pie.
-\param color The color value of the filled pie to draw (0xAABBGGRR). 
-
-\returns Returns 0 on success, -1 on failure.
-*/
-int filledPieColor(SDL_Renderer * renderer, Sint16 x, Sint16 y, Sint16 rad, Sint16 start, Sint16 end, Uint32 color)
-{
-	Uint8 *c = (Uint8 *)&color; 
-	return _pieRGBA(renderer, x, y, rad, start, end, c[0], c[1], c[2], c[3], 1);
 }
 
 /*!
@@ -2348,23 +2024,6 @@ int filledTrigonRGBA(SDL_Renderer * renderer, Sint16 x1, Sint16 y1, Sint16 x2, S
 /* ---- Polygon */
 
 /*!
-\brief Draw polygon with alpha blending.
-
-\param renderer The renderer to draw on.
-\param vx Vertex array containing X coordinates of the points of the polygon.
-\param vy Vertex array containing Y coordinates of the points of the polygon.
-\param n Number of points in the vertex array. Minimum number is 3.
-\param color The color value of the polygon to draw (0xAABBGGRR). 
-
-\returns Returns 0 on success, -1 on failure.
-*/
-int polygonColor(SDL_Renderer * renderer, const Sint16 * vx, const Sint16 * vy, int n, Uint32 color)
-{
-	Uint8 *c = (Uint8 *)&color; 
-	return polygonRGBA(renderer, vx, vy, n, c[0], c[1], c[2], c[3]);
-}
-
-/*!
 \brief Draw polygon with the currently set color and blend mode.
 
 \param renderer The renderer to draw on.
@@ -2480,23 +2139,6 @@ int polygonRGBA(SDL_Renderer * renderer, const Sint16 * vx, const Sint16 * vy, i
 }
 
 /* ---- AA-Polygon */
-
-/*!
-\brief Draw anti-aliased polygon with alpha blending.
-
-\param renderer The renderer to draw on.
-\param vx Vertex array containing X coordinates of the points of the aa-polygon.
-\param vy Vertex array containing Y coordinates of the points of the aa-polygon.
-\param n Number of points in the vertex array. Minimum number is 3.
-\param color The color value of the aa-polygon to draw (0xAABBGGRR). 
-
-\returns Returns 0 on success, -1 on failure.
-*/
-int aapolygonColor(SDL_Renderer * renderer, const Sint16 * vx, const Sint16 * vy, int n, Uint32 color)
-{
-	Uint8 *c = (Uint8 *)&color; 
-	return aapolygonRGBA(renderer, vx, vy, n, c[0], c[1], c[2], c[3]);
-}
 
 /*!
 \brief Draw anti-aliased polygon with alpha blending.
@@ -2762,23 +2404,6 @@ int filledPolygonRGBAMT(SDL_Renderer * renderer, const Sint16 * vx, const Sint16
 	}
 
 	return (result);
-}
-
-/*!
-\brief Draw filled polygon with alpha blending.
-
-\param renderer The renderer to draw on.
-\param vx Vertex array containing X coordinates of the points of the filled polygon.
-\param vy Vertex array containing Y coordinates of the points of the filled polygon.
-\param n Number of points in the vertex array. Minimum number is 3.
-\param color The color value of the filled polygon to draw (0xAABBGGRR). 
-
-\returns Returns 0 on success, -1 on failure.
-*/
-int filledPolygonColor(SDL_Renderer * renderer, const Sint16 * vx, const Sint16 * vy, int n, Uint32 color)
-{
-	Uint8 *c = (Uint8 *)&color; 
-	return filledPolygonRGBAMT(renderer, vx, vy, n, c[0], c[1], c[2], c[3], NULL, NULL);
 }
 
 /*!
@@ -3152,24 +2777,6 @@ double _evaluateBezier (double *data, int ndata, double t)
 	}
 
 	return (result);
-}
-
-/*!
-\brief Draw a bezier curve with alpha blending.
-
-\param renderer The renderer to draw on.
-\param vx Vertex array containing X coordinates of the points of the bezier curve.
-\param vy Vertex array containing Y coordinates of the points of the bezier curve.
-\param n Number of points in the vertex array. Minimum number is 3.
-\param s Number of steps for the interpolation. Minimum number is 2.
-\param color The color value of the bezier curve to draw (0xAABBGGRR). 
-
-\returns Returns 0 on success, -1 on failure.
-*/
-int bezierColor(SDL_Renderer * renderer, const Sint16 * vx, const Sint16 * vy, int n, int s, Uint32 color)
-{
-	Uint8 *c = (Uint8 *)&color; 
-	return bezierRGBA(renderer, vx, vy, n, s, c[0], c[1], c[2], c[3]);
 }
 
 /*!
@@ -3651,34 +3258,6 @@ static int LineStyle = -1;
 \param x2 X coordinate of the second point of the line.
 \param y2 Y coordinate of the second point of the line.
 \param width Width of the line in pixels. Must be >0.
-\param color The color value of the line to draw (0xAABBGGRR). 
-
-\returns Returns 0 on success, -1 on failure.
-*/
-int thickLineColor(SDL_Renderer *renderer, Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2, Uint8 width, Uint32 color)
-{	
-	Uint8 *c = (Uint8 *)&color; 
-	LineStyle = -1;
-	return thickLineRGBA(renderer, x1, y1, x2, y2, width, c[0], c[1], c[2], c[3]);
-}
-
-int thickLineColorStyle(SDL_Renderer *renderer, Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2,
-                        Uint8 width, Uint32 color, int style)
-{	
-	Uint8 *c = (Uint8 *)&color; 
-	LineStyle = style;
-	return thickLineRGBA(renderer, x1, y1, x2, y2, width, c[0], c[1], c[2], c[3]);
-}
-
-/*!
-\brief Draw a thick line with alpha blending.
-
-\param renderer The renderer to draw on.
-\param x1 X coordinate of the first point of the line.
-\param y1 Y coordinate of the first point of the line.
-\param x2 X coordinate of the second point of the line.
-\param y2 Y coordinate of the second point of the line.
-\param width Width of the line in pixels. Must be >0.
 \param r The red value of the character to draw. 
 \param g The green value of the character to draw. 
 \param b The blue value of the character to draw. 
@@ -3949,27 +3528,6 @@ int thickCircleRGBA(SDL_Renderer * renderer, Sint16 x, Sint16 y, Sint16 rad, Uin
 	return thickEllipseRGBA(renderer, x, y, rad, rad, r, g, b, a, thick);
 }
 
-// returns Returns 0 on success, -1 on failure.
-int thickEllipseColor(SDL_Renderer * renderer, Sint16 x, Sint16 y, Sint16 rx, Sint16 ry, Uint32 color, Uint8 thick)
-{
-	Uint8 *c = (Uint8 *)&color; 
-	return thickEllipseRGBA(renderer, x, y, rx, ry, c[0], c[1], c[2], c[3], thick);
-}
-
-// returns Returns 0 on success, -1 on failure.
-int thickArcColor(SDL_Renderer * renderer, Sint16 x, Sint16 y, Sint16 rad, Sint16 start, Sint16 end, Uint32 color, Uint8 thick)
-{
-	Uint8 *c = (Uint8 *)&color; 
-	return thickArcRGBA(renderer, x, y, rad, start, end, c[0], c[1], c[2], c[3], thick);
-}
-
-// returns Returns 0 on success, -1 on failure.
-int thickCircleColor(SDL_Renderer * renderer, Sint16 x, Sint16 y, Sint16 rad, Uint32 color, Uint8 thick)
-{
-	Uint8 *c = (Uint8 *)&color; 
-	return thickEllipseRGBA(renderer, x, y, rad, rad, c[0], c[1], c[2], c[3], thick);
-}
-
 /*!
 \brief Fill a region bounded by cubic Bezier curves, with alpha blending.
 
@@ -4053,13 +3611,6 @@ int filledPolyBezierRGBA(SDL_Renderer * renderer, const Sint16 *x, const Sint16 
 
 	free(vx) ;
 	return (result);
-}
-
-// returns Returns 0 on success, -1 on failure.
-int filledPolyBezierColor(SDL_Renderer * renderer, const Sint16 *x, const Sint16 *y, int n, int s, Uint32 color)
-{
-	Uint8 *c = (Uint8 *)&color; 
-	return filledPolyBezierRGBA(renderer, x, y, n, s, c[0], c[1], c[2], c[3]);
 }
 
 // Extensions for anti-aliased filled ellipses and polygons by Richard Russell 20-Aug-2019
@@ -4191,13 +3742,6 @@ int aaFilledEllipseRGBA(SDL_Renderer * renderer, float cx, float cy, float rx, f
 		    }
 	    }
 	return result;
-}
-
-// returns Returns 0 on success, -1 on failure.
-int aaFilledEllipseColor(SDL_Renderer * renderer, float cx, float cy, float rx, float ry, Uint32 color)
-{
-	Uint8 *c = (Uint8 *)&color; 
-	return aaFilledEllipseRGBA(renderer, cx, cy, rx, ry, c[0], c[1], c[2], c[3]);
 }
 
 static int _gfxPrimitivesCompareFloat2(const void *a, const void *b)
@@ -4436,13 +3980,6 @@ int aaFilledPolygonRGBA(SDL_Renderer * renderer, const double * vx, const double
 	return result ;
 }
 
-// returns Returns 0 on success, -1 on failure.
-int aaFilledPolygonColor(SDL_Renderer * renderer, const double * vx, const double * vy, int n, Uint32 color)
-{
-	Uint8 *c = (Uint8 *)&color; 
-	return aaFilledPolygonRGBA(renderer, vx, vy, n, c[0], c[1], c[2], c[3]);
-}
-
 /*!
 \brief Draw anti-aliased filled ellipical pie (or chord) with alpha blending.
 
@@ -4512,13 +4049,6 @@ int aaFilledPieRGBA(SDL_Renderer * renderer, float cx, float cy, float rx, float
 	return (result);
 }
 
-// returns Returns 0 on success, -1 on failure.
-int aaFilledPieColor(SDL_Renderer * renderer, float cx, float cy, float rx, float ry, float start, float end, Uint32 chord, Uint32 color)
-{
-	Uint8 *c = (Uint8 *)&color; 
-	return aaFilledPieRGBA(renderer, cx, cy, rx, ry, start, end, chord, c[0], c[1], c[2], c[3]);
-}
-
 /*!
 \brief Draw anti-aliased ellipical arc with alpha blending.
 
@@ -4585,13 +4115,6 @@ int aaArcRGBA(SDL_Renderer * renderer, float cx, float cy, float rx, float ry,
 	free(vx);
 
 	return (result);
-}
-
-// returns Returns 0 on success, -1 on failure.
-int aaArcColor(SDL_Renderer * renderer, float cx, float cy, float rx, float ry, float start, float end, float thick, Uint32 color)
-{
-	Uint8 *c = (Uint8 *)&color; 
-	return aaArcRGBA(renderer, cx, cy, rx, ry, start, end, thick, c[0], c[1], c[2], c[3]);
 }
 
 /*!
@@ -4665,13 +4188,6 @@ int aaBezierRGBA(SDL_Renderer * renderer, double *x, double *y, int n, int s, fl
 	return (result);
 }
 
-// returns Returns 0 on success, -1 on failure.
-int aaBezierColor(SDL_Renderer * renderer, double *x, double *y, int n, int s, float thick, Uint32 color)
-{
-	Uint8 *c = (Uint8 *)&color; 
-	return aaBezierRGBA(renderer, x, y, n, s, thick, c[0], c[1], c[2], c[3]);
-}
-
 /*!
 \brief Fill an anti-aliased region bounded by cubic Bezier curves, with alpha blending.
 
@@ -4734,11 +4250,4 @@ int aaFilledPolyBezierRGBA(SDL_Renderer * renderer, double *x, double *y, int n,
 
 	free (vx) ;
 	return (result);
-}
-
-// returns Returns 0 on success, -1 on failure.
-int aaFilledPolyBezierColor(SDL_Renderer * renderer, double *x, double *y, int n, int s, Uint32 color)
-{
-	Uint8 *c = (Uint8 *)&color; 
-	return aaFilledPolyBezierRGBA(renderer, x, y, n, s, c[0], c[1], c[2], c[3]);
 }
