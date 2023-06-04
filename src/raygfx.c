@@ -34,6 +34,7 @@ Pixelsuf's Hands -- pixelsuft.github.io
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
+#include <raylib.h>
 #include <raydef.h>
 #include <raygfx.h>
 
@@ -306,14 +307,6 @@ int roundedRectangleRGBA(Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2, Sint16 rad,
     Sint16 yy1, yy2;
 
     /*
-     * Check radius vor valid range
-     */
-    if (rad < 0)
-    {
-        return -1;
-    }
-
-    /*
      * Special case - no rounding
      */
     if (rad <= 1)
@@ -443,14 +436,6 @@ int roundedBoxRGBA(Sint16 x1, Sint16 y1, Sint16 x2,
     Sint16 xpcx, xmcx, xpcy, xmcy;
     Sint16 ypcy, ymcy, ypcx, ymcx;
     Sint16 x, y, dx, dy;
-
-    /*
-     * Check radius vor valid range
-     */
-    if (rad < 0)
-    {
-        return -1;
-    }
 
     /*
      * Special case - no rounding
@@ -1057,14 +1042,6 @@ int arcRGBA(Sint16 x, Sint16 y, Sint16 rad, Sint16 start, Sint16 end, Uint8 r, U
     Uint8 drawoct;
     int startoct, endoct, oct, stopval_start = 0, stopval_end = 0;
     double dstart, dend, temp = 0.;
-
-    /*
-     * Sanity check radius
-     */
-    if (rad < 0)
-    {
-        return (-1);
-    }
 
     /*
      * Special case for rad=0 - draw a point
@@ -1938,7 +1915,7 @@ Note: Determines vertex array and uses polygon or filledPolygon drawing routines
 \returns Returns 0 on success, -1 on failure.
 */
 /* TODO: rewrite algorithm; pie is not always accurate */
-int _pieRGBA(Sint16 x, Sint16 y, Sint16 rad, Sint16 start, Sint16 end, Uint8 r, Uint8 g, Uint8 b, Uint8 a, Uint8 filled)
+int _pieRGBA(Sint16 x, Sint16 y, float rad, float start, float end, Uint8 r, Uint8 g, Uint8 b, Uint8 a, Uint8 filled)
 {
     int result;
     double angle, start_angle, end_angle;
@@ -1948,23 +1925,15 @@ int _pieRGBA(Sint16 x, Sint16 y, Sint16 rad, Sint16 start, Sint16 end, Uint8 r, 
     Sint16 *vx, *vy;
 
     /*
-     * Sanity check radii
-     */
-    if (rad < 0)
-    {
-        return (-1);
-    }
-
-    /*
      * Fixup angles
      */
-    start = start % 360;
-    end = end % 360;
+    //start = start % 360;
+    //end = end % 360;
 
     /*
      * Special case for rad=0 - draw a point
      */
-    if (rad == 0)
+    if (rad == 0.0f)
     {
         return (pixelRGBA(x, y, r, g, b, a));
     }
@@ -1993,10 +1962,10 @@ int _pieRGBA(Sint16 x, Sint16 y, Sint16 rad, Sint16 start, Sint16 end, Uint8 r, 
     }
 
     /* Allocate combined vertex array */
-    vx = vy = (Sint16 *)malloc(2 * sizeof(Sint16) * numpoints);
-    if (vx == NULL)
-    {
-        return (-1);
+    vx = vy = (Sint16 *)SDL_malloc(2 * sizeof(Sint16) * numpoints);
+    if (vx == NULL) {
+        TRACELOG(LOG_WARNING, "Failed to allocate memory for combined vertex array");
+        return 0;
     }
 
     /* Update point to start of vy */
@@ -2008,8 +1977,8 @@ int _pieRGBA(Sint16 x, Sint16 y, Sint16 rad, Sint16 start, Sint16 end, Uint8 r, 
 
     /* First vertex */
     angle = start_angle;
-    vx[1] = x + (int)(dr * cos(angle));
-    vy[1] = y + (int)(dr * sin(angle));
+    vx[1] = x + (int)(dr * SDL_cos(angle));
+    vy[1] = y + (int)(dr * SDL_sin(angle));
 
     if (numpoints < 3)
     {
@@ -2027,8 +1996,8 @@ int _pieRGBA(Sint16 x, Sint16 y, Sint16 rad, Sint16 start, Sint16 end, Uint8 r, 
             {
                 angle = end_angle;
             }
-            vx[i] = x + (int)(dr * cos(angle));
-            vy[i] = y + (int)(dr * sin(angle));
+            vx[i] = x + (int)(dr * SDL_cos(angle));
+            vy[i] = y + (int)(dr * SDL_sin(angle));
             i++;
         }
 
@@ -2044,7 +2013,7 @@ int _pieRGBA(Sint16 x, Sint16 y, Sint16 rad, Sint16 start, Sint16 end, Uint8 r, 
     }
 
     /* Free combined vertex array */
-    free(vx);
+    SDL_free(vx);
 
     return (result);
 }
@@ -2065,8 +2034,8 @@ int _pieRGBA(Sint16 x, Sint16 y, Sint16 rad, Sint16 start, Sint16 end, Uint8 r, 
 
 \returns Returns 0 on success, -1 on failure.
 */
-int pieRGBA(Sint16 x, Sint16 y, Sint16 rad,
-            Sint16 start, Sint16 end, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
+int pieRGBA(Sint16 x, Sint16 y, float rad,
+            float start, float end, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
 {
     return _pieRGBA(x, y, rad, start, end, r, g, b, a, 0);
 }
@@ -2087,8 +2056,8 @@ int pieRGBA(Sint16 x, Sint16 y, Sint16 rad,
 
 \returns Returns 0 on success, -1 on failure.
 */
-int filledPieRGBA(Sint16 x, Sint16 y, Sint16 rad,
-                  Sint16 start, Sint16 end, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
+int filledPieRGBA(Sint16 x, Sint16 y, float rad,
+                  float start, float end, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
 {
     return _pieRGBA(x, y, rad, start, end, r, g, b, a, 1);
 }

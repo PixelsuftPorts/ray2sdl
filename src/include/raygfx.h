@@ -137,13 +137,13 @@ extern "C"
 
     /* Pie */
 
-    RAYGFXAPI int pieRGBA(Sint16 x, Sint16 y, Sint16 rad,
-                          Sint16 start, Sint16 end, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+    RAYGFXAPI int pieRGBA(Sint16 x, Sint16 y, float rad,
+                          float start, float end, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 
     /* Filled Pie */
 
-    RAYGFXAPI int filledPieRGBA(Sint16 x, Sint16 y, Sint16 rad,
-                                Sint16 start, Sint16 end, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+    RAYGFXAPI int filledPieRGBA(Sint16 x, Sint16 y, float rad,
+                                float start, float end, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 
     /* Trigon */
 
