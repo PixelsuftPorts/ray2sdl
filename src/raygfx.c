@@ -1779,13 +1779,13 @@ int aaellipseRGBA(Sint16 x, Sint16 y, Sint16 rx, Sint16 ry, Uint8 r, Uint8 g, Ui
 int filledEllipseRGBA(Sint16 x, Sint16 y, float rx, float ry, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
 {
     int result;
-    int ix, iy;
-    int h, i, j, k;
-    int oh, oi, oj, ok;
-    int xmh, xph;
-    int xmi, xpi;
-    int xmj, xpj;
-    int xmk, xpk;
+    float ix, iy;
+    float h, i, j, k;
+    float oh, oi, oj, ok;
+    float xmh, xph;
+    float xmi, xpi;
+    float xmj, xpj;
+    float xmk, xpk;
 
     /*
      * Special case for rx=0 - draw a vline
@@ -1811,22 +1811,22 @@ int filledEllipseRGBA(Sint16 x, Sint16 y, float rx, float ry, Uint8 r, Uint8 g, 
     /*
      * Init vars
      */
-    oh = oi = oj = ok = 0xFFFF;
+    oh = oi = oj = ok = (float)0xFFFF;
 
     /*
      * Draw
      */
     if (rx >= ry)
     {
-        ix = 0;
-        iy = (int)rx * 64;
+        ix = 0.0f;
+        iy = rx * 64.0f;
 
         do
         {
-            h = (ix + 32) >> 6;
-            i = (iy + 32) >> 6;
-            j = (h * ry) / (int)rx;
-            k = (i * ry) / (int)rx;
+            h = (float)(((int)ix + 32) >> 6);
+            i = (float)(((int)iy + 32) >> 6);
+            j = (h * ry) / rx;
+            k = (i * ry) / rx;
 
             if ((ok != k) && (oj != k))
             {
@@ -1834,12 +1834,12 @@ int filledEllipseRGBA(Sint16 x, Sint16 y, float rx, float ry, Uint8 r, Uint8 g, 
                 xmh = x - h;
                 if (k > 0)
                 {
-                    result |= hline(xmh, xph, y + k);
-                    result |= hline(xmh, xph, y - k);
+                    result |= hline((Sint16)xmh, (Sint16)xph, y + (Sint16)k);
+                    result |= hline((Sint16)xmh, (Sint16)xph, y - (Sint16)k);
                 }
                 else
                 {
-                    result |= hline(xmh, xph, y);
+                    result |= hline((Sint16)xmh, (Sint16)xph, y);
                 }
                 ok = k;
             }
@@ -1849,32 +1849,32 @@ int filledEllipseRGBA(Sint16 x, Sint16 y, float rx, float ry, Uint8 r, Uint8 g, 
                 xpi = x + i;
                 if (j > 0)
                 {
-                    result |= hline(xmi, xpi, y + j);
-                    result |= hline(xmi, xpi, y - j);
+                    result |= hline((Sint16)xmi, (Sint16)xpi, y + (Sint16)j);
+                    result |= hline((Sint16)xmi, (Sint16)xpi, y - (Sint16)j);
                 }
                 else
                 {
-                    result |= hline(xmi, xpi, y);
+                    result |= hline((Sint16)xmi, (Sint16)xpi, y);
                 }
                 oj = j;
             }
 
-            ix = ix + iy / (int)rx;
-            iy = iy - ix / (int)rx;
+            ix = ix + iy / rx;
+            iy = iy - ix / rx;
 
         } while (i > h);
     }
     else
     {
-        ix = 0;
-        iy = (int)ry * 64;
+        ix = 0.0f;
+        iy = ry * 64.0f;
 
         do
         {
-            h = (ix + 32) >> 6;
-            i = (iy + 32) >> 6;
-            j = (h * rx) / (int)ry;
-            k = (i * rx) / (int)ry;
+            h = (float)(((int)ix + 32) >> 6);
+            i = (float)(((int)iy + 32) >> 6);
+            j = (h * rx) / ry;
+            k = (i * rx) / ry;
 
             if ((oi != i) && (oh != i))
             {
@@ -1882,12 +1882,12 @@ int filledEllipseRGBA(Sint16 x, Sint16 y, float rx, float ry, Uint8 r, Uint8 g, 
                 xpj = x + j;
                 if (i > 0)
                 {
-                    result |= hline(xmj, xpj, y + i);
-                    result |= hline(xmj, xpj, y - i);
+                    result |= hline((Sint16)xmj, (Sint16)xpj, y + (Sint16)i);
+                    result |= hline((Sint16)xmj, (Sint16)xpj, y - (Sint16)i);
                 }
                 else
                 {
-                    result |= hline(xmj, xpj, y);
+                    result |= hline((Sint16)xmj, (Sint16)xpj, y);
                 }
                 oi = i;
             }
@@ -1897,18 +1897,18 @@ int filledEllipseRGBA(Sint16 x, Sint16 y, float rx, float ry, Uint8 r, Uint8 g, 
                 xpk = x + k;
                 if (h > 0)
                 {
-                    result |= hline(xmk, xpk, y + h);
-                    result |= hline(xmk, xpk, y - h);
+                    result |= hline((Sint16)xmk, (Sint16)xpk, y + (Sint16)h);
+                    result |= hline((Sint16)xmk, (Sint16)xpk, y - (Sint16)h);
                 }
                 else
                 {
-                    result |= hline(xmk, xpk, y);
+                    result |= hline((Sint16)xmk, (Sint16)xpk, y);
                 }
                 oh = h;
             }
 
-            ix = ix + iy / (int)ry;
-            iy = iy - ix / (int)ry;
+            ix = ix + iy / ry;
+            iy = iy - ix / ry;
 
         } while (i > h);
     }
