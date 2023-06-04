@@ -447,126 +447,6 @@ typedef enum {
     LOG_NONE            // Disable logging
 } TraceLogLevel;
 
-// Keyboard keys (US keyboard layout)
-// NOTE: Use GetKeyPressed() to allow redefining
-// required keys for alternative layouts
-typedef enum {
-    KEY_NULL            = 0,        // Key: NULL, used for no key pressed
-    // Alphanumeric keys
-    KEY_APOSTROPHE      = 39,       // Key: '
-    KEY_COMMA           = 44,       // Key: ,
-    KEY_MINUS           = 45,       // Key: -
-    KEY_PERIOD          = 46,       // Key: .
-    KEY_SLASH           = 47,       // Key: /
-    KEY_ZERO            = 48,       // Key: 0
-    KEY_ONE             = 49,       // Key: 1
-    KEY_TWO             = 50,       // Key: 2
-    KEY_THREE           = 51,       // Key: 3
-    KEY_FOUR            = 52,       // Key: 4
-    KEY_FIVE            = 53,       // Key: 5
-    KEY_SIX             = 54,       // Key: 6
-    KEY_SEVEN           = 55,       // Key: 7
-    KEY_EIGHT           = 56,       // Key: 8
-    KEY_NINE            = 57,       // Key: 9
-    KEY_SEMICOLON       = 59,       // Key: ;
-    KEY_EQUAL           = 61,       // Key: =
-    KEY_A               = 65,       // Key: A | a
-    KEY_B               = 66,       // Key: B | b
-    KEY_C               = 67,       // Key: C | c
-    KEY_D               = 68,       // Key: D | d
-    KEY_E               = 69,       // Key: E | e
-    KEY_F               = 70,       // Key: F | f
-    KEY_G               = 71,       // Key: G | g
-    KEY_H               = 72,       // Key: H | h
-    KEY_I               = 73,       // Key: I | i
-    KEY_J               = 74,       // Key: J | j
-    KEY_K               = 75,       // Key: K | k
-    KEY_L               = 76,       // Key: L | l
-    KEY_M               = 77,       // Key: M | m
-    KEY_N               = 78,       // Key: N | n
-    KEY_O               = 79,       // Key: O | o
-    KEY_P               = 80,       // Key: P | p
-    KEY_Q               = 81,       // Key: Q | q
-    KEY_R               = 82,       // Key: R | r
-    KEY_S               = 83,       // Key: S | s
-    KEY_T               = 84,       // Key: T | t
-    KEY_U               = 85,       // Key: U | u
-    KEY_V               = 86,       // Key: V | v
-    KEY_W               = 87,       // Key: W | w
-    KEY_X               = 88,       // Key: X | x
-    KEY_Y               = 89,       // Key: Y | y
-    KEY_Z               = 90,       // Key: Z | z
-    KEY_LEFT_BRACKET    = 91,       // Key: [
-    KEY_BACKSLASH       = 92,       // Key: '\'
-    KEY_RIGHT_BRACKET   = 93,       // Key: ]
-    KEY_GRAVE           = 96,       // Key: `
-    // Function keys
-    KEY_SPACE           = 32,       // Key: Space
-    KEY_ESCAPE          = 256,      // Key: Esc
-    KEY_ENTER           = 257,      // Key: Enter
-    KEY_TAB             = 258,      // Key: Tab
-    KEY_BACKSPACE       = 259,      // Key: Backspace
-    KEY_INSERT          = 260,      // Key: Ins
-    KEY_DELETE          = 261,      // Key: Del
-    KEY_RIGHT           = 262,      // Key: Cursor right
-    KEY_LEFT            = 263,      // Key: Cursor left
-    KEY_DOWN            = 264,      // Key: Cursor down
-    KEY_UP              = 265,      // Key: Cursor up
-    KEY_PAGE_UP         = 266,      // Key: Page up
-    KEY_PAGE_DOWN       = 267,      // Key: Page down
-    KEY_HOME            = 268,      // Key: Home
-    KEY_END             = 269,      // Key: End
-    KEY_CAPS_LOCK       = 280,      // Key: Caps lock
-    KEY_SCROLL_LOCK     = 281,      // Key: Scroll down
-    KEY_NUM_LOCK        = 282,      // Key: Num lock
-    KEY_PRINT_SCREEN    = 283,      // Key: Print screen
-    KEY_PAUSE           = 284,      // Key: Pause
-    KEY_F1              = 290,      // Key: F1
-    KEY_F2              = 291,      // Key: F2
-    KEY_F3              = 292,      // Key: F3
-    KEY_F4              = 293,      // Key: F4
-    KEY_F5              = 294,      // Key: F5
-    KEY_F6              = 295,      // Key: F6
-    KEY_F7              = 296,      // Key: F7
-    KEY_F8              = 297,      // Key: F8
-    KEY_F9              = 298,      // Key: F9
-    KEY_F10             = 299,      // Key: F10
-    KEY_F11             = 300,      // Key: F11
-    KEY_F12             = 301,      // Key: F12
-    KEY_LEFT_SHIFT      = 340,      // Key: Shift left
-    KEY_LEFT_CONTROL    = 341,      // Key: Control left
-    KEY_LEFT_ALT        = 342,      // Key: Alt left
-    KEY_LEFT_SUPER      = 343,      // Key: Super left
-    KEY_RIGHT_SHIFT     = 344,      // Key: Shift right
-    KEY_RIGHT_CONTROL   = 345,      // Key: Control right
-    KEY_RIGHT_ALT       = 346,      // Key: Alt right
-    KEY_RIGHT_SUPER     = 347,      // Key: Super right
-    KEY_KB_MENU         = 348,      // Key: KB menu
-    // Keypad keys
-    KEY_KP_0            = 320,      // Key: Keypad 0
-    KEY_KP_1            = 321,      // Key: Keypad 1
-    KEY_KP_2            = 322,      // Key: Keypad 2
-    KEY_KP_3            = 323,      // Key: Keypad 3
-    KEY_KP_4            = 324,      // Key: Keypad 4
-    KEY_KP_5            = 325,      // Key: Keypad 5
-    KEY_KP_6            = 326,      // Key: Keypad 6
-    KEY_KP_7            = 327,      // Key: Keypad 7
-    KEY_KP_8            = 328,      // Key: Keypad 8
-    KEY_KP_9            = 329,      // Key: Keypad 9
-    KEY_KP_DECIMAL      = 330,      // Key: Keypad .
-    KEY_KP_DIVIDE       = 331,      // Key: Keypad /
-    KEY_KP_MULTIPLY     = 332,      // Key: Keypad *
-    KEY_KP_SUBTRACT     = 333,      // Key: Keypad -
-    KEY_KP_ADD          = 334,      // Key: Keypad +
-    KEY_KP_ENTER        = 335,      // Key: Keypad Enter
-    KEY_KP_EQUAL        = 336,      // Key: Keypad =
-    // Android key buttons
-    KEY_BACK            = 4,        // Key: Android back button
-    KEY_MENU            = 82,       // Key: Android menu button
-    KEY_VOLUME_UP       = 24,       // Key: Android volume up button
-    KEY_VOLUME_DOWN     = 25        // Key: Android volume down button
-} KeyboardKey;
-
 // Add backwards compatibility support for deprecated names
 #define MOUSE_LEFT_BUTTON   MOUSE_BUTTON_LEFT
 #define MOUSE_RIGHT_BUTTON  MOUSE_BUTTON_RIGHT
@@ -814,6 +694,123 @@ typedef enum {
     NPATCH_THREE_PATCH_VERTICAL,    // Npatch layout: 1x3 tiles
     NPATCH_THREE_PATCH_HORIZONTAL   // Npatch layout: 3x1 tiles
 } NPatchLayout;
+
+typedef enum {
+    KEY_NULL            = 0,        // Key: NULL, used for no key pressed
+    // Alphanumeric keys
+    KEY_APOSTROPHE      = SDLK_QUOTE,       // Key: '
+    KEY_COMMA           = SDLK_COMMA,       // Key: ,
+    KEY_MINUS           = SDLK_MINUS,       // Key: -
+    KEY_PERIOD          = SDLK_PERIOD,       // Key: .
+    KEY_SLASH           = SDLK_SLASH,       // Key: /
+    KEY_ZERO            = SDLK_0,       // Key: 0
+    KEY_ONE             = SDLK_1,       // Key: 1
+    KEY_TWO             = SDLK_2,       // Key: 2
+    KEY_THREE           = SDLK_3,       // Key: 3
+    KEY_FOUR            = SDLK_4,       // Key: 4
+    KEY_FIVE            = SDLK_5,       // Key: 5
+    KEY_SIX             = SDLK_6,       // Key: 6
+    KEY_SEVEN           = SDLK_7,       // Key: 7
+    KEY_EIGHT           = SDLK_8,       // Key: 8
+    KEY_NINE            = SDLK_9,       // Key: 9
+    KEY_SEMICOLON       = SDLK_SEMICOLON,       // Key: ;
+    KEY_EQUAL           = SDLK_EQUALS,       // Key: =
+    KEY_A               = SDLK_a,       // Key: A | a
+    KEY_B               = SDLK_b,       // Key: B | b
+    KEY_C               = SDLK_c,       // Key: C | c
+    KEY_D               = SDLK_d,       // Key: D | d
+    KEY_E               = SDLK_e,       // Key: E | e
+    KEY_F               = SDLK_f,       // Key: F | f
+    KEY_G               = SDLK_g,       // Key: G | g
+    KEY_H               = SDLK_h,       // Key: H | h
+    KEY_I               = SDLK_i,       // Key: I | i
+    KEY_J               = SDLK_j,       // Key: J | j
+    KEY_K               = SDLK_k,       // Key: K | k
+    KEY_L               = SDLK_l,       // Key: L | l
+    KEY_M               = SDLK_m,       // Key: M | m
+    KEY_N               = SDLK_n,       // Key: N | n
+    KEY_O               = SDLK_o,       // Key: O | o
+    KEY_P               = SDLK_p,       // Key: P | p
+    KEY_Q               = SDLK_q,       // Key: Q | q
+    KEY_R               = SDLK_r,       // Key: R | r
+    KEY_S               = SDLK_s,       // Key: S | s
+    KEY_T               = SDLK_t,       // Key: T | t
+    KEY_U               = SDLK_u,       // Key: U | u
+    KEY_V               = SDLK_v,       // Key: V | v
+    KEY_W               = SDLK_w,       // Key: W | w
+    KEY_X               = SDLK_x,       // Key: X | x
+    KEY_Y               = SDLK_y,       // Key: Y | y
+    KEY_Z               = SDLK_z,       // Key: Z | z
+    KEY_LEFT_BRACKET    = SDLK_LEFTBRACKET,       // Key: [
+    KEY_BACKSLASH       = SDLK_BACKSLASH,       // Key: '\'
+    KEY_RIGHT_BRACKET   = SDLK_RIGHTBRACKET,       // Key: ]
+    KEY_GRAVE           = SDLK_BACKQUOTE,       // Key: `
+    // Function keys
+    KEY_SPACE           = SDLK_SPACE,       // Key: Space
+    KEY_ESCAPE          = SDLK_ESCAPE,      // Key: Esc
+    KEY_ENTER           = SDLK_RETURN,      // Key: Enter
+    KEY_TAB             = SDLK_TAB,      // Key: Tab
+    KEY_BACKSPACE       = SDLK_BACKSPACE,      // Key: Backspace
+    KEY_INSERT          = SDLK_INSERT,      // Key: Ins
+    KEY_DELETE          = SDLK_DELETE,      // Key: Del
+    KEY_RIGHT           = SDLK_RIGHT,      // Key: Cursor right
+    KEY_LEFT            = SDLK_LEFT,      // Key: Cursor left
+    KEY_DOWN            = SDLK_DOWN,      // Key: Cursor down
+    KEY_UP              = SDLK_UP,      // Key: Cursor up
+    KEY_PAGE_UP         = SDLK_PAGEUP,      // Key: Page up
+    KEY_PAGE_DOWN       = SDLK_PAGEDOWN,      // Key: Page down
+    KEY_HOME            = SDLK_HOME,      // Key: Home
+    KEY_END             = SDLK_END,      // Key: End
+    KEY_CAPS_LOCK       = SDLK_CAPSLOCK,      // Key: Caps lock
+    KEY_SCROLL_LOCK     = SDLK_SCROLLLOCK,      // Key: Scroll down
+    KEY_NUM_LOCK        = SDLK_NUMLOCKCLEAR,      // Key: Num lock
+    KEY_PRINT_SCREEN    = SDLK_PRINTSCREEN,      // Key: Print screen
+    KEY_PAUSE           = SDLK_PAUSE,      // Key: Pause
+    KEY_F1              = SDLK_F1,      // Key: F1
+    KEY_F2              = SDLK_F2,      // Key: F2
+    KEY_F3              = SDLK_F3,      // Key: F3
+    KEY_F4              = SDLK_F4,      // Key: F4
+    KEY_F5              = SDLK_F5,      // Key: F5
+    KEY_F6              = SDLK_F6,      // Key: F6
+    KEY_F7              = SDLK_F7,      // Key: F7
+    KEY_F8              = SDLK_F8,      // Key: F8
+    KEY_F9              = SDLK_F9,      // Key: F9
+    KEY_F10             = SDLK_F10,      // Key: F10
+    KEY_F11             = SDLK_F11,      // Key: F11
+    KEY_F12             = SDLK_F12,      // Key: F12
+    KEY_LEFT_SHIFT      = SDLK_LSHIFT,      // Key: Shift left
+    KEY_LEFT_CONTROL    = SDLK_LCTRL,      // Key: Control left
+    KEY_LEFT_ALT        = SDLK_LALT,      // Key: Alt left
+    KEY_LEFT_SUPER      = SDLK_LGUI,      // Key: Super left
+    KEY_RIGHT_SHIFT     = SDLK_RSHIFT,      // Key: Shift right
+    KEY_RIGHT_CONTROL   = SDLK_RCTRL,      // Key: Control right
+    KEY_RIGHT_ALT       = SDLK_RALT,      // Key: Alt right
+    KEY_RIGHT_SUPER     = SDLK_RGUI,      // Key: Super right
+    KEY_KB_MENU         = SDLK_KBDILLUMTOGGLE,      // Key: KB menu
+    // Keypad keys
+    KEY_KP_0            = SDLK_KP_0,      // Key: Keypad 0
+    KEY_KP_1            = SDLK_KP_1,      // Key: Keypad 1
+    KEY_KP_2            = SDLK_KP_2,      // Key: Keypad 2
+    KEY_KP_3            = SDLK_KP_3,      // Key: Keypad 3
+    KEY_KP_4            = SDLK_KP_4,      // Key: Keypad 4
+    KEY_KP_5            = SDLK_KP_5,      // Key: Keypad 5
+    KEY_KP_6            = SDLK_KP_6,      // Key: Keypad 6
+    KEY_KP_7            = SDLK_KP_7,      // Key: Keypad 7
+    KEY_KP_8            = SDLK_KP_8,      // Key: Keypad 8
+    KEY_KP_9            = SDLK_KP_9,      // Key: Keypad 9
+    KEY_KP_DECIMAL      = SDLK_KP_DECIMAL,      // Key: Keypad .
+    KEY_KP_DIVIDE       = SDLK_KP_DIVIDE,      // Key: Keypad /
+    KEY_KP_MULTIPLY     = SDLK_KP_MULTIPLY,      // Key: Keypad *
+    KEY_KP_SUBTRACT     = SDLK_KP_MINUS,      // Key: Keypad -
+    KEY_KP_ADD          = SDLK_KP_PLUS,      // Key: Keypad +
+    KEY_KP_ENTER        = SDLK_KP_ENTER,      // Key: Keypad Enter
+    KEY_KP_EQUAL        = SDLK_KP_EQUALS,      // Key: Keypad =
+    // Android key buttons
+    KEY_BACK            = SDLK_AC_BACK,        // Key: Android back button
+    KEY_MENU            = SDLK_APPLICATION,       // Key: Android menu button
+    KEY_VOLUME_UP       = SDLK_VOLUMEUP,       // Key: Android volume up button
+    KEY_VOLUME_DOWN     = SDLK_VOLUMEDOWN        // Key: Android volume down button
+} KeyboardKey;
 
 typedef void (*TraceLogCallback)(int logLevel, const char *text, va_list args);
 typedef unsigned char *(*LoadFileDataCallback)(const char *fileName, unsigned int *bytesRead);
