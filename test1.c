@@ -37,7 +37,7 @@ int main(void)
         BeginDrawing();
         ClearBackground(BLACK);
         DrawCircleGradient(GetMouseX(), GetMouseY(), 25.0f, RED, BLACK);
-        DrawCircleSector((Vector2){(float)GetMouseX(), (float)GetMouseY()}, 25.0f, 45.0f, 180.0f, 0, WHITE);
+        DrawCircleSectorLines((Vector2){(float)GetMouseX(), (float)GetMouseY()}, 25.0f, 45.0f, 180.0f, 0, WHITE);
             //DrawText("Congrats! You created your first window!", 190, 200, 20, LIGHTGRAY);
         EndDrawing();
     }

@@ -84,7 +84,19 @@ RLCAPI void DrawCircleSector(Vector2 center, float radius, float startAngle, flo
 }
 
 RLCAPI void DrawCircleSectorLines(Vector2 center, float radius, float startAngle, float endAngle, int segments, Color color) {
-
+    if (radius <= 0.0f)
+        radius = 0.1f;
+    startAngle -= 135.0f;
+    endAngle -= 135.0f;
+    if (startAngle < 0.0f)
+        startAngle += 360.0f;
+    if (endAngle < 0.0f)
+        endAngle += 360.0f;
+    if (pieRGBA(
+        (Sint16)center.x, (Sint16)center.y, (Sint16)radius, (Sint16)(startAngle), (Sint16)endAngle,
+        color.r, color.g, color.b, color.a
+    ) < 0)
+        GFX_WARN();
 }
 
 RLCAPI void DrawCircleV(Vector2 center, float radius, Color color) {

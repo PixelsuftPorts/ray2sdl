@@ -1,6 +1,6 @@
 /*
 
-raygfx.c: graphics primitives for SDL
+raygfx.h: graphics primitives for SDL
 
 Copyright (C) 2012-2014  Andreas Schiffler
 Additions for BBC BASIC (C) 2016-2020 Richard Russell
@@ -26,7 +26,7 @@ distribution.
 
 Andreas Schiffler -- aschiffler at ferzkopp dot net
 Richard Russell -- richard at rtrussell dot co dot uk
-Pixelsuf's Hands -- pixelsuft.github.io
+Pixelsuft's Hands -- pixelsuft dot github dot io
 
 */
 

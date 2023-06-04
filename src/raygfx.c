@@ -26,7 +26,7 @@ distribution.
 
 Andreas Schiffler -- aschiffler at ferzkopp dot net
 Richard Russell -- richard at rtrussell dot co dot uk
-Pixelsuf's Hands -- pixelsuft.github.io
+Pixelsuft's Hands -- pixelsuft dot github dot io
 
 */
 
