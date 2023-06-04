@@ -512,17 +512,3 @@ RLCAPI unsigned char *DecodeDataBase64(const unsigned char *data, int *outputSiz
     *outputSize = outSize;
     return decodedData;
 }
-
-RLCAPI bool IsKeyPressed(int key) {}
-
-RLCAPI bool IsKeyDown(int key) {}
-
-RLCAPI bool IsKeyReleased(int key) {}
-
-RLCAPI bool IsKeyUp(int key) {}
-
-RLCAPI void SetExitKey(int key) {}
-
-RLCAPI int GetKeyPressed(void) {}
-
-RLCAPI int GetCharPressed(void) {}

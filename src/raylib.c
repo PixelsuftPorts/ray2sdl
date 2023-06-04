@@ -62,6 +62,7 @@ RLCAPI void InitWindow(int width, int height, const char *title) {
             TRACELOG(LOG_INFO, "     > Max texture size: %ix%i", info.max_texture_width, info.max_texture_width);
         }
     }
+    rl.kbd_array = SDL_GetKeyboardState(&rl.num_kbd_keys);
     rl.should_close = false;
     rl.clip_ptr = NULL;
     if (!(rl.fl & FLAG_WINDOW_HIDDEN))
@@ -614,6 +615,40 @@ RLCAPI void OpenURL(const char *url) {
     if (SDL_OpenURL(url) < 0)
         TRACELOG(LOG_WARNING, "Failed to open URL (%s)", SDL_GetError());
 }
+
+RLCAPI bool IsKeyPressed(int key) {}
+
+RLCAPI bool IsKeyDown(int key) {
+    if (key >= 0 && key < rl.num_kbd_keys) {
+#ifdef USE_SCANCODES
+        return (bool)rl.kbd_array[(key)];
+#else
+        return (bool)rl.kbd_array[SDL_GetScancodeFromKey(key)];
+#endif
+    }
+    TRACELOG(LOG_WARNING, "Got Invalid Key %i", key);
+    return false;
+}
+
+RLCAPI bool IsKeyReleased(int key) {}
+
+RLCAPI bool IsKeyUp(int key) {
+    if (key >= 0 && key < rl.num_kbd_keys) {
+#ifdef USE_SCANCODES
+        return !rl.kbd_array[(key)];
+#else
+        return !rl.kbd_array[SDL_GetScancodeFromKey(key)];
+#endif
+    }
+    TRACELOG(LOG_WARNING, "Got Invalid Key %i", key);
+    return true;
+}
+
+RLCAPI void SetExitKey(int key) {}
+
+RLCAPI int GetKeyPressed(void) {}
+
+RLCAPI int GetCharPressed(void) {}
 
 RLCAPI void ClearBackground(Color color) {
     if (SDL_SetRenderDrawColor(rl.r, color.r, color.g, color.b, color.a) < 0)
