@@ -688,9 +688,13 @@ RLCAPI void SetExitKey(int key) {
     rl.exit_key = key;
 }
 
-RLCAPI int GetKeyPressed(void) {}
+RLCAPI int GetKeyPressed(void) {
+    return 0; // TODO
+}
 
-RLCAPI int GetCharPressed(void) {}
+RLCAPI int GetCharPressed(void) {
+    return 0;
+}
 
 RLCAPI void ClearBackground(Color color) {
     if (SDL_SetRenderDrawColor(rl.r, color.r, color.g, color.b, color.a) < 0)
