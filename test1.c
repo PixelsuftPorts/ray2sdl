@@ -36,7 +36,14 @@ int main(void)
         }
         BeginDrawing();
         ClearBackground(BLACK);
-        DrawLineEx((Vector2){ 10.0f, 10.0f }, (Vector2){ 50.0f, 100.0f }, 0.5f, RAYWHITE);
+        Vector2 points[3];
+        points[0].x = 0.0f;
+        points[0].y = 0.0f;
+        points[1].x = 50.0f;
+        points[1].y = 100.0f;
+        points[2].x = 100.0f;
+        points[2].y = 50.0f;
+        DrawLineStrip(points, 3, RAYWHITE);
             //DrawText("Congrats! You created your first window!", 190, 200, 20, LIGHTGRAY);
         EndDrawing();
     }

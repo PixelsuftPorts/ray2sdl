@@ -37,10 +37,19 @@ RLCAPI void DrawLineV(Vector2 startPos, Vector2 endPos, Color color) {
         DRAW_WARN();
 }
 
-void DrawLineEx(Vector2 startPos, Vector2 endPos, float thick, Color color) {
+RLCAPI void DrawLineEx(Vector2 startPos, Vector2 endPos, float thick, Color color) {
+    if (thick <= 0.0f)
+        return;
     if (thickLineRGBA(
         (Sint16)startPos.x, (Sint16)startPos.y, (Sint16)endPos.x, (Sint16)endPos.y,
         thick, color.r, color.g, color.b, color.a
     ) < 0)
+        DRAW_WARN();
+}
+
+RLCAPI void DrawLineStrip(Vector2 *points, int pointCount, Color color) {
+    if (APPLY_BLEND(color) < 0)
+        BLEND_WARN();
+    if (SDL_RenderDrawLinesF(rl.r, (const SDL_FPoint*)points, pointCount) < 0)
         DRAW_WARN();
 }

@@ -3290,13 +3290,14 @@ int _bresenhamIterate(SDL2_gfxBresenhamIterator *b)
  *                                                                     *
  ***********************************************************************/
 
-static void x_perpendicular(int x0, int y0, int dx, int dy, int xstep, int ystep,
+static int x_perpendicular(int x0, int y0, int dx, int dy, int xstep, int ystep,
                             int einit, int w_left, int w_right, int winit)
 {
     int x, y, threshold, E_diag, E_square;
     int tk;
     int error;
     int p, q;
+    int result = 0;
 
     threshold = dx - 2 * dy;
     E_diag = -2 * dx;
@@ -3310,7 +3311,7 @@ static void x_perpendicular(int x0, int y0, int dx, int dy, int xstep, int ystep
 
     while (tk <= w_left)
     {
-        SDL_RenderDrawPoint(rl.r, x, y);
+        result |= SDL_RenderDrawPoint(rl.r, x, y);
         if (error >= threshold)
         {
             x = x + xstep;
@@ -3331,7 +3332,7 @@ static void x_perpendicular(int x0, int y0, int dx, int dy, int xstep, int ystep
     while (tk <= w_right)
     {
         if (p)
-            SDL_RenderDrawPoint(rl.r, x, y);
+            result |= SDL_RenderDrawPoint(rl.r, x, y);
         if (error > threshold)
         {
             x = x - xstep;
@@ -3345,15 +3346,17 @@ static void x_perpendicular(int x0, int y0, int dx, int dy, int xstep, int ystep
     }
 
     if (q == 0 && p < 2)
-        SDL_RenderDrawPoint(rl.r, x0, y0); // we need this for very thin lines
+        result |= SDL_RenderDrawPoint(rl.r, x0, y0); // we need this for very thin lines
+    return result;
 }
 
-static void x_varthick_line(int style,
+static int x_varthick_line(int style,
                             int x0, int y0, int dx, int dy, int xstep, int ystep,
                             double thickness, int pxstep, int pystep)
 {
     int p_error, error, x, y, threshold, E_diag, E_square, length, p;
     int w_left, w_right;
+    int result = 0;
     double D;
 
     p_error = 0;
@@ -3374,7 +3377,7 @@ static void x_varthick_line(int style,
         style = (style << 1) | (style < 0);
 
         if (style < 0)
-            x_perpendicular(x, y, dx, dy, pxstep, pystep,
+            result |= x_perpendicular(x, y, dx, dy, pxstep, pystep,
                             p_error, w_left, w_right, error);
         if (error >= threshold)
         {
@@ -3383,7 +3386,7 @@ static void x_varthick_line(int style,
             if (p_error >= threshold)
             {
                 if (style < 0)
-                    x_perpendicular(x, y, dx, dy, pxstep, pystep,
+                    result |= x_perpendicular(x, y, dx, dy, pxstep, pystep,
                                     (p_error + E_diag + E_square),
                                     w_left, w_right, error);
                 p_error = p_error + E_diag;
@@ -3393,6 +3396,7 @@ static void x_varthick_line(int style,
         error = error + E_square;
         x = x + xstep;
     }
+    return result;
 }
 
 /***********************************************************************
@@ -3401,13 +3405,14 @@ static void x_varthick_line(int style,
  *                                                                     *
  ***********************************************************************/
 
-static void y_perpendicular(int x0, int y0, int dx, int dy, int xstep, int ystep,
+static int y_perpendicular(int x0, int y0, int dx, int dy, int xstep, int ystep,
                             int einit, int w_left, int w_right, int winit)
 {
     int x, y, threshold, E_diag, E_square;
     int tk;
     int error;
     int p, q;
+    int result = 0;
 
     p = q = 0;
     threshold = dy - 2 * dx;
@@ -3421,7 +3426,7 @@ static void y_perpendicular(int x0, int y0, int dx, int dy, int xstep, int ystep
 
     while (tk <= w_left)
     {
-        SDL_RenderDrawPoint(rl.r, x, y);
+        result |= SDL_RenderDrawPoint(rl.r, x, y);
         if (error > threshold)
         {
             y = y + ystep;
@@ -3442,7 +3447,7 @@ static void y_perpendicular(int x0, int y0, int dx, int dy, int xstep, int ystep
     while (tk <= w_right)
     {
         if (p)
-            SDL_RenderDrawPoint(rl.r, x, y);
+            result |= SDL_RenderDrawPoint(rl.r, x, y);
         if (error >= threshold)
         {
             y = y - ystep;
@@ -3456,15 +3461,17 @@ static void y_perpendicular(int x0, int y0, int dx, int dy, int xstep, int ystep
     }
 
     if (q == 0 && p < 2)
-        SDL_RenderDrawPoint(rl.r, x0, y0); // we need this for very thin lines
+        result |= SDL_RenderDrawPoint(rl.r, x0, y0); // we need this for very thin lines
+    return result;
 }
 
-static void y_varthick_line(int style,
+static int y_varthick_line(int style,
                             int x0, int y0, int dx, int dy, int xstep, int ystep,
                             double thickness, int pxstep, int pystep)
 {
     int p_error, error, x, y, threshold, E_diag, E_square, length, p;
     int w_left, w_right;
+    int result = 0;
     double D;
 
     p_error = 0;
@@ -3485,7 +3492,7 @@ static void y_varthick_line(int style,
         style = (style << 1) | (style < 0);
 
         if (style < 0)
-            y_perpendicular(x, y, dx, dy, pxstep, pystep,
+            result |= y_perpendicular(x, y, dx, dy, pxstep, pystep,
                             p_error, w_left, w_right, error);
         if (error >= threshold)
         {
@@ -3494,7 +3501,7 @@ static void y_varthick_line(int style,
             if (p_error >= threshold)
             {
                 if (style < 0)
-                    y_perpendicular(x, y, dx, dy, pxstep, pystep,
+                    result |= y_perpendicular(x, y, dx, dy, pxstep, pystep,
                                     p_error + E_diag + E_square,
                                     w_left, w_right, error);
                 p_error = p_error + E_diag;
@@ -3504,6 +3511,7 @@ static void y_varthick_line(int style,
         error = error + E_square;
         y = y + ystep;
     }
+    return result;
 }
 
 /***********************************************************************
@@ -3512,7 +3520,7 @@ static void y_varthick_line(int style,
  *                                                                     *
  ***********************************************************************/
 
-void draw_varthick_line(int style, int x0, int y0, int x1, int y1, double thickness)
+int draw_varthick_line(int style, int x0, int y0, int x1, int y1, double thickness)
 {
     int dx, dy, xstep, ystep;
     int pxstep = 0, pystep = 0;
@@ -3578,14 +3586,13 @@ void draw_varthick_line(int style, int x0, int y0, int x1, int y1, double thickn
     }
 
     if (dx > dy)
-        x_varthick_line(style, x0, y0, dx, dy, xstep, ystep,
+        return x_varthick_line(style, x0, y0, dx, dy, xstep, ystep,
                         thickness + 1.0,
                         pxstep, pystep);
     else
-        y_varthick_line(style, x0, y0, dx, dy, xstep, ystep,
+        return y_varthick_line(style, x0, y0, dx, dy, xstep, ystep,
                         thickness + 1.0,
                         pxstep, pystep);
-    return;
 }
 
 static int LineStyle = -1;
@@ -3608,26 +3615,20 @@ static int LineStyle = -1;
 */
 int thickLineRGBA(Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2, float width, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
 {
-    int result;
-    int wh;
-
     /* Special case: thick "point" */
     if ((x1 == x2) && (y1 == y2))
     {
-        wh = (int)(width / 2.0f);
+        int wh = (int)(width / 2.0f);
         return boxRGBA(x1 - wh, y1 - wh, x2 + wh, y2 + wh, r, g, b, a);
     }
-
     /*
      * Set color
      */
-    result = 0;
-    result |= APPLY_BLEND_RGBA(r, g, b, a);
-
+    int result = APPLY_BLEND_RGBA(r, g, b, a);
     /*
      * Draw
      */
-    draw_varthick_line(LineStyle, x1, y1, x2, y2, (double)width);
+    result |= draw_varthick_line(LineStyle, x1, y1, x2, y2, (double)width);
     return (result);
 }
 
