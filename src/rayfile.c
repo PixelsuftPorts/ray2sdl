@@ -264,7 +264,16 @@ RLCAPI const char *GetFileName(const char *filePath) {
 }
 
 RLCAPI const char *GetFileNameWithoutExt(const char *filePath) {
-    return "";
+    if (filePath == NULL) {
+        TRACELOG(LOG_WARNING, "FILEIO: NULL pointer passed");
+        return NULL;
+    }
+    static char result[MAX_FILENAME_LENGTH];
+    const char* fileName = GetFileName(filePath);
+    size_t size = SDL_strlen(fileName) - SDL_strlen(GetFileExtension(fileName));
+    SDL_memcpy(result, fileName, size);
+    result[size] = '\0';
+    return result;
 }
 
 RLCAPI const char *GetDirectoryPath(const char *filePath) {
