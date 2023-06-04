@@ -36,5 +36,10 @@ RLCAPI void DrawLineV(Vector2 startPos, Vector2 endPos, Color color) {
 }
 
 void DrawLineEx(Vector2 startPos, Vector2 endPos, float thick, Color color) {
-
+    if (thickLineRGBA(
+        rl.r,
+        (Sint16)startPos.x, (Sint16)startPos.y, (Sint16)endPos.x, (Sint16)endPos.y,
+        (Uint8)thick, color.r, color.g, color.b, color.a
+    ) < 0)
+        DRAW_WARN();
 }

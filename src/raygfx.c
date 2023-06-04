@@ -3270,13 +3270,6 @@ int thickLineRGBA(SDL_Renderer *renderer, Sint16 x1, Sint16 y1, Sint16 x2, Sint1
 	int result;
 	int wh;
 
-	if (renderer == NULL) {
-		return -1;
-	}
-	if (width < 1) {
-		return -1;
-	}
-
 	/* Special case: thick "point" */
 	if ((x1 == x2) && (y1 == y2)) {
 		wh = width / 2;
