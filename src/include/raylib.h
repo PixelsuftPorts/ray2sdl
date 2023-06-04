@@ -172,6 +172,7 @@ RLAPI void DrawRing(Vector2 center, float innerRadius, float outerRadius, float 
 RLAPI void DrawRingLines(Vector2 center, float innerRadius, float outerRadius, float startAngle, float endAngle, int segments, Color color);
 RLAPI void DrawRectangle(int posX, int posY, int width, int height, Color color);
 RLAPI void DrawRectangleV(Vector2 position, Vector2 size, Color color);
+RLAPI void DrawRectangleRec(Rectangle rec, Color color);
 
 RLAPI void ClearBackground(Color color);
 RLAPI void BeginDrawing(void);

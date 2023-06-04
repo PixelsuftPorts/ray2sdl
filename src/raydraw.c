@@ -28,11 +28,14 @@ RLCAPI void DrawCircle(int centerX, int centerY, float radius, Color color) {
 }
 
 RLCAPI void DrawRectangle(int posX, int posY, int width, int height, Color color) {
-    DrawRectangleV(
-        VECLITERAL(Vector2){ (float)posX, (float)posY },
-        VECLITERAL(Vector2){ (float)width, (float)height },
+    DrawRectangleRec(
+        VECLITERAL(Rectangle){ (float)posX, (float)posY, (float)width, (float)height },
         color
     );
+}
+
+RLCAPI void DrawRectangleV(Vector2 position, Vector2 size, Color color) {
+    DrawRectangleRec(VECLITERAL(Rectangle) { position.x, position.y, size.x, size.y }, color);
 }
 
 RLCAPI void DrawPixelV(Vector2 position, Color color) {
@@ -178,10 +181,9 @@ RLCAPI void DrawRingLines(Vector2 center, float innerRadius, float outerRadius, 
         GFX_WARN();
 }
 
-RLCAPI void DrawRectangleV(Vector2 position, Vector2 size, Color color) {
+RLCAPI void DrawRectangleRec(Rectangle rec, Color color) {
     if (APPLY_BLEND(color) < 0)
         BLEND_WARN();
-    SDL_FRect draw_rect = { position.x, position.y, size.x, size.y };
-    if (SDL_RenderFillRectF(rl.r, &draw_rect) < 0)
+    if (SDL_RenderFillRectF(rl.r, (const SDL_FRect*)&rec) < 0)
         DRAW_WARN();
 }
