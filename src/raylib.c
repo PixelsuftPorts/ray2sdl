@@ -12,6 +12,7 @@ RLCAPI void InitWindow(int width, int height, const char *title) {
         SDL_memset(&rl, 0, sizeof(rl));
         rl.not_first_init = true;
         rl.log_level = LOG_INFO;
+        rl.exit_key = KEY_ESCAPE;
         TRACELOG(LOG_INFO, "Initializing ray2sdl %s", RAYLIB_VERSION);
         TRACELOG(LOG_INFO, "Supported raylib modules:");
         TRACELOG(LOG_INFO, "     > bruh:...... loaded (mandatory)");
@@ -78,7 +79,7 @@ void PollEvents() {
                 break;
             }
             case SDL_KEYDOWN: {
-                if (rl.event.key.keysym.sym == SDLK_ESCAPE)
+                if (rl.event.key.keysym.sym == rl.exit_key)
                     rl.should_close = true;
                 break;
             }
@@ -616,7 +617,14 @@ RLCAPI void OpenURL(const char *url) {
         TRACELOG(LOG_WARNING, "Failed to open URL (%s)", SDL_GetError());
 }
 
-RLCAPI bool IsKeyPressed(int key) {}
+RLCAPI bool IsKeyPressed(int key) {
+    // TODO
+    if (key >= 0 && key < rl.num_kbd_keys) {
+        return false;
+    }
+    TRACELOG(LOG_WARNING, "Got Invalid Key %i", key);
+    return false;
+}
 
 RLCAPI bool IsKeyDown(int key) {
     if (key >= 0 && key < rl.num_kbd_keys) {
@@ -630,7 +638,13 @@ RLCAPI bool IsKeyDown(int key) {
     return false;
 }
 
-RLCAPI bool IsKeyReleased(int key) {}
+RLCAPI bool IsKeyReleased(int key) {
+    if (key >= 0 && key < rl.num_kbd_keys) {
+        return false;
+    }
+    TRACELOG(LOG_WARNING, "Got Invalid Key %i", key);
+    return false;
+}
 
 RLCAPI bool IsKeyUp(int key) {
     if (key >= 0 && key < rl.num_kbd_keys) {
@@ -644,7 +658,9 @@ RLCAPI bool IsKeyUp(int key) {
     return true;
 }
 
-RLCAPI void SetExitKey(int key) {}
+RLCAPI void SetExitKey(int key) {
+    rl.exit_key = key;
+}
 
 RLCAPI int GetKeyPressed(void) {}
 

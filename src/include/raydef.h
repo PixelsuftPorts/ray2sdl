@@ -950,6 +950,7 @@ struct rl_type {
     unsigned int fl;
     int num_kbd_keys;
     int log_level;
+    int exit_key;
     bool not_first_init;
     bool event_waiting;
     bool w_resized;
