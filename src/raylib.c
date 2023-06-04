@@ -64,6 +64,12 @@ RLCAPI void InitWindow(int width, int height, const char *title) {
         }
     }
     rl.kbd_array = SDL_GetKeyboardState(&rl.num_kbd_keys);
+#ifdef HANDLE_KEY_PRESS
+    rl.keypress_array = SDL_malloc(rl.num_kbd_keys);
+    if (rl.keypress_array == NULL) {
+        TRACELOG(LOG_WARNING, "Failed to allocate keypress array");
+    }
+#endif
     rl.should_close = false;
     rl.clip_ptr = NULL;
     if (!(rl.fl & FLAG_WINDOW_HIDDEN))
@@ -72,6 +78,10 @@ RLCAPI void InitWindow(int width, int height, const char *title) {
 
 void PollEvents() {
     rl.w_resized = false;
+#ifdef HANDLE_KEY_PRESS
+    if (rl.keypress_array)
+        SDL_memset(rl.keypress_array, 0, rl.num_kbd_keys);
+#endif
     while (SDL_PollEvent(&rl.event)) {
         switch (rl.event.type) {
             case SDL_QUIT: {
@@ -79,12 +89,19 @@ void PollEvents() {
                 break;
             }
             case SDL_KEYDOWN: {
-#ifdef USE_SCANCODES
-                if (rl.event.key.keysym.scancode == rl.exit_key)
-#else
-                if (rl.event.key.keysym.sym == rl.exit_key)
-#endif
+                if (GET_KEY_INT(rl.event.key.keysym) == rl.exit_key)
                     rl.should_close = true;
+#ifdef HANDLE_KEY_PRESS
+                if (rl.keypress_array && !rl.event.key.repeat)
+                    rl.keypress_array[rl.event.key.keysym.scancode] = 1;
+#endif
+                break;
+            }
+            case SDL_KEYUP: {
+#ifdef HANDLE_KEY_PRESS
+                if (rl.keypress_array)
+                    rl.keypress_array[rl.event.key.keysym.scancode] = 2;
+#endif
                 break;
             }
             case SDL_WINDOWEVENT: {
@@ -155,6 +172,12 @@ RLCAPI void CloseWindow(void) {
 #ifdef SUPPORT_FILES_DROPPING
     if (rl.drops.capacity && rl.drops.paths)
         UnloadDroppedFiles(rl.drops);
+#endif
+#ifdef HANDLE_KEY_PRESS
+    if (rl.keypress_array) {
+        SDL_free(rl.keypress_array);
+        rl.keypress_array = NULL;
+    }
 #endif
     if (rl.clip_ptr) {
         SDL_free(rl.clip_ptr);
@@ -622,9 +645,12 @@ RLCAPI void OpenURL(const char *url) {
 }
 
 RLCAPI bool IsKeyPressed(int key) {
-    // TODO
     if (key >= 0 && key < rl.num_kbd_keys) {
+#ifdef HANDLE_KEY_PRESS
+        return rl.keypress_array[key] == 1;
+#else
         return false;
+#endif
     }
     TRACELOG(LOG_WARNING, "Got Invalid Key %i", key);
     return false;
@@ -632,11 +658,7 @@ RLCAPI bool IsKeyPressed(int key) {
 
 RLCAPI bool IsKeyDown(int key) {
     if (key >= 0 && key < rl.num_kbd_keys) {
-#ifdef USE_SCANCODES
-        return (bool)rl.kbd_array[(key)];
-#else
-        return (bool)rl.kbd_array[SDL_GetScancodeFromKey(key)];
-#endif
+        return (bool)rl.kbd_array[CONVERT_KEY_CODE(key)];
     }
     TRACELOG(LOG_WARNING, "Got Invalid Key %i", key);
     return false;
@@ -644,7 +666,11 @@ RLCAPI bool IsKeyDown(int key) {
 
 RLCAPI bool IsKeyReleased(int key) {
     if (key >= 0 && key < rl.num_kbd_keys) {
+#ifdef HANDLE_KEY_PRESS
+        return rl.keypress_array[key] == 2;
+#else
         return false;
+#endif
     }
     TRACELOG(LOG_WARNING, "Got Invalid Key %i", key);
     return false;
@@ -652,11 +678,7 @@ RLCAPI bool IsKeyReleased(int key) {
 
 RLCAPI bool IsKeyUp(int key) {
     if (key >= 0 && key < rl.num_kbd_keys) {
-#ifdef USE_SCANCODES
-        return !rl.kbd_array[(key)];
-#else
-        return !rl.kbd_array[SDL_GetScancodeFromKey(key)];
-#endif
+        return !rl.kbd_array[CONVERT_KEY_CODE(key)];
     }
     TRACELOG(LOG_WARNING, "Got Invalid Key %i", key);
     return true;

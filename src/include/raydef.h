@@ -927,6 +927,21 @@ typedef enum {
 #endif
 } KeyboardKey;
 
+#ifndef GET_KEY_INT
+#ifdef USE_SCANCODES
+#define GET_KEY_INT(keysym) (keysym.scancode)
+#else
+#define GET_KEY_INT(keysym) (keysym.sym)
+#endif
+#endif
+#ifndef CONVERT_KEY_CODE
+#ifdef USE_SCANCODES
+#define CONVERT_KEY_CODE(scancode) (scancode)
+#else
+#define CONVERT_KEY_CODE(scancode) (SDL_GetScancodeFromKey(scancode))
+#endif
+#endif
+
 typedef void (*TraceLogCallback)(int logLevel, const char *text, va_list args);
 typedef unsigned char *(*LoadFileDataCallback)(const char *fileName, unsigned int *bytesRead);
 typedef bool (*SaveFileDataCallback)(const char *fileName, void *data, unsigned int bytesToWrite);
@@ -946,6 +961,9 @@ struct rl_type {
     SDL_Window* w;
     SDL_Renderer* r;
     const Uint8* kbd_array;
+#ifdef HANDLE_KEY_PRESS
+    Uint8* keypress_array;
+#endif
     char* clip_ptr;
     unsigned int fl;
     int num_kbd_keys;
