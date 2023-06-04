@@ -23,6 +23,10 @@ RLCAPI void DrawLine(int startPosX, int startPosY, int endPosX, int endPosY, Col
     );
 }
 
+RLCAPI void DrawCircle(int centerX, int centerY, float radius, Color color) {
+    DrawCircleV(VECLITERAL(Vector2) { (float)centerX, (float)centerY }, radius, color);
+}
+
 RLCAPI void DrawPixelV(Vector2 position, Color color) {
     if (APPLY_BLEND(color) < 0)
         BLEND_WARN();
@@ -51,5 +55,12 @@ RLCAPI void DrawLineStrip(Vector2 *points, int pointCount, Color color) {
     if (APPLY_BLEND(color) < 0)
         BLEND_WARN();
     if (SDL_RenderDrawLinesF(rl.r, (const SDL_FPoint*)points, pointCount) < 0)
+        DRAW_WARN();
+}
+
+RLCAPI void DrawCircleV(Vector2 center, float radius, Color color) {
+    if (filledCircleRGBA(
+        (Sint16)center.x, (Sint16)center.y, (Sint16)radius, color.r, color.g, color.b, color.a
+    ) < 0)
         DRAW_WARN();
 }
