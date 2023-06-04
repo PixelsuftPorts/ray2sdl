@@ -320,9 +320,16 @@ RLCAPI const char *GetApplicationDirectory(void) {
 }
 
 RLCAPI bool ChangeDirectory(const char *dir) {
-    return "";
+    if (dir == NULL) {
+        TRACELOG(LOG_WARNING, "FILEIO: NULL pointer passed");
+        return NULL;
+    }
+    if (!CHDIR(dir))
+        return true;
+    TRACELOG(LOG_WARNING, "FILEIO: Failed to change dir to %s", dir);
+    return false;
 }
 
 RLCAPI bool IsPathFile(const char *path) {
-    return false;
+    return FileExists(path); // I don't think it's correct
 }
