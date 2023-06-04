@@ -316,7 +316,7 @@ RLCAPI const char *GetWorkingDirectory(void) {
 }
 
 RLCAPI const char *GetApplicationDirectory(void) {
-    return "";
+    return (const char*)SDL_GetBasePath();
 }
 
 RLCAPI bool ChangeDirectory(const char *dir) {
