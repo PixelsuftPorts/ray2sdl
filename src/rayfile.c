@@ -230,6 +230,10 @@ RLCAPI bool DirectoryExists(const char *dirPath) {
 }
 
 RLCAPI bool IsFileExtension(const char *fileName, const char *ext) {
+    if (fileName == NULL || ext == NULL) {
+        TRACELOG(LOG_WARNING, "FILEIO: NULL pointer passed");
+        return false;
+    }
     const char *fileExt = GetFileExtension(fileName);
     if (fileExt == NULL)
         return false;
@@ -238,14 +242,25 @@ RLCAPI bool IsFileExtension(const char *fileName, const char *ext) {
 
 RLCAPI const char *GetFileExtension(const char *fileName) {
     // This one doesn't check UPPER or lower cases so it's not mine problem
+    if (fileName == NULL) {
+        TRACELOG(LOG_WARNING, "FILEIO: NULL pointer passed");
+        return NULL;
+    }
     const char *dot = SDL_strrchr(fileName, '.');
-    if (!dot || dot == fileName)
+    if (dot == NULL || dot == fileName)
         return NULL;
     return dot;
 }
 
 RLCAPI const char *GetFileName(const char *filePath) {
-    return "";
+    if (filePath == NULL) {
+        TRACELOG(LOG_WARNING, "FILEIO: NULL pointer passed");
+        return NULL;
+    }
+    const char *fileName = SDL_max(SDL_strrchr(filePath, '\\'), SDL_strrchr(filePath, '/'));
+    if (fileName == NULL)
+        return filePath;
+    return fileName + 1;
 }
 
 RLCAPI const char *GetFileNameWithoutExt(const char *filePath) {
