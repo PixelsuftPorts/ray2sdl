@@ -511,8 +511,7 @@ int roundedBoxRGBA(SDL_Renderer * renderer, Sint16 x1, Sint16 y1, Sint16 x2,
 	* Set color
 	*/
 	result = 0;
-	if (a != 255)  result |= SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-	result |= SDL_SetRenderDrawColor(renderer, r, g, b, a);
+	result |= APPLY_BLEND_RGBA(r, g, b, a);
 
 	/*
 	* Draw corners
@@ -2382,8 +2381,7 @@ int filledPolygonRGBAMT(SDL_Renderer * renderer, const Sint16 * vx, const Sint16
 		* Set color 
 		*/
 		result = 0;
-	    if (a != 255) result |= SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-		result |= SDL_SetRenderDrawColor(renderer, r, g, b, a);	
+	    result |= APPLY_BLEND_RGBA(r, g, b, a);
 
 		for (i = 0; (i < ints); i += 2) {
 			xa = gfxPrimitivesPolyInts[i] + 1;
