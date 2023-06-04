@@ -23,7 +23,7 @@ int main(void)
             }
             UnloadDroppedFiles(files);
         }
-        if (IsKeyDown(KEY_SPACE)) {
+        if (IsKeyPressed(KEY_SPACE)) {
             printf("Space Down\n");
         }
         BeginDrawing();
