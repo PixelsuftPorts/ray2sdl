@@ -59,12 +59,23 @@ RLCAPI void DrawLineStrip(Vector2 *points, int pointCount, Color color) {
 }
 
 RLCAPI void DrawCircleGradient(int centerX, int centerY, float radius, Color color1, Color color2) {
-    // TODO
-    DrawCircleV(
-        VECLITERAL(Vector2){ (float)centerX, (float)centerY },
-        radius,
-        CLITERAL(Color) { color1.r / 2 + color2.r / 2, color1.g / 2 + color2.g / 2, color1.b / 2 + color2.b / 2, color1.a / 2 + color2.a / 2 }
-    );
+    // TODO: what abaout transparency?
+    if (radius <= 0.0f)
+        radius = 0.1f;
+    float speed[4] = { (float)(color1.r - color2.r) / radius, (float)(color1.g - color2.g) / radius,
+                    (float)(color1.b - color2.b) / radius, (float)(color1.a - color2.a) / radius };
+    float color[4] = { (float)color2.r, (float)color2.g, (float)color2.b, (float)color2.a };
+    for (float i = radius; i >= 1.0f; i -= 1.0f) {
+        DrawCircleV(
+            VECLITERAL(Vector2){ (float)centerX, (float)centerY }, i,
+            CLITERAL(Color) { (unsigned char)color[0], (unsigned char)color[1],
+            (unsigned char)color[2], (unsigned char)color[3] }
+        );
+        color[0] += speed[0];
+        color[1] += speed[1];
+        color[2] += speed[2];
+        color[3] += speed[3];
+    }
 }
 
 RLCAPI void DrawCircleSector(Vector2 center, float radius, float startAngle, float endAngle, int segments, Color color) {
