@@ -832,7 +832,7 @@ struct rl_type {
     SDL_Renderer* r;
     char* clip_ptr;
     unsigned int fl;
-    bool first_init;
+    bool not_first_init;
     bool event_waiting;
     bool w_resized;
     bool was_init;
@@ -840,15 +840,4 @@ struct rl_type {
     bool need_to_swap;
     int log_level;
 };
-
-#ifdef __GNUC__
-__attribute__((unused)) 
-#endif
-static struct rl_type rl = {
-#ifdef SUPPORT_FILES_DROPPING
-    .drops.capacity = 0, .drops.count = 0, .drops.paths = (char**)NULL,
-#endif
-    .w = NULL, .r = NULL, .clip_ptr = NULL, .event_waiting = false, .w_resized = false, .was_init = false,
-    .should_close = false, .need_to_swap = false, .log_level = LOG_INFO, .traceLog = NULL, .loadFileData = NULL,
-    .saveFileData = NULL, .loadFileText = NULL, .saveFileText = NULL, .first_init = true
-};
+struct rl_type rl;

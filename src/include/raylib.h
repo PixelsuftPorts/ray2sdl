@@ -118,6 +118,14 @@ RLAPI unsigned char *DecompressData(const unsigned char *compData, int compDataS
 RLAPI char *EncodeDataBase64(const unsigned char *data, int dataSize, int *outputSize);
 RLAPI unsigned char *DecodeDataBase64(const unsigned char *data, int *outputSize);
 
+RLAPI bool IsKeyPressed(int key);
+RLAPI bool IsKeyDown(int key);
+RLAPI bool IsKeyReleased(int key);
+RLAPI bool IsKeyUp(int key);
+RLAPI void SetExitKey(int key);
+RLAPI int GetKeyPressed(void);
+RLAPI int GetCharPressed(void);
+
 RLAPI void ClearBackground(Color color);
 RLAPI void BeginDrawing(void);
 RLAPI void EndDrawing(void); 

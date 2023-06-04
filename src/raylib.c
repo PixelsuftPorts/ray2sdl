@@ -8,8 +8,10 @@
 #endif
 
 RLCAPI void InitWindow(int width, int height, const char *title) {
-    if (rl.first_init) {
-        rl.first_init = false;
+    if (!rl.not_first_init) {
+        SDL_memset(&rl, 0, sizeof(rl));
+        rl.not_first_init = true;
+        rl.log_level = LOG_INFO;
         TRACELOG(LOG_INFO, "Initializing ray2sdl %s", RAYLIB_VERSION);
         TRACELOG(LOG_INFO, "Supported raylib modules:");
         TRACELOG(LOG_INFO, "     > bruh:...... loaded (mandatory)");
