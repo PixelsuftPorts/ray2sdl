@@ -43,7 +43,8 @@ int main(void)
         points[1].y = 100.0f;
         points[2].x = 100.0f;
         points[2].y = 50.0f;
-        DrawLineStrip(points, 3, RAYWHITE);
+        DrawLineEx(points[0], points[1], 5.0f, (Color){255.0f, 0.0f, 0.0f, 255.0f});
+        DrawLineEx(points[1], points[2], 5.0f, (Color){255.0f, 0.0f, 0.0f, 255.0f});
             //DrawText("Congrats! You created your first window!", 190, 200, 20, LIGHTGRAY);
         EndDrawing();
     }
