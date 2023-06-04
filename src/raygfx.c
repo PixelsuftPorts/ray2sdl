@@ -1791,8 +1791,8 @@ int filledEllipseRGBA(Sint16 x, Sint16 y, float rx, float ry, Uint8 r, Uint8 g, 
 
             if ((ok != k) && (oj != k))
             {
-                xph = x + h;
-                xmh = x - h;
+                xph = (float)x + h;
+                xmh = (float)x - h;
                 if (k > 0)
                 {
                     result |= hline((Sint16)xmh, (Sint16)xph, y + (Sint16)k);
@@ -1806,8 +1806,8 @@ int filledEllipseRGBA(Sint16 x, Sint16 y, float rx, float ry, Uint8 r, Uint8 g, 
             }
             if ((oj != j) && (ok != j) && (k != j))
             {
-                xmi = x - i;
-                xpi = x + i;
+                xmi = (float)x - i;
+                xpi = (float)x + i;
                 if (j > 0)
                 {
                     result |= hline((Sint16)xmi, (Sint16)xpi, y + (Sint16)j);
@@ -1839,8 +1839,8 @@ int filledEllipseRGBA(Sint16 x, Sint16 y, float rx, float ry, Uint8 r, Uint8 g, 
 
             if ((oi != i) && (oh != i))
             {
-                xmj = x - j;
-                xpj = x + j;
+                xmj = (float)x - j;
+                xpj = (float)x + j;
                 if (i > 0)
                 {
                     result |= hline((Sint16)xmj, (Sint16)xpj, y + (Sint16)i);
@@ -1854,8 +1854,8 @@ int filledEllipseRGBA(Sint16 x, Sint16 y, float rx, float ry, Uint8 r, Uint8 g, 
             }
             if ((oh != h) && (oi != h) && (i != h))
             {
-                xmk = x - k;
-                xpk = x + k;
+                xmk = (float)x - k;
+                xpk = (float)x + k;
                 if (h > 0)
                 {
                     result |= hline((Sint16)xmk, (Sint16)xpk, y + (Sint16)h);
