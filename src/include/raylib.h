@@ -157,6 +157,7 @@ RLAPI void DrawPixel(int posX, int posY, Color color);
 RLAPI void DrawPixelV(Vector2 position, Color color);
 RLAPI void DrawLine(int startPosX, int startPosY, int endPosX, int endPosY, Color color);
 RLAPI void DrawLineV(Vector2 startPos, Vector2 endPos, Color color);
+RLAPI void DrawLineEx(Vector2 startPos, Vector2 endPos, float thick, Color color);
 
 RLAPI void ClearBackground(Color color);
 RLAPI void BeginDrawing(void);

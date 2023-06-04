@@ -2,6 +2,10 @@
 #include <SDL2/SDL.h>
 #include <rayconf.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define RAYLIB_VERSION_MAJOR 228
 #define RAYLIB_VERSION_MINOR 0
 #define RAYLIB_VERSION_PATCH 0
@@ -97,6 +101,13 @@
 #define BLANK      CLITERAL(Color){ 0, 0, 0, 0 }           // Blank (Transparent)
 #define MAGENTA    CLITERAL(Color){ 255, 0, 255, 255 }     // Magenta
 #define RAYWHITE   CLITERAL(Color){ 245, 245, 245, 255 }   // My own White (raylib logo)
+
+#define BLEND_WARN() TRACELOG(LOG_WARNING, "Failed to apply blend with color (%s)", SDL_GetError())
+#define DRAW_WARN() TRACELOG(LOG_WARNING, "Failed to draw (%s)", SDL_GetError())
+
+#define APPLY_BLEND(color) (\
+    SDL_SetRenderDrawBlendMode(rl.r, color.a >= 255 ? SDL_BLENDMODE_NONE : SDL_BLENDMODE_BLEND) |\
+    SDL_SetRenderDrawColor(rl.r, color.r, color.g, color.b, color.a))
 
 #if (defined(__STDC__) && __STDC_VERSION__ >= 199901L) || (defined(_MSC_VER) && _MSC_VER >= 1800)
     #include <stdbool.h>
@@ -981,3 +992,8 @@ struct rl_type {
     bool need_to_swap;
 };
 struct rl_type rl;
+
+
+#ifdef __cplusplus
+}
+#endif

@@ -36,7 +36,7 @@ int main(void)
         }
         BeginDrawing();
         ClearBackground(BLACK);
-        DrawLine(10, 10, 100, 50, RAYWHITE);
+        DrawLineEx((Vector2){ 10.0f, 10.0f }, (Vector2){ 50.0f, 100.0f }, 5.0f, RAYWHITE);
             //DrawText("Congrats! You created your first window!", 190, 200, 20, LIGHTGRAY);
         EndDrawing();
     }
