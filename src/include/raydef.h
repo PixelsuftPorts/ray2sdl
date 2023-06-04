@@ -466,16 +466,16 @@ typedef enum {
 // Mouse cursor
 typedef enum {
     MOUSE_CURSOR_DEFAULT       = 0,     // Default pointer shape
-    MOUSE_CURSOR_ARROW         = 1,     // Arrow shape
-    MOUSE_CURSOR_IBEAM         = 2,     // Text writing cursor shape
-    MOUSE_CURSOR_CROSSHAIR     = 3,     // Cross shape
-    MOUSE_CURSOR_POINTING_HAND = 4,     // Pointing hand cursor
-    MOUSE_CURSOR_RESIZE_EW     = 5,     // Horizontal resize/move arrow shape
-    MOUSE_CURSOR_RESIZE_NS     = 6,     // Vertical resize/move arrow shape
-    MOUSE_CURSOR_RESIZE_NWSE   = 7,     // Top-left to bottom-right diagonal resize/move arrow shape
-    MOUSE_CURSOR_RESIZE_NESW   = 8,     // The top-right to bottom-left diagonal resize/move arrow shape
-    MOUSE_CURSOR_RESIZE_ALL    = 9,     // The omnidirectional resize/move cursor shape
-    MOUSE_CURSOR_NOT_ALLOWED   = 10     // The operation-not-allowed shape
+    MOUSE_CURSOR_ARROW         = SDL_SYSTEM_CURSOR_ARROW,     // Arrow shape
+    MOUSE_CURSOR_IBEAM         = SDL_SYSTEM_CURSOR_IBEAM,     // Text writing cursor shape
+    MOUSE_CURSOR_CROSSHAIR     = SDL_SYSTEM_CURSOR_CROSSHAIR,     // Cross shape
+    MOUSE_CURSOR_POINTING_HAND = SDL_SYSTEM_CURSOR_HAND,     // Pointing hand cursor
+    MOUSE_CURSOR_RESIZE_EW     = SDL_SYSTEM_CURSOR_SIZEWE,     // Horizontal resize/move arrow shape
+    MOUSE_CURSOR_RESIZE_NS     = SDL_SYSTEM_CURSOR_SIZENS,     // Vertical resize/move arrow shape
+    MOUSE_CURSOR_RESIZE_NWSE   = SDL_SYSTEM_CURSOR_SIZENWSE,     // Top-left to bottom-right diagonal resize/move arrow shape
+    MOUSE_CURSOR_RESIZE_NESW   = SDL_SYSTEM_CURSOR_SIZENESW,     // The top-right to bottom-left diagonal resize/move arrow shape
+    MOUSE_CURSOR_RESIZE_ALL    = SDL_SYSTEM_CURSOR_SIZEALL,     // The omnidirectional resize/move cursor shape
+    MOUSE_CURSOR_NOT_ALLOWED   = SDL_SYSTEM_CURSOR_NO     // The operation-not-allowed shape
 } MouseCursor;
 
 // Gamepad buttons

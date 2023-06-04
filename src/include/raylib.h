@@ -126,6 +126,21 @@ RLAPI void SetExitKey(int key);
 RLAPI int GetKeyPressed(void);
 RLAPI int GetCharPressed(void);
 
+RLAPI bool IsMouseButtonPressed(int button);
+RLAPI bool IsMouseButtonDown(int button);
+RLAPI bool IsMouseButtonReleased(int button);
+RLAPI bool IsMouseButtonUp(int button);
+RLAPI int GetMouseX(void);
+RLAPI int GetMouseY(void);
+RLAPI Vector2 GetMousePosition(void);
+RLAPI Vector2 GetMouseDelta(void);
+RLAPI void SetMousePosition(int x, int y);
+RLAPI void SetMouseOffset(int offsetX, int offsetY);
+RLAPI void SetMouseScale(float scaleX, float scaleY);
+RLAPI float GetMouseWheelMove(void);
+RLAPI Vector2 GetMouseWheelMoveV(void);
+RLAPI void SetMouseCursor(int cursor);
+
 RLAPI void ClearBackground(Color color);
 RLAPI void BeginDrawing(void);
 RLAPI void EndDrawing(void); 

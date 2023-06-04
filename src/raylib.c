@@ -644,58 +644,6 @@ RLCAPI void OpenURL(const char *url) {
         TRACELOG(LOG_WARNING, "Failed to open URL (%s)", SDL_GetError());
 }
 
-RLCAPI bool IsKeyPressed(int key) {
-    if (key >= 0 && key < rl.num_kbd_keys) {
-#ifdef HANDLE_KEY_PRESS
-        return rl.keypress_array[key] == 1;
-#else
-        return false;
-#endif
-    }
-    TRACELOG(LOG_WARNING, "Got Invalid Key %i", key);
-    return false;
-}
-
-RLCAPI bool IsKeyDown(int key) {
-    if (key >= 0 && key < rl.num_kbd_keys) {
-        return (bool)rl.kbd_array[CONVERT_KEY_CODE(key)];
-    }
-    TRACELOG(LOG_WARNING, "Got Invalid Key %i", key);
-    return false;
-}
-
-RLCAPI bool IsKeyReleased(int key) {
-    if (key >= 0 && key < rl.num_kbd_keys) {
-#ifdef HANDLE_KEY_PRESS
-        return rl.keypress_array[key] == 2;
-#else
-        return false;
-#endif
-    }
-    TRACELOG(LOG_WARNING, "Got Invalid Key %i", key);
-    return false;
-}
-
-RLCAPI bool IsKeyUp(int key) {
-    if (key >= 0 && key < rl.num_kbd_keys) {
-        return !rl.kbd_array[CONVERT_KEY_CODE(key)];
-    }
-    TRACELOG(LOG_WARNING, "Got Invalid Key %i", key);
-    return true;
-}
-
-RLCAPI void SetExitKey(int key) {
-    rl.exit_key = key;
-}
-
-RLCAPI int GetKeyPressed(void) {
-    return 0; // TODO
-}
-
-RLCAPI int GetCharPressed(void) {
-    return 0;
-}
-
 RLCAPI void ClearBackground(Color color) {
     if (SDL_SetRenderDrawColor(rl.r, color.r, color.g, color.b, color.a) < 0)
         TRACELOG(LOG_WARNING, "Failed to set draw color (%s)", SDL_GetError());
