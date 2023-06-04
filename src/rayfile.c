@@ -212,56 +212,21 @@ RLCAPI bool FileExists(const char *fileName) {
     return true;
 }
 
-#ifdef _MSC_VER
-DIR *opendir(const char *name)
-{
-    DIR *dir = 0;
-
-    if (name && name[0])
-    {
-        size_t base_length = SDL_strlen(name);
-        
-        // Search pattern must end with suitable wildcard
-        const char *all = SDL_strchr("/\\", name[base_length - 1]) ? "*" : "/*";
-
-        if ((dir = (DIR *)SDL_malloc(sizeof *dir)) != 0 &&
-            (dir->name = (char *)SDL_malloc(base_length + strlen(all) + 1)) != 0)
-        {
-            SDL_strlcat(SDL_strlcpy(dir->name, name, MAX_FILEPATH_LENGTH), all, MAX_FILEPATH_LENGTH);
-
-            if ((dir->handle = (handle_type) _findfirst(dir->name, &dir->info)) != -1)
-            {
-                dir->result.d_name = 0;
-            }
-            else  // rollback
-            {
-                SDL_free(dir->name);
-                SDL_free(dir);
-                dir = 0;
-            }
-        }
-        else  // rollback
-        {
-            SDL_free(dir);
-            dir   = 0;
-        }
-    }
-
-    return dir;
-}
-#endif
-
 RLCAPI bool DirectoryExists(const char *dirPath) {
     if (dirPath == NULL) {
         TRACELOG(LOG_WARNING, "FILEIO: NULL pointer passed");
         return false;
     }
+#ifdef _MSC_VER
+    return false; // TODO
+#else
     DIR *dir = opendir(dirPath);
     if (dir == NULL)
         return false;
     if (closedir(dir) < 0)
         TRACELOG(LOG_WARNING, "FILEIO: [%s] WTF Failed to close dir", dirPath);
     return true;
+#endif
 }
 
 RLCAPI bool IsFileExtension(const char *fileName, const char *ext) {
@@ -272,7 +237,7 @@ RLCAPI bool IsFileExtension(const char *fileName, const char *ext) {
 }
 
 RLCAPI const char *GetFileExtension(const char *fileName) {
-    // This one doesn't check UPPER or lower case so it's not mine problem
+    // This one doesn't check UPPER or lower cases so it's not mine problem
     const char *dot = SDL_strrchr(fileName, '.');
     if (!dot || dot == fileName)
         return NULL;
