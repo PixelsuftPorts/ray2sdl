@@ -334,22 +334,22 @@ RLCAPI bool IsPathFile(const char *path) {
     return FileExists(path); // I don't think it's correct
 }
 
-RLAPI FilePathList LoadDirectoryFiles(const char *dirPath) {
+RLCAPI FilePathList LoadDirectoryFiles(const char *dirPath) {
     // TODO
     FilePathList result = { 0 };
     return result;
 }
 
-RLAPI FilePathList LoadDirectoryFilesEx(const char *basePath, const char *filter, bool scanSubdirs) {
+RLCAPI FilePathList LoadDirectoryFilesEx(const char *basePath, const char *filter, bool scanSubdirs) {
     FilePathList result = { 0 };
     return result;
 }
 
-RLAPI void UnloadDirectoryFiles(FilePathList files) {
+RLCAPI void UnloadDirectoryFiles(FilePathList files) {
 
 }
 
-RLAPI void RegisterFileDrop(char* fp) {
+RLCAPI void RegisterFileDrop(char* fp) {
 #ifdef SUPPORT_FILES_DROPPING
     if (rl.drops.capacity <= 0) {
         rl.drops.count = 0;
@@ -369,7 +369,7 @@ RLAPI void RegisterFileDrop(char* fp) {
 #endif
 }
 
-RLAPI bool IsFileDropped(void) {
+RLCAPI bool IsFileDropped(void) {
 #ifdef SUPPORT_FILES_DROPPING
     return (bool)rl.drops.count;
 #else
@@ -377,7 +377,7 @@ RLAPI bool IsFileDropped(void) {
 #endif
 }
 
-RLAPI FilePathList LoadDroppedFiles(void) {
+RLCAPI FilePathList LoadDroppedFiles(void) {
 #ifdef SUPPORT_FILES_DROPPING
     return rl.drops;
 #else
@@ -386,7 +386,7 @@ RLAPI FilePathList LoadDroppedFiles(void) {
 #endif
 }
 
-RLAPI void UnloadDroppedFiles(FilePathList files) {
+RLCAPI void UnloadDroppedFiles(FilePathList files) {
 #ifdef SUPPORT_FILES_DROPPING
     if (files.capacity <= 0 || files.paths == NULL) {
         TRACELOG(LOG_WARNING, "Passed inavid FilePathList");
@@ -405,11 +405,110 @@ RLAPI void UnloadDroppedFiles(FilePathList files) {
 #endif
 }
 
-RLAPI long GetFileModTime(const char *fileName) {
+RLCAPI long GetFileModTime(const char *fileName) {
     if (fileName == NULL) {
         TRACELOG(LOG_WARNING, "FILEIO: NULL pointer passed");
         return 0;
     }
     // TODO
     return 0;
+}
+
+RLCAPI unsigned char *CompressData(const unsigned char *data, int dataSize, int *compDataSize) {
+    return NULL; // TODO
+}
+
+RLCAPI unsigned char *DecompressData(const unsigned char *compData, int compDataSize, int *dataSize) {
+    return NULL;
+}
+
+RLCAPI char *EncodeDataBase64(const unsigned char *data, int dataSize, int *outputSize) {
+    if (data == NULL || dataSize <= 0) {
+        TRACELOG(LOG_WARNING, "Invalid data");
+        return NULL;
+    }
+    static const unsigned char base64encodeTable[] = {
+        'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X',
+        'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
+        'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '/'
+    };
+    static const int modTable[] = { 0, 2, 1 };
+    *outputSize = 4 * ((dataSize + 2) / 3);
+    char *encodedData = (char *)SDL_malloc(*outputSize);
+    if (encodedData == NULL) {
+        TRACELOG(LOG_WARNING, "Failed to allocate memory for encoded data");
+        return NULL;
+    }
+    for (int i = 0, j = 0; i < dataSize;)
+    {
+        unsigned int octetA = (i < dataSize)? (unsigned char)data[i++] : 0;
+        unsigned int octetB = (i < dataSize)? (unsigned char)data[i++] : 0;
+        unsigned int octetC = (i < dataSize)? (unsigned char)data[i++] : 0;
+
+        unsigned int triple = (octetA << 0x10) + (octetB << 0x08) + octetC;
+
+        encodedData[j++] = base64encodeTable[(triple >> 3 * 6) & 0x3F];
+        encodedData[j++] = base64encodeTable[(triple >> 2 * 6) & 0x3F];
+        encodedData[j++] = base64encodeTable[(triple >> 1 * 6) & 0x3F];
+        encodedData[j++] = base64encodeTable[(triple >> 0 * 6) & 0x3F];
+    }
+    for (int i = 0; i < modTable[dataSize % 3]; i++) encodedData[*outputSize - 1 - i] = '=';
+    return encodedData;
+}
+
+RLCAPI unsigned char *DecodeDataBase64(const unsigned char *data, int *outputSize) {
+    if (data == NULL) {
+        TRACELOG(LOG_WARNING, "Invalid data");
+        return NULL;
+    }
+    static const unsigned char base64decodeTable[] = {
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 62, 0, 0, 0, 63, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+        11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 0, 0, 0, 0, 0, 0, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36,
+        37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51
+    };
+    int outSize = 0;
+    for (int i = 0; data[4 * i] != 0; i++)
+    {
+        if (data[4 * i + 3] == '=')
+        {
+            if (data[4 * i + 2] == '=') outSize += 1;
+            else outSize += 2;
+        }
+        else outSize += 3;
+    }
+    unsigned char *decodedData = (unsigned char *)SDL_malloc(outSize);
+    if (decodedData == NULL) {
+        TRACELOG(LOG_WARNING, "Failed to allocate memory for decoded data");
+        return NULL;
+    }
+    for (int i = 0; i < outSize / 3; i++)
+    {
+        unsigned char a = base64decodeTable[(int)data[4 * i]];
+        unsigned char b = base64decodeTable[(int)data[4 * i + 1]];
+        unsigned char c = base64decodeTable[(int)data[4 * i + 2]];
+        unsigned char d = base64decodeTable[(int)data[4 * i + 3]];
+
+        decodedData[3 * i] = (a << 2) | (b >> 4);
+        decodedData[3 * i + 1] = (b << 4) | (c >> 2);
+        decodedData[3 * i + 2] = (c << 6) | d;
+    }
+    if (outSize % 3 == 1)
+    {
+        int n = outSize / 3;
+        unsigned char a = base64decodeTable[(int)data[4 * n]];
+        unsigned char b = base64decodeTable[(int)data[4 * n + 1]];
+        decodedData[outSize - 1] = (a << 2) | (b >> 4);
+    }
+    else if (outSize % 3 == 2)
+    {
+        int n = outSize / 3;
+        unsigned char a = base64decodeTable[(int)data[4 * n]];
+        unsigned char b = base64decodeTable[(int)data[4 * n + 1]];
+        unsigned char c = base64decodeTable[(int)data[4 * n + 2]];
+        decodedData[outSize - 2] = (a << 2) | (b >> 4);
+        decodedData[outSize - 1] = (b << 4) | (c >> 2);
+    }
+    *outputSize = outSize;
+    return decodedData;
 }

@@ -113,6 +113,11 @@ RLAPI FilePathList LoadDroppedFiles(void);
 RLAPI void UnloadDroppedFiles(FilePathList files);
 RLAPI long GetFileModTime(const char *fileName);
 
+RLAPI unsigned char *CompressData(const unsigned char *data, int dataSize, int *compDataSize);
+RLAPI unsigned char *DecompressData(const unsigned char *compData, int compDataSize, int *dataSize);
+RLAPI char *EncodeDataBase64(const unsigned char *data, int dataSize, int *outputSize);
+RLAPI unsigned char *DecodeDataBase64(const unsigned char *data, int *outputSize);
+
 RLAPI void ClearBackground(Color color);
 RLAPI void BeginDrawing(void);
 RLAPI void EndDrawing(void); 
