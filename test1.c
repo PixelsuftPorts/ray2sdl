@@ -34,11 +34,9 @@ int main(void)
         else if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
             SetMouseCursor(MOUSE_CURSOR_DEFAULT);
         }
-        if (GetMouseWheelMove()) {
-            printf("%f\n", GetMouseWheelMove());
-        }
         BeginDrawing();
         ClearBackground(BLACK);
+        DrawPixel(10, 10, RAYWHITE);
             //DrawText("Congrats! You created your first window!", 190, 200, 20, LIGHTGRAY);
         EndDrawing();
     }

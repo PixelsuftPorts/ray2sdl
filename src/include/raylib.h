@@ -153,6 +153,9 @@ RLAPI Vector2 GetTouchPosition(int index);
 RLAPI int GetTouchPointId(int index);
 RLAPI int GetTouchPointCount(void);
 
+RLAPI void DrawPixel(int posX, int posY, Color color);
+RLAPI void DrawPixelV(Vector2 position, Color color);
+
 RLAPI void ClearBackground(Color color);
 RLAPI void BeginDrawing(void);
 RLAPI void EndDrawing(void); 

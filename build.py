@@ -49,12 +49,15 @@ class App:
                 })
         # TODO: don't hardcode fn
         fn = 'test1.c'
-        self.to_build.append({
-            'fn': fn,
-            'fp': fn,
-            'out': self.pc(fn + '.o'),
-            'hash': self.hash_file(self.p(fn))
-        })
+        fp = self.p(fn)
+        f_hash = self.hash_file(fp)
+        if self.rebuild or fn not in self.config['cache'] or not f_hash == self.config['cache'][fn]:
+            self.to_build.append({
+                'fn': fn,
+                'fp': fp,
+                'out': self.pc(fn + '.o'),
+                'hash': self.hash_file(fp)
+            })
         if self.threaded:
             self.build_threaded()
         else:
