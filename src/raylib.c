@@ -112,12 +112,16 @@ void PollEvents() {
                 }
                 break;
             }
-#ifdef SUPPORT_FILES_DROPPING
             case SDL_DROPFILE: {
+#ifdef SUPPORT_FILES_DROPPING
                 RegisterFileDrop(rl.event.drop.file);
+#else
+                if (rl.event.drop.file)
+                    SDL_free(rl.event.drop.file);
+                rl.event.drop.file = NULL;
+#endif
                 break;
             }
-#endif
         }
     }
 }

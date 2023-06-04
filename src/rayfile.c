@@ -350,6 +350,7 @@ RLAPI void UnloadDirectoryFiles(FilePathList files) {
 }
 
 RLAPI void RegisterFileDrop(char* fp) {
+#ifdef SUPPORT_FILES_DROPPING
     if (rl.drops.capacity <= 0) {
         rl.drops.count = 0;
         rl.drops.paths = (char**)SDL_malloc(MAX_FILEPATH_CAPACITY);
@@ -365,6 +366,7 @@ RLAPI void RegisterFileDrop(char* fp) {
     }
     rl.drops.paths[rl.drops.count] = fp;
     rl.drops.count++;
+#endif
 }
 
 RLAPI bool IsFileDropped(void) {
@@ -385,6 +387,7 @@ RLAPI FilePathList LoadDroppedFiles(void) {
 }
 
 RLAPI void UnloadDroppedFiles(FilePathList files) {
+#ifdef SUPPORT_FILES_DROPPING
     if (files.capacity <= 0 || files.paths == NULL) {
         TRACELOG(LOG_WARNING, "Passed inavid FilePathList");
         return;
@@ -399,8 +402,14 @@ RLAPI void UnloadDroppedFiles(FilePathList files) {
     files.capacity = rl.drops.capacity = 0;
     files.count = rl.drops.count = 0;
     files.paths = rl.drops.paths = NULL;
+#endif
 }
 
 RLAPI long GetFileModTime(const char *fileName) {
+    if (fileName == NULL) {
+        TRACELOG(LOG_WARNING, "FILEIO: NULL pointer passed");
+        return 0;
+    }
+    // TODO
     return 0;
 }
