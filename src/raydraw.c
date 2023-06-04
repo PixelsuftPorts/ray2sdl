@@ -3,6 +3,8 @@
 #include <rayconf.h>
 #include <raygfx.h>
 
+// TODO: make raygfx.c normal
+
 RLCAPI void ClearBackground(Color color) {
     if (SDL_SetRenderDrawColor(rl.r, color.r, color.g, color.b, color.a) < 0)
         TRACELOG(LOG_WARNING, "Failed to set draw color (%s)", SDL_GetError());
@@ -37,7 +39,6 @@ RLCAPI void DrawLineV(Vector2 startPos, Vector2 endPos, Color color) {
 
 void DrawLineEx(Vector2 startPos, Vector2 endPos, float thick, Color color) {
     if (thickLineRGBA(
-        rl.r,
         (Sint16)startPos.x, (Sint16)startPos.y, (Sint16)endPos.x, (Sint16)endPos.y,
         (Uint8)thick, color.r, color.g, color.b, color.a
     ) < 0)
