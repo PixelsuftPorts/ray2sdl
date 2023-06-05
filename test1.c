@@ -36,12 +36,6 @@ int main(void)
         }
         BeginDrawing();
         ClearBackground(BLACK);
-        DrawTriangle(
-            (Vector2){100, 10},  // point a
-            (Vector2){10, 100},  // point b
-            (Vector2){100, 100}, // point c
-            WHITE       // triangle color
-        );
         DrawCircleGradient(GetMouseX(), GetMouseY(), 50.0f, RED, (Color){ 0, 0, 0, 0 });
         //DrawText("Congrats! You created your first window!", 190, 200, 20, LIGHTGRAY);
         EndDrawing();

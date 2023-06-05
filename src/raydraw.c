@@ -394,11 +394,36 @@ RLCAPI void DrawTriangle(Vector2 v1, Vector2 v2, Vector2 v3, Color color) {
         GFX_WARN();
 }
 
-RLCAPI void DrawTriangleLines(Vector2 v1, Vector2 v2, Vector2 v3, Color color) {}
+RLCAPI void DrawTriangleLines(Vector2 v1, Vector2 v2, Vector2 v3, Color color) {
+    if (trigonRGBA(
+        (Sint16)v1.x, (Sint16)v1.y, (Sint16)v2.x, (Sint16)v2.y, (Sint16)v3.x, (Sint16)v3.y,
+        color.r, color.g, color.b, color.a
+    ) < 0)
+        GFX_WARN();
+}
 
-RLCAPI void DrawTriangleFan(Vector2 *points, int pointCount, Color color) {}
+RLCAPI void DrawTriangleFan(Vector2 *points, int pointCount, Color color) {
+    if (pointCount < 3)
+        return;
+    // What this does?
+    for (int i = 0; i < pointCount; i++) {
+        if (filledTrigonRGBA(
+            (Sint16)points[i].x, (Sint16)points[i].y, (Sint16)points[i + 1].x, (Sint16)points[i + 1].y,
+            (Sint16)points[i + 2].x, (Sint16)points[i + 2].y, color.r, color.g, color.b, color.a
+        ) < 0)
+            GFX_WARN();
+    }
+}
 
-RLCAPI void DrawTriangleStrip(Vector2 *points, int pointCount, Color color) {}
+RLCAPI void DrawTriangleStrip(Vector2 *points, int pointCount, Color color) {
+    for (int i = 0; i < pointCount; i++) {
+        if (filledTrigonRGBA(
+            (Sint16)points[i].x, (Sint16)points[i].y, (Sint16)points[i + 1].x, (Sint16)points[i + 1].y,
+            (Sint16)points[i + 2].x, (Sint16)points[i + 2].y, color.r, color.g, color.b, color.a
+        ) < 0)
+            GFX_WARN();
+    }
+}
 
 RLCAPI void DrawPoly(Vector2 center, int sides, float radius, float rotation, Color color) {}
 
