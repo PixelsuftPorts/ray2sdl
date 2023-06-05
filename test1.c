@@ -67,11 +67,12 @@ int main(void)
             camera.zoom = 1.0f;
         }
         BeginDrawing();
+        ClearBackground(BLACK);
         if (IsKeyUp(KEY_B))
             BeginMode2D(camera);
         ClearBackground(BLACK);
-        int screenWidth = GetScreenWidth();
-        DrawRectangle(0, 0, screenWidth, GetScreenHeight(), (Color){ 50, 50, 50, 255 });
+        int screenWidth = GetRenderWidth();
+        DrawRectangle(0, 0, screenWidth, GetRenderHeight(), (Color){ 50, 50, 50, 255 });
         DrawCircle(screenWidth/5, 120, 35, DARKBLUE);
         DrawCircleGradient(screenWidth/5, 220, 60, GREEN, SKYBLUE);
         DrawCircleLines(screenWidth/5, 340, 80, DARKBLUE);

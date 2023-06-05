@@ -28,12 +28,13 @@ RLCAPI void UpdateCameraTexture() {
 RLCAPI void BeginMode2D(Camera2D camera) {
     if (camera.zoom < 0.0f) {
         rl.z = -camera.zoom;
-        rl.cam_rot = (double)camera.rotation + 180.0;
+        rl.cam_flip = SDL_FLIP_HORIZONTAL | SDL_FLIP_VERTICAL;
     }
     else {
         rl.z = camera.zoom;
-        rl.cam_rot = (double)camera.rotation;
+        rl.cam_flip = SDL_FLIP_NONE;
     }
+    rl.cam_rot = (double)camera.rotation;
     while (rl.cam_rot >= 360.0)
         rl.cam_rot -= 360.0;
     while (rl.cam_rot < 0.0)
@@ -53,7 +54,7 @@ RLCAPI void EndMode2D(void) {
         //    (float)GetRenderWidth(), (float)GetRenderHeight() };
         if (SDL_RenderCopyExF(
             rl.r, rl.screen_tex, NULL, NULL,
-            rl.cam_rot, &rl.cam_origin, SDL_FLIP_NONE
+            rl.cam_rot, &rl.cam_origin, rl.cam_flip
         ) < 0)
             RENDER_COPY_WARN();
         SDL_DestroyTexture(rl.screen_tex);

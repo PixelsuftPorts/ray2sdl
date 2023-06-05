@@ -1000,6 +1000,7 @@ struct rl_type {
     float z;
     double cam_rot;
     unsigned int fl;
+    int cam_flip;
     int num_kbd_keys;
     int log_level;
     int exit_key;
