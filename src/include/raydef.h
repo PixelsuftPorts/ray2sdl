@@ -675,14 +675,14 @@ typedef enum {
 
 // Color blending modes (pre-defined)
 typedef enum {
-    BLEND_ALPHA = 0,                // Blend textures considering alpha (default)
-    BLEND_ADDITIVE,                 // Blend textures adding colors
-    BLEND_MULTIPLIED,               // Blend textures multiplying colors
-    BLEND_ADD_COLORS,               // Blend textures adding colors (alternative)
-    BLEND_SUBTRACT_COLORS,          // Blend textures subtracting colors (alternative)
-    BLEND_ALPHA_PREMULTIPLY,        // Blend premultiplied textures considering alpha
-    BLEND_CUSTOM,                   // Blend textures using custom src/dst factors (use rlSetBlendFactors())
-    BLEND_CUSTOM_SEPARATE           // Blend textures using custom rgb/alpha separate src/dst factors (use rlSetBlendFactorsSeparate())
+    BLEND_ALPHA = SDL_BLENDMODE_BLEND,
+    BLEND_ADDITIVE = SDL_BLENDMODE_ADD,
+    BLEND_MULTIPLIED = SDL_BLENDMODE_MUL,
+    BLEND_ADD_COLORS = SDL_BLENDMODE_BLEND,
+    BLEND_SUBTRACT_COLORS = SDL_BLENDMODE_MOD,
+    BLEND_ALPHA_PREMULTIPLY = SDL_BLENDMODE_MUL,
+    BLEND_CUSTOM,
+    BLEND_CUSTOM_SEPARATE
 } BlendMode;
 
 // Gesture
