@@ -22,7 +22,7 @@ int main(void)
     while (!WindowShouldClose())
     {
         if (IsWindowResized()) {
-            printf("Window Resized: [%ix%i]\n", GetScreenWidth(), GetScreenHeight());
+            printf("Window Resized: %ix%i\n", GetScreenWidth(), GetScreenHeight());
         }
         if (IsFileDropped()) {
             FilePathList files = LoadDroppedFiles();
