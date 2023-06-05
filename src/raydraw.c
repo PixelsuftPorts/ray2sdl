@@ -3,7 +3,9 @@
 #include <rayconf.h>
 #include <raygfx.h>
 
-// TODO: make raygfx.c clean
+// TODO:
+//  - make raygfx.c clean
+//  - support aa for drawing (in config)
 
 RLCAPI void ClearBackground(Color color) {
     if (SDL_SetRenderDrawColor(rl.r, color.r, color.g, color.b, color.a) < 0)
