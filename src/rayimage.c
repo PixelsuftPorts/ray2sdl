@@ -20,7 +20,21 @@ RLCAPI void SetWindowIcon(Image image) {
     SDL_SetWindowIcon(rl.w, image.surf);
 }
 
-RLCAPI void SetWindowIcons(Image *images, int count) {}
+RLCAPI void SetWindowIcons(Image *images, int count) {
+    SDL_Surface* nice_img = NULL;
+    for (int i = 0; i < count; i++) {
+        SDL_Surface* maybe_nice_img = images[i].surf;
+        if (maybe_nice_img && (
+            nice_img == NULL || (maybe_nice_img->w > nice_img->w && maybe_nice_img->h > nice_img->h)
+        ))
+            nice_img = maybe_nice_img;
+    }
+    if (nice_img == NULL) {
+        TRACELOG(LOG_WARNING, "No images found");
+        return;
+    }
+    SDL_SetWindowIcon(rl.w, nice_img);
+}
 
 RLCAPI Image LoadImage(const char *fileName) {
     if (fileName == NULL) {
@@ -41,15 +55,25 @@ RLCAPI Image LoadImage(const char *fileName) {
     return result;
 }
 
-RLCAPI Image LoadImageRaw(const char *fileName, int width, int height, int format, int headerSize) {}
+RLCAPI Image LoadImageRaw(const char *fileName, int width, int height, int format, int headerSize) {
+    return GetDummyImage();
+}
 
-RLCAPI Image LoadImageAnim(const char *fileName, int *frames) {}
+RLCAPI Image LoadImageAnim(const char *fileName, int *frames) {
+    return GetDummyImage();
+}
 
-RLCAPI Image LoadImageFromMemory(const char *fileType, const unsigned char *fileData, int dataSize) {}
+RLCAPI Image LoadImageFromMemory(const char *fileType, const unsigned char *fileData, int dataSize) {
+    return GetDummyImage();
+}
 
-RLCAPI Image LoadImageFromTexture(Texture2D texture) {}
+RLCAPI Image LoadImageFromTexture(Texture2D texture) {
+    return GetDummyImage();
+}
 
-RLCAPI Image LoadImageFromScreen(void) {}
+RLCAPI Image LoadImageFromScreen(void) {
+    return GetDummyImage();
+}
 
 RLCAPI bool IsImageReady(Image image) {
     return (bool)image.surf;
