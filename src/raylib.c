@@ -286,6 +286,10 @@ RLCAPI void SetWindowState(unsigned int flags) {
             TRACELOG(LOG_WARNING, "Failed to enable fullscreen (%s)", SDL_GetError());
         }
     }
+    if (diff & FLAG_VSYNC_HINT) {
+        if (SDL_RenderSetVSync(rl.r, 1) != 0)
+            TRACELOG(LOG_WARNING, "Failed to turn on vertical sync");
+    }
     if (diff & FLAG_WINDOW_RESIZABLE)
         SDL_SetWindowResizable(rl.w, SDL_TRUE);
     if (diff & SDL_WINDOW_BORDERLESS)
@@ -306,6 +310,10 @@ RLCAPI void ClearWindowState(unsigned int flags) {
     if (diff & FLAG_FULLSCREEN_MODE) {
         if (SDL_SetWindowFullscreen(rl.w, 0) < 0)
             TRACELOG(LOG_WARNING, "Failed to disable fullscreen (%s)", SDL_GetError());
+    }
+    if (diff & FLAG_VSYNC_HINT) {
+        if (SDL_RenderSetVSync(rl.r, 0) != 0)
+            TRACELOG(LOG_WARNING, "Failed to turn off vertical sync");
     }
     if (diff & FLAG_WINDOW_RESIZABLE)
         SDL_SetWindowResizable(rl.w, SDL_FALSE);
