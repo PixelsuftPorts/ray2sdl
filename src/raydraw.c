@@ -425,7 +425,9 @@ RLCAPI void DrawTriangleStrip(Vector2 *points, int pointCount, Color color) {
     }
 }
 
-RLCAPI void DrawPoly(Vector2 center, int sides, float radius, float rotation, Color color) {}
+RLCAPI void DrawPoly(Vector2 center, int sides, float radius, float rotation, Color color) {
+    // TODO
+}
 
 RLCAPI void DrawPolyLines(Vector2 center, int sides, float radius, float rotation, Color color) {}
 

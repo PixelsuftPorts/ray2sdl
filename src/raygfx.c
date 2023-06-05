@@ -2380,26 +2380,6 @@ int filledPolygonRGBAMT(const Sint16 *vx, const Sint16 *vy, int n, Uint8 r, Uint
     int gfxPrimitivesPolyAllocated = 0;
 
     /*
-     * Vertex array NULL check
-     */
-    if (vx == NULL)
-    {
-        return (-1);
-    }
-    if (vy == NULL)
-    {
-        return (-1);
-    }
-
-    /*
-     * Sanity check number of edges
-     */
-    if (n < 3)
-    {
-        return -1;
-    }
-
-    /*
      * Map polygon cache
      */
     if ((polyInts == NULL) || (polyAllocated == NULL))
@@ -2420,19 +2400,19 @@ int filledPolygonRGBAMT(const Sint16 *vx, const Sint16 *vy, int n, Uint8 r, Uint
      */
     if (!gfxPrimitivesPolyAllocated)
     {
-        gfxPrimitivesPolyInts = (int *)malloc(sizeof(int) * n);
+        gfxPrimitivesPolyInts = (int *)SDL_malloc(sizeof(int) * n);
         gfxPrimitivesPolyAllocated = n;
     }
     else
     {
         if (gfxPrimitivesPolyAllocated < n)
         {
-            gfxPrimitivesPolyIntsNew = (int *)realloc(gfxPrimitivesPolyInts, sizeof(int) * n);
+            gfxPrimitivesPolyIntsNew = (int *)SDL_realloc(gfxPrimitivesPolyInts, sizeof(int) * n);
             if (!gfxPrimitivesPolyIntsNew)
             {
                 if (!gfxPrimitivesPolyInts)
                 {
-                    free(gfxPrimitivesPolyInts);
+                    SDL_free(gfxPrimitivesPolyInts);
                     gfxPrimitivesPolyInts = NULL;
                 }
                 gfxPrimitivesPolyAllocated = 0;
@@ -2535,7 +2515,7 @@ int filledPolygonRGBAMT(const Sint16 *vx, const Sint16 *vy, int n, Uint8 r, Uint
             }
         }
 
-        qsort(gfxPrimitivesPolyInts, ints, sizeof(int), _gfxPrimitivesCompareInt);
+        SDL_qsort(gfxPrimitivesPolyInts, ints, sizeof(int), _gfxPrimitivesCompareInt);
 
         /*
          * Set color
