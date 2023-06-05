@@ -985,6 +985,9 @@ struct rl_type {
     SaveFileTextCallback saveFileText;
     Vector2 wheel_move;
     Vector2 co;
+#ifdef ENABLE_CLOCK
+    Uint64 clock_last_tick;
+#endif
     SDL_TouchID touch_dev;
     SDL_FPoint cam_origin;
     SDL_Cursor* cursor;
@@ -997,6 +1000,11 @@ struct rl_type {
     Uint8* keypress_array;
 #endif
     char* clip_ptr;
+#ifdef ENABLE_CLOCK
+    float clock_freq;
+    float clock_delta;
+    float fps_limit;
+#endif
     float z;
     double cam_rot;
     unsigned int fl;

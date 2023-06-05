@@ -10,7 +10,9 @@
 RLCAPI void InitWindow(int width, int height, const char *title) {
     if (!rl.not_first_init) {
         // TODO: clean need things when not first init maybe?
+        unsigned int fl_temp = rl.fl;
         SDL_memset(&rl, 0, sizeof(rl));
+        rl.fl = fl_temp;
         rl.not_first_init = true;
         rl.log_level = LOG_INFO;
         rl.exit_key = KEY_ESCAPE;
@@ -76,11 +78,17 @@ RLCAPI void InitWindow(int width, int height, const char *title) {
         TRACELOG(LOG_INFO, "TOUCH: Device with id %lld and index %i initialized successfully", (long long)rl.touch_dev, TOUCH_DEVICE_ID);
     rl.should_close = false;
     rl.clip_ptr = NULL;
+#ifdef ENABLE_CLOCK
+    ClockReset();
+#endif
     if (!(rl.fl & FLAG_WINDOW_HIDDEN))
         SDL_ShowWindow(rl.w);
 }
 
 void PollEvents() {
+#ifdef ENABLE_CLOCK
+    ClockStep();
+#endif
     rl.w_resized = false;
     rl.wheel_move.x = rl.wheel_move.y = 0.0f;
     SDL_memset(rl.mousepress_array, 0, 8);
@@ -550,11 +558,6 @@ RLCAPI void PollInputEvents(void) {
     PollEvents(); // Crude.
 }
 
-RLCAPI void WaitTime(double seconds) {
-    Uint64 timer_start = SDL_GetTicks64();
-    while ((double)(SDL_GetTicks64() - timer_start) < seconds * 1000.0) {}
-}
-
 RLCAPI void ShowCursor(void) {
     if (SDL_ShowCursor(SDL_ENABLE) < 0)
         TRACELOG(LOG_WARNING, "Failed to show cursor (%s)", SDL_GetError());
@@ -591,10 +594,6 @@ RLCAPI bool IsCursorOnScreen(void) {
     SDL_GetWindowSize(rl.w, &w, &h);
     return (x >= 0) && (y >= 0) && (x < w) && (y < h);
 }
-
-RLCAPI void SetTargetFPS(int fps) {} // TODO this
-RLCAPI int GetFPS(void) {return 0;}
-RLCAPI float GetFrameTime(void) {return 1.0f / 60.0f;}
 
 RLCAPI double GetTime(void) {
     return (double)SDL_GetTicks64() / 1000.0;
