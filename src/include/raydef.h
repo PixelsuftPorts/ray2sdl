@@ -986,9 +986,11 @@ struct rl_type {
     Vector2 wheel_move;
     Vector2 co;
     SDL_TouchID touch_dev;
+    SDL_FPoint rot_origin;
     SDL_Cursor* cursor;
     SDL_Window* w;
     SDL_Renderer* r;
+    SDL_Texture* screen_tex;
     const Uint8* kbd_array;
     Uint8 mousepress_array[8];
 #ifdef HANDLE_KEY_PRESS
@@ -996,6 +998,7 @@ struct rl_type {
 #endif
     char* clip_ptr;
     float z;
+    double cam_rot;
     unsigned int fl;
     int num_kbd_keys;
     int log_level;

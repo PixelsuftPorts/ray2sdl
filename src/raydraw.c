@@ -358,8 +358,6 @@ RLCAPI void DrawRectangleGradientV(int posX, int posY, int width, int height, Co
 
 RLCAPI void DrawRectangleGradientH(int posX, int posY, int width, int height, Color color1, Color color2) {
 #ifdef PREFER_GPU_FUNCTIONS
-    if (rl.z_en && RENDER_ENABLE_SCALE() < 0)
-        SCALE_WARN();
     SDL_Texture* tex = CREATE_DRAW_TEXTURE(2, height, SDL_min(color1.a, color2.a));
     if (tex == NULL) {
         CREATE_TEXTURE_WARN();
@@ -380,6 +378,8 @@ RLCAPI void DrawRectangleGradientH(int posX, int posY, int width, int height, Co
         DRAW_WARN();
     if (SDL_SetRenderTarget(rl.r, target_before) < 0)
         RENDER_TARGET_WARN();
+    if (rl.z_en && (RENDER_ENABLE_SCALE() < 0))
+        SCALE_WARN();
     SDL_FRect dst_rect = { (float)posX + (rl.z_en ? rl.co.x : 0.0f), (float)posY + (rl.z_en ? rl.co.y : 0.0f),
         (float)width, (float)height };
     if (SDL_RenderCopyF(rl.r, tex, NULL, &dst_rect) < 0)
