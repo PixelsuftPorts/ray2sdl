@@ -191,6 +191,7 @@ RLCAPI void DrawRectangleRec(Rectangle rec, Color color) {
 RLCAPI void DrawRectanglePro(Rectangle rec, Vector2 origin, float rotation, Color color) {
     if (rotation == 0.0f)
         return DrawRectangleRec(rec, color);
+#ifdef PREFER_GPU_FUNCTIONS
     SDL_Texture* tex = CREATE_DRAW_TEXTURE(rec.width, rec.height, color);
     if (tex == NULL) {
         CREATE_TEXTURE_WARN();
@@ -220,4 +221,7 @@ RLCAPI void DrawRectanglePro(Rectangle rec, Vector2 origin, float rotation, Colo
     ) < 0)
         DRAW_WARN();
     SDL_DestroyTexture(tex);
+#else
+    // TODO
+#endif
 }
