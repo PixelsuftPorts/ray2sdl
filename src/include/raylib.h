@@ -177,6 +177,17 @@ RLAPI void DrawRectanglePro(Rectangle rec, Vector2 origin, float rotation, Color
 RLAPI void DrawRectangleGradientV(int posX, int posY, int width, int height, Color color1, Color color2);
 RLAPI void DrawRectangleGradientH(int posX, int posY, int width, int height, Color color1, Color color2);
 RLAPI void DrawRectangleGradientEx(Rectangle rec, Color col1, Color col2, Color col3, Color col4);
+RLAPI void DrawRectangleLines(int posX, int posY, int width, int height, Color color);
+RLAPI void DrawRectangleLinesEx(Rectangle rec, float lineThick, Color color);
+RLAPI void DrawRectangleRounded(Rectangle rec, float roundness, int segments, Color color);
+RLAPI void DrawRectangleRoundedLines(Rectangle rec, float roundness, int segments, float lineThick, Color color);
+RLAPI void DrawTriangle(Vector2 v1, Vector2 v2, Vector2 v3, Color color);
+RLAPI void DrawTriangleLines(Vector2 v1, Vector2 v2, Vector2 v3, Color color);
+RLAPI void DrawTriangleFan(Vector2 *points, int pointCount, Color color);
+RLAPI void DrawTriangleStrip(Vector2 *points, int pointCount, Color color);
+RLAPI void DrawPoly(Vector2 center, int sides, float radius, float rotation, Color color);
+RLAPI void DrawPolyLines(Vector2 center, int sides, float radius, float rotation, Color color);
+RLAPI void DrawPolyLinesEx(Vector2 center, int sides, float radius, float rotation, float lineThick, Color color);
 
 RLAPI void ClearBackground(Color color);
 RLAPI void BeginDrawing(void);

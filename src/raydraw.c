@@ -139,14 +139,14 @@ RLCAPI void DrawCircleLines(int centerX, int centerY, float radius, Color color)
         GFX_WARN();
 }
 
-RLAPI void DrawEllipse(int centerX, int centerY, float radiusH, float radiusV, Color color) {
+RLCAPI void DrawEllipse(int centerX, int centerY, float radiusH, float radiusV, Color color) {
     if (filledEllipseRGBA(
         (Sint16)centerX, (Sint16)centerY, radiusH, radiusV, color.r, color.g, color.b, color.a
     ) < 0)
         GFX_WARN();
 }
 
-RLAPI void DrawEllipseLines(int centerX, int centerY, float radiusH, float radiusV, Color color) {
+RLCAPI void DrawEllipseLines(int centerX, int centerY, float radiusH, float radiusV, Color color) {
     if (ellipseRGBA(
         (Sint16)centerX, (Sint16)centerY, radiusH, radiusV, color.r, color.g, color.b, color.a
     ) < 0)
@@ -226,7 +226,7 @@ RLCAPI void DrawRectanglePro(Rectangle rec, Vector2 origin, float rotation, Colo
 #endif
 }
 
-RLAPI void DrawRectangleGradientV(int posX, int posY, int width, int height, Color color1, Color color2) {
+RLCAPI void DrawRectangleGradientV(int posX, int posY, int width, int height, Color color1, Color color2) {
 #ifdef PREFER_GPU_FUNCTIONS
     SDL_Texture* tex = CREATE_DRAW_TEXTURE(width, 2, SDL_min(color1.a, color2.a));
     if (tex == NULL) {
@@ -257,7 +257,7 @@ RLAPI void DrawRectangleGradientV(int posX, int posY, int width, int height, Col
 #endif
 }
 
-RLAPI void DrawRectangleGradientH(int posX, int posY, int width, int height, Color color1, Color color2) {
+RLCAPI void DrawRectangleGradientH(int posX, int posY, int width, int height, Color color1, Color color2) {
 #ifdef PREFER_GPU_FUNCTIONS
     SDL_Texture* tex = CREATE_DRAW_TEXTURE(2, height, SDL_min(color1.a, color2.a));
     if (tex == NULL) {
@@ -288,7 +288,7 @@ RLAPI void DrawRectangleGradientH(int posX, int posY, int width, int height, Col
 #endif
 }
 
-RLAPI void DrawRectangleGradientEx(Rectangle rec, Color col1, Color col2, Color col3, Color col4) {
+RLCAPI void DrawRectangleGradientEx(Rectangle rec, Color col1, Color col2, Color col3, Color col4) {
 #ifdef PREFER_GPU_FUNCTIONS
     SDL_Texture* tex = CREATE_DRAW_TEXTURE(
         2, 2,
@@ -329,3 +329,60 @@ RLAPI void DrawRectangleGradientEx(Rectangle rec, Color col1, Color col2, Color 
 #endif
 }
 
+RLCAPI void DrawRectangleLines(int posX, int posY, int width, int height, Color color) {
+    if (APPLY_BLEND(color) < 0)
+        BLEND_WARN();
+    SDL_FRect draw_rect = { (float)posX, (float)posY, (float)width, (float)height };
+    if (SDL_RenderDrawRectF(rl.r, &draw_rect) < 0)
+        DRAW_WARN();
+}
+
+RLCAPI void DrawRectangleLinesEx(Rectangle rec, float lineThick, Color color) {
+    if (lineThick == 1.0f) {
+        if (APPLY_BLEND(color) < 0)
+            BLEND_WARN();
+        if (SDL_RenderDrawRectF(rl.r, (const SDL_FRect*)&rec) < 0)
+            DRAW_WARN();
+        return;
+    }
+    if (APPLY_BLEND(color) < 0)
+        BLEND_WARN();
+    SDL_FRect draw_rects[4] = {
+        { rec.x, rec.y, rec.width, lineThick },
+        { rec.x + rec.width - lineThick, rec.y + lineThick, lineThick, rec.height - lineThick - lineThick },
+        { rec.x, rec.y + rec.height - lineThick, rec.width, lineThick },
+        { rec.x, rec.y + lineThick, lineThick, rec.height - lineThick - lineThick }
+    };
+    if (SDL_RenderFillRectsF(rl.r, draw_rects, 4) < 0)
+        DRAW_WARN();
+}
+
+RLCAPI void DrawRectangleRounded(Rectangle rec, float roundness, int segments, Color color) {
+    if ((roundness <= 0.0f) || (rec.width < 1) || (rec.height < 1 ))
+    {
+        DrawRectangleRec(rec, color);
+        return;
+    }
+    if (roundness >= 1.0f) roundness = 1.0f;
+    if (roundedBoxRGBA(
+        (Sint16)rec.x, (Sint16)rec.y, (Sint16)(rec.width + rec.x), (Sint16)(rec.height + rec.y),
+        (Sint16)(roundness * SDL_min(rec.width, rec.height) / 2.0f), color.r, color.g, color.b, color.a
+    ) < 0)
+        GFX_WARN();
+}
+
+RLCAPI void DrawRectangleRoundedLines(Rectangle rec, float roundness, int segments, float lineThick, Color color) {}
+
+RLCAPI void DrawTriangle(Vector2 v1, Vector2 v2, Vector2 v3, Color color) {}
+
+RLCAPI void DrawTriangleLines(Vector2 v1, Vector2 v2, Vector2 v3, Color color) {}
+
+RLCAPI void DrawTriangleFan(Vector2 *points, int pointCount, Color color) {}
+
+RLCAPI void DrawTriangleStrip(Vector2 *points, int pointCount, Color color) {}
+
+RLCAPI void DrawPoly(Vector2 center, int sides, float radius, float rotation, Color color) {}
+
+RLCAPI void DrawPolyLines(Vector2 center, int sides, float radius, float rotation, Color color) {}
+
+RLCAPI void DrawPolyLinesEx(Vector2 center, int sides, float radius, float rotation, float lineThick, Color color) {}
