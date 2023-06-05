@@ -422,28 +422,20 @@ int roundedRectangleRGBA(Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2, Sint16 rad,
 \returns Returns 0 on success, -1 on failure.
 */
 int roundedBoxRGBA(Sint16 x1, Sint16 y1, Sint16 x2,
-                   Sint16 y2, Sint16 rad, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
+                   Sint16 y2, float rad, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
 {
     int result;
-    Sint16 w, h, r2, tmp;
-    Sint16 cx = 0;
-    Sint16 cy = rad;
-    Sint16 ocx = (Sint16)0xffff;
-    Sint16 ocy = (Sint16)0xffff;
-    Sint16 df = 1 - rad;
-    Sint16 d_e = 3;
-    Sint16 d_se = -2 * rad + 5;
-    Sint16 xpcx, xmcx, xpcy, xmcy;
-    Sint16 ypcy, ymcy, ypcx, ymcx;
-    Sint16 x, y, dx, dy;
-
-    /*
-     * Special case - no rounding
-     */
-    if (rad <= 1)
-    {
-        return boxRGBA(x1, y1, x2, y2, r, g, b, a);
-    }
+    float w, h, r2, tmp;
+    float cx = 0.0f;
+    float cy = rad;
+    float ocx = (float)0xffff;
+    float ocy = (float)0xffff;
+    float df = 1.0f - rad;
+    float d_e = 3.0f;
+    float d_se = -2.0f * rad + 5.0f;
+    float xpcx, xmcx, xpcy, xmcy;
+    float ypcy, ymcy, ypcx, ymcx;
+    float x, y, dx, dy;
 
     /*
      * Test for special cases of straight lines or single point
@@ -490,8 +482,8 @@ int roundedBoxRGBA(Sint16 x1, Sint16 y1, Sint16 x2,
     /*
      * Calculate width&height
      */
-    w = x2 - x1 + 1;
-    h = y2 - y1 + 1;
+    w = (float)(x2 - x1) + 1.0f;
+    h = (float)(y2 - y1) + 1.0f;
 
     /*
      * Maybe adjust radius
@@ -499,47 +491,46 @@ int roundedBoxRGBA(Sint16 x1, Sint16 y1, Sint16 x2,
     r2 = rad + rad;
     if (r2 > w)
     {
-        rad = w / 2;
+        rad = w / 2.0f;
         r2 = rad + rad;
     }
     if (r2 > h)
     {
-        rad = h / 2;
+        rad = h / 2.0f;
     }
 
     /* Setup filled circle drawing for corners */
-    x = x1 + rad;
-    y = y1 + rad;
-    dx = x2 - x1 - rad - rad;
-    dy = y2 - y1 - rad - rad;
+    x = (float)x1 + rad;
+    y = (float)y1 + rad;
+    dx = (float)(x2 - x1) - rad - rad;
+    dy = (float)(y2 - y1) - rad - rad;
 
     /*
      * Set color
      */
-    result = 0;
-    result |= APPLY_BLEND_RGBA(r, g, b, a);
+    result = APPLY_BLEND_RGBA(r, g, b, a);
 
     /*
      * Draw corners
      */
     do
     {
-        xpcx = x + cx;
-        xmcx = x - cx;
-        xpcy = x + cy;
-        xmcy = x - cy;
+        xpcx = (float)x + cx;
+        xmcx = (float)x - cx;
+        xpcy = (float)x + cy;
+        xmcy = (float)x - cy;
         if (ocy != cy)
         {
             if (cy > 0)
             {
-                ypcy = y + cy;
-                ymcy = y - cy;
-                result |= hline(xmcx, xpcx + dx, ypcy + dy);
-                result |= hline(xmcx, xpcx + dx, ymcy);
+                ypcy = (float)y + cy;
+                ymcy = (float)y - cy;
+                result |= hline((Sint16)SDL_floorf(xmcx), (Sint16)SDL_floorf(xpcx + dx), (Sint16)SDL_floorf(ypcy + dy));
+                result |= hline((Sint16)SDL_floorf(xmcx), (Sint16)SDL_floorf(xpcx + dx), (Sint16)SDL_floorf(ymcy));
             }
             else
             {
-                result |= hline(xmcx, xpcx + dx, y);
+                result |= hline((Sint16)SDL_floorf(xmcx), (Sint16)SDL_floorf(xpcx + dx), y);
             }
             ocy = cy;
         }
@@ -549,14 +540,14 @@ int roundedBoxRGBA(Sint16 x1, Sint16 y1, Sint16 x2,
             {
                 if (cx > 0)
                 {
-                    ypcx = y + cx;
-                    ymcx = y - cx;
-                    result |= hline(xmcy, xpcy + dx, ymcx);
-                    result |= hline(xmcy, xpcy + dx, ypcx + dy);
+                    ypcx = (float)y + cx;
+                    ymcx = (float)y - cx;
+                    result |= hline((Sint16)SDL_floorf(xmcy), (Sint16)SDL_floorf(xpcy + dx), (Sint16)SDL_floorf(ymcx));
+                    result |= hline((Sint16)SDL_floorf(xmcy), (Sint16)SDL_floorf(xpcy + dx), (Sint16)SDL_floorf(ypcx + dy));
                 }
                 else
                 {
-                    result |= hline(xmcy, xpcy + dx, y);
+                    result |= hline((Sint16)SDL_floorf(xmcy), (Sint16)SDL_floorf(xpcy + dx), y);
                 }
             }
             ocx = cx;
@@ -565,26 +556,26 @@ int roundedBoxRGBA(Sint16 x1, Sint16 y1, Sint16 x2,
         /*
          * Update
          */
-        if (df < 0)
+        if (df < 0.0f)
         {
             df += d_e;
-            d_e += 2;
-            d_se += 2;
+            d_e += 2.0f;
+            d_se += 2.0f;
         }
         else
         {
             df += d_se;
-            d_e += 2;
-            d_se += 4;
+            d_e += 2.0f;
+            d_se += 4.0f;
             cy--;
         }
         cx++;
     } while (cx <= cy);
 
     /* Inside */
-    if (dx > 0 && dy > 0)
+    if (dx > 0.0f && dy > 0.0f)
     {
-        result |= boxRGBA(x1, y1 + rad + 1, x2, y2 - rad, r, g, b, a);
+        result |= boxRGBA(x1, y1 + (Sint16)rad + 1, x2, y2 - (Sint16)rad, r, g, b, a);
     }
 
     return (result);

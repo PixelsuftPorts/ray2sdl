@@ -358,7 +358,7 @@ RLCAPI void DrawRectangleLinesEx(Rectangle rec, float lineThick, Color color) {
 }
 
 RLCAPI void DrawRectangleRounded(Rectangle rec, float roundness, int segments, Color color) {
-    if ((roundness <= 0.0f) || (rec.width < 1) || (rec.height < 1 ))
+    if ((roundness <= 0.0f) || (rec.width < 1.0f) || (rec.height < 1.0f))
     {
         DrawRectangleRec(rec, color);
         return;
@@ -366,7 +366,7 @@ RLCAPI void DrawRectangleRounded(Rectangle rec, float roundness, int segments, C
     if (roundness >= 1.0f) roundness = 1.0f;
     if (roundedBoxRGBA(
         (Sint16)rec.x, (Sint16)rec.y, (Sint16)(rec.width + rec.x), (Sint16)(rec.height + rec.y),
-        (Sint16)(roundness * SDL_min(rec.width, rec.height) / 2.0f), color.r, color.g, color.b, color.a
+        roundness * SDL_min(rec.width, rec.height) / 2.0f, color.r, color.g, color.b, color.a
     ) < 0)
         GFX_WARN();
 }
