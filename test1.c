@@ -41,30 +41,31 @@ int main(void)
         else if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
             SetMouseCursor(MOUSE_CURSOR_DEFAULT);
         }
+        float speed_mul = GetFrameTime() * 60.0f;
         if (IsKeyDown(KEY_RIGHT))
-            camera.offset.x += 4.0f;
+            camera.offset.x += 4.0f * speed_mul;
         else if (IsKeyDown(KEY_LEFT))
-            camera.offset.x -= 4.0f;
+            camera.offset.x -= 4.0f * speed_mul;
         if (IsKeyDown(KEY_UP))
-            camera.offset.y -= 4.0f;
+            camera.offset.y -= 4.0f * speed_mul;
         else if (IsKeyDown(KEY_DOWN))
-            camera.offset.y += 4.0f;
+            camera.offset.y += 4.0f * speed_mul;
         if (IsKeyDown(KEY_D))
-            camera.target.x += 4.0f;
+            camera.target.x += 4.0f * speed_mul;
         else if (IsKeyDown(KEY_A))
-            camera.target.x -= 4.0f;
+            camera.target.x -= 4.0f * speed_mul;
         if (IsKeyDown(KEY_W))
-            camera.target.y -= 4.0f;
+            camera.target.y -= 4.0f * speed_mul;
         else if (IsKeyDown(KEY_S))
-            camera.target.y += 4.0f;
+            camera.target.y += 4.0f * speed_mul;
         if (IsKeyDown(KEY_Z))
-            camera.zoom += 0.05f;
+            camera.zoom += 0.05f * speed_mul;
         else if (IsKeyDown(KEY_X))
-            camera.zoom -= 0.05f;
+            camera.zoom -= 0.05f * speed_mul;
         if (IsKeyDown(KEY_C))
-            camera.rotation += 1.0f;
+            camera.rotation += 1.0f * speed_mul;
         else if (IsKeyDown(KEY_V))
-            camera.rotation -= 1.0f;
+            camera.rotation -= 1.0f * speed_mul;
         if (IsKeyPressed(KEY_R)) {
             memset(&camera, 0, sizeof(Camera2D));
             camera.zoom = 1.0f;
