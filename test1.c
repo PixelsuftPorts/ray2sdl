@@ -63,7 +63,7 @@ int main(void)
         else if (IsKeyDown(KEY_V))
             camera.rotation -= 1.0f;
         if (IsKeyPressed(KEY_R)) {
-            //memset(&camera, 0, sizeof(Camera2D));
+            memset(&camera, 0, sizeof(Camera2D));
             camera.zoom = 1.0f;
         }
         BeginDrawing();

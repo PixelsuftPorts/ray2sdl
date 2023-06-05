@@ -48,7 +48,8 @@ RLCAPI void EndMode2D(void) {
     if (SDL_SetRenderTarget(rl.r, NULL) < 0)
         RENDER_TARGET_WARN();
     if (rl.screen_tex) {
-        SDL_FRect dst_rect = { -rl.cam_origin.x, -rl.cam_origin.y, (float)GetRenderWidth(), (float)GetRenderHeight() };
+        SDL_FRect dst_rect = { -rl.cam_origin.x, -rl.cam_origin.y,
+            (float)GetRenderWidth(), (float)GetRenderHeight() };
         if (SDL_RenderCopyExF(
             rl.r, rl.screen_tex, NULL, &dst_rect,
             rl.cam_rot, &rl.cam_origin, SDL_FLIP_NONE

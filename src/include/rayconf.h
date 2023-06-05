@@ -1,5 +1,7 @@
 #pragma once
 
+// TODO: support aa for drawing
+
 #define SUPPORT_TRACELOG
 #define MAX_TRACELOG_MSG_LENGTH 1024
 #define MAX_FILE_EXTENSION_SIZE  16
