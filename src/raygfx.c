@@ -298,21 +298,13 @@ int rectangleRGBA(Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2, Uint8 r, Uint8 g, 
 
 \returns Returns 0 on success, -1 on failure.
 */
-int roundedRectangleRGBA(Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2, Sint16 rad, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
+int roundedRectangleRGBA(Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2, float rad, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
 {
     int result = 0;
     Sint16 tmp;
-    Sint16 w, h;
+    float w, h;
     Sint16 xx1, xx2;
     Sint16 yy1, yy2;
-
-    /*
-     * Special case - no rounding
-     */
-    if (rad <= 1)
-    {
-        return rectangleRGBA(x1, y1, x2, y2, r, g, b, a);
-    }
 
     /*
      * Test for special cases of straight lines or single point
@@ -359,32 +351,32 @@ int roundedRectangleRGBA(Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2, Sint16 rad,
     /*
      * Calculate width&height
      */
-    w = x2 - x1;
-    h = y2 - y1;
+    w = (float)(x2 - x1);
+    h = (float)(y2 - y1);
 
     /*
      * Maybe adjust radius
      */
-    if ((rad * 2) > w)
+    if ((rad * 2.0f) > w)
     {
-        rad = w / 2;
+        rad = w / 2.0f;
     }
     if ((rad * 2) > h)
     {
-        rad = h / 2;
+        rad = h / 2.0f;
     }
 
     /*
      * Draw corners
      */
-    xx1 = x1 + rad;
-    xx2 = x2 - rad;
-    yy1 = y1 + rad;
-    yy2 = y2 - rad;
-    result |= arcRGBA(xx1, yy1, rad, 180, 270, r, g, b, a);
-    result |= arcRGBA(xx2, yy1, rad, 270, 360, r, g, b, a);
-    result |= arcRGBA(xx1, yy2, rad, 90, 180, r, g, b, a);
-    result |= arcRGBA(xx2, yy2, rad, 0, 90, r, g, b, a);
+    xx1 = x1 + (Sint16)rad;
+    xx2 = x2 - (Sint16)rad;
+    yy1 = y1 + (Sint16)rad;
+    yy2 = y2 - (Sint16)rad;
+    result |= arcRGBA(xx1, yy1, (Sint16)rad, 180, 270, r, g, b, a);
+    result |= arcRGBA(xx2, yy1, (Sint16)rad, 270, 360, r, g, b, a);
+    result |= arcRGBA(xx1, yy2, (Sint16)rad, 90, 180, r, g, b, a);
+    result |= arcRGBA(xx2, yy2, (Sint16)rad, 0, 90, r, g, b, a);
 
     /*
      * Draw lines

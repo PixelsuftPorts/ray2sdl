@@ -75,7 +75,7 @@ extern "C"
     /* Rounded-Corner Rectangle */
 
     RAYGFXAPI int roundedRectangleRGBA(Sint16 x1, Sint16 y1,
-                                       Sint16 x2, Sint16 y2, Sint16 rad, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+                                       Sint16 x2, Sint16 y2, float rad, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 
     /* Filled rectangle (Box) */
 
