@@ -213,6 +213,17 @@ RLAPI bool CheckCollisionLines(Vector2 startPos1, Vector2 endPos1, Vector2 start
 RLAPI bool CheckCollisionPointLine(Vector2 point, Vector2 p1, Vector2 p2, int threshold);
 RLAPI Rectangle GetCollisionRec(Rectangle rec1, Rectangle rec2);
 
+RLAPI Image LoadImage(const char *fileName);
+RLAPI Image LoadImageRaw(const char *fileName, int width, int height, int format, int headerSize);
+RLAPI Image LoadImageAnim(const char *fileName, int *frames);
+RLAPI Image LoadImageFromMemory(const char *fileType, const unsigned char *fileData, int dataSize);
+RLAPI Image LoadImageFromTexture(Texture2D texture);
+RLAPI Image LoadImageFromScreen(void);
+RLAPI bool IsImageReady(Image image);
+RLAPI void UnloadImage(Image image);
+RLAPI bool ExportImage(Image image, const char *fileName);
+RLAPI bool ExportImageAsCode(Image image, const char *fileName);
+
 #if defined(__cplusplus)
 }
 #endif

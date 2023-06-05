@@ -279,7 +279,7 @@ RLCAPI void DrawRectangleRec(Rectangle rec, Color color) {
 RLCAPI void DrawRectanglePro(Rectangle rec, Vector2 origin, float rotation, Color color) {
     if (rotation == 0.0f)
         return DrawRectangleRec(rec, color);
-#ifdef PREFER_GPU_FUNCTIONS
+#ifdef PREFER_HW_FUNCTIONS
     if (rl.z_en) {
         rec.x += rl.co.x;
         rec.y += rl.co.y;
@@ -323,7 +323,7 @@ RLCAPI void DrawRectanglePro(Rectangle rec, Vector2 origin, float rotation, Colo
 }
 
 RLCAPI void DrawRectangleGradientV(int posX, int posY, int width, int height, Color color1, Color color2) {
-#ifdef PREFER_GPU_FUNCTIONS
+#ifdef PREFER_HW_FUNCTIONS
     if (rl.z_en && RENDER_ENABLE_SCALE() < 0)
         SCALE_WARN();
     SDL_Texture* tex = CREATE_DRAW_TEXTURE(width, 2, SDL_min(color1.a, color2.a));
@@ -359,7 +359,7 @@ RLCAPI void DrawRectangleGradientV(int posX, int posY, int width, int height, Co
 }
 
 RLCAPI void DrawRectangleGradientH(int posX, int posY, int width, int height, Color color1, Color color2) {
-#ifdef PREFER_GPU_FUNCTIONS
+#ifdef PREFER_HW_FUNCTIONS
     SDL_Texture* tex = CREATE_DRAW_TEXTURE(2, height, SDL_min(color1.a, color2.a));
     if (tex == NULL) {
         CREATE_TEXTURE_WARN();
@@ -395,7 +395,7 @@ RLCAPI void DrawRectangleGradientH(int posX, int posY, int width, int height, Co
 }
 
 RLCAPI void DrawRectangleGradientEx(Rectangle rec, Color col1, Color col2, Color col3, Color col4) {
-#ifdef PREFER_GPU_FUNCTIONS
+#ifdef PREFER_HW_FUNCTIONS
     if (rl.z_en) {
         rec.x += rl.co.x;
         rec.y += rl.co.y;

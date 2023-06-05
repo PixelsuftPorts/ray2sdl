@@ -3,6 +3,7 @@
 .cache
 b.bat
 SDL2
+SDL2_image
 raylib
 build
 Release

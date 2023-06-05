@@ -155,6 +155,10 @@ typedef struct float16
 // Module Functions Definition - Utils math
 //----------------------------------------------------------------------------------
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // Clamp float value
 RLMAPI float Clamp(float value, float min, float max)
 {
@@ -2141,3 +2145,7 @@ RLMAPI int QuaternionEquals(Quaternion p, Quaternion q)
 
     return result;
 }
+
+#ifdef __cplusplus
+}
+#endif

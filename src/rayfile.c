@@ -39,7 +39,7 @@ RLCAPI unsigned char *LoadFileData(const char *fileName, unsigned int *bytesRead
     unsigned char *data = NULL;
     *bytesRead = 0;
     if (fileName == NULL) {
-        TRACELOG(LOG_WARNING, "FILEIO: File name provided is not valid");
+        FILENAME_WARN();
         return NULL;
     }
     if (rl.loadFileData) {
@@ -75,7 +75,7 @@ RLCAPI unsigned char *LoadFileData(const char *fileName, unsigned int *bytesRead
 
 RLCAPI void UnloadFileData(unsigned char *data) {
     if (data == NULL) {
-        TRACELOG(LOG_WARNING, "FILEIO: NULL pointer passed");
+        NULLPTR_WARN();
         return;
     }
     SDL_free(data);
@@ -83,7 +83,7 @@ RLCAPI void UnloadFileData(unsigned char *data) {
 
 RLCAPI bool SaveFileData(const char *fileName, void *data, unsigned int bytesToWrite) {
     if (fileName == NULL) {
-        TRACELOG(LOG_WARNING, "FILEIO: File name provided is not valid");
+        FILENAME_WARN();
         return false;
     }
     if (rl.saveFileData) {
@@ -157,7 +157,7 @@ RLCAPI bool ExportDataAsCode(const unsigned char *data, unsigned int size, const
 
 RLCAPI char *LoadFileText(const char *fileName) {
     if (fileName == NULL) {
-        TRACELOG(LOG_WARNING, "FILEIO: File name provided is not valid");
+        FILENAME_WARN();
         return NULL;
     }
     if (rl.loadFileText) {
@@ -171,7 +171,7 @@ RLCAPI char *LoadFileText(const char *fileName) {
 
 RLCAPI void UnloadFileText(char *text) {
     if (text == NULL) {
-        TRACELOG(LOG_WARNING, "FILEIO: NULL pointer passed");
+        NULLPTR_WARN();
         return;
     }
     SDL_free(text);
@@ -179,7 +179,7 @@ RLCAPI void UnloadFileText(char *text) {
 
 RLCAPI bool SaveFileText(const char *fileName, char *text) {
     if (fileName == NULL) {
-        TRACELOG(LOG_WARNING, "FILEIO: File name provided is not valid");
+        FILENAME_WARN();
         return false;
     }
     if (rl.saveFileText) {
@@ -208,7 +208,7 @@ RLCAPI bool SaveFileText(const char *fileName, char *text) {
 
 RLCAPI bool FileExists(const char *fileName) {
     if (fileName == NULL) {
-        TRACELOG(LOG_WARNING, "FILEIO: NULL pointer passed");
+        NULLPTR_WARN();
         return false;
     }
     SDL_RWops* file = SDL_RWFromFile(fileName, "rb");
@@ -223,7 +223,7 @@ RLCAPI bool FileExists(const char *fileName) {
 
 RLCAPI bool DirectoryExists(const char *dirPath) {
     if (dirPath == NULL) {
-        TRACELOG(LOG_WARNING, "FILEIO: NULL pointer passed");
+        NULLPTR_WARN();
         return false;
     }
 #ifdef _MSC_VER
@@ -240,7 +240,7 @@ RLCAPI bool DirectoryExists(const char *dirPath) {
 
 RLCAPI bool IsFileExtension(const char *fileName, const char *ext) {
     if (fileName == NULL || ext == NULL) {
-        TRACELOG(LOG_WARNING, "FILEIO: NULL pointer passed");
+        NULLPTR_WARN();
         return false;
     }
     const char *fileExt = GetFileExtension(fileName);
@@ -252,7 +252,7 @@ RLCAPI bool IsFileExtension(const char *fileName, const char *ext) {
 RLCAPI const char *GetFileExtension(const char *fileName) {
     // This one doesn't check UPPER or lower cases so it's not mine problem
     if (fileName == NULL) {
-        TRACELOG(LOG_WARNING, "FILEIO: NULL pointer passed");
+        NULLPTR_WARN();
         return NULL;
     }
     const char *dot = SDL_strrchr(fileName, '.');
@@ -263,7 +263,7 @@ RLCAPI const char *GetFileExtension(const char *fileName) {
 
 RLCAPI const char *GetFileName(const char *filePath) {
     if (filePath == NULL) {
-        TRACELOG(LOG_WARNING, "FILEIO: NULL pointer passed");
+        NULLPTR_WARN();
         return NULL;
     }
     const char *fileName = SDL_max(SDL_strrchr(filePath, '\\'), SDL_strrchr(filePath, '/'));
@@ -274,7 +274,7 @@ RLCAPI const char *GetFileName(const char *filePath) {
 
 RLCAPI const char *GetFileNameWithoutExt(const char *filePath) {
     if (filePath == NULL) {
-        TRACELOG(LOG_WARNING, "FILEIO: NULL pointer passed");
+        NULLPTR_WARN();
         return NULL;
     }
     static char result[MAX_FILENAME_LENGTH];
@@ -287,7 +287,7 @@ RLCAPI const char *GetFileNameWithoutExt(const char *filePath) {
 
 RLCAPI const char *GetDirectoryPath(const char *filePath) {
     if (filePath == NULL) {
-        TRACELOG(LOG_WARNING, "FILEIO: NULL pointer passed");
+        NULLPTR_WARN();
         return NULL;
     }
     // I don't think it's safe (or it is?)
@@ -301,7 +301,7 @@ RLCAPI const char *GetDirectoryPath(const char *filePath) {
 
 RLCAPI const char *GetPrevDirectoryPath(const char *dirPath) {
     if (dirPath == NULL) {
-        TRACELOG(LOG_WARNING, "FILEIO: NULL pointer passed");
+        NULLPTR_WARN();
         return NULL;
     }
     return GetDirectoryPath(dirPath); // LOL
@@ -321,7 +321,7 @@ RLCAPI const char *GetApplicationDirectory(void) {
 
 RLCAPI bool ChangeDirectory(const char *dir) {
     if (dir == NULL) {
-        TRACELOG(LOG_WARNING, "FILEIO: NULL pointer passed");
+        NULLPTR_WARN();
         return NULL;
     }
     if (!CHDIR(dir))
@@ -407,7 +407,7 @@ RLCAPI void UnloadDroppedFiles(FilePathList files) {
 
 RLCAPI long GetFileModTime(const char *fileName) {
     if (fileName == NULL) {
-        TRACELOG(LOG_WARNING, "FILEIO: NULL pointer passed");
+        NULLPTR_WARN();
         return 0;
     }
     // TODO

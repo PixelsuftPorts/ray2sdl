@@ -110,6 +110,8 @@ extern "C" {
 #define RENDER_COPY_WARN() TRACELOG(LOG_WARNING, "Failed to copy texture (%s)", SDL_GetError())
 #define SCALE_MODE_WARN() TRACELOG(LOG_WARNING, "Failed to set scale mode (%s)", SDL_GetError())
 #define SCALE_WARN() TRACELOG(LOG_WARNING, "Failed to set scale (%s)", SDL_GetError())
+#define FILENAME_WARN() TRACELOG(LOG_WARNING, "File name provided is not valid")
+#define NULLPTR_WARN() TRACELOG(LOG_WARNING, "NULL pointer passed")
 
 #define APPLY_BLEND_RGBA(color_r, color_g, color_b, color_a) (\
     SDL_SetRenderDrawBlendMode(rl.r, (color_a) >= 255 ? SDL_BLENDMODE_NONE : SDL_BLENDMODE_BLEND) |\
