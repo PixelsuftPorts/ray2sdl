@@ -109,6 +109,7 @@ extern "C" {
 #define RENDER_TARGET_WARN() TRACELOG(LOG_WARNING, "Failed to set render target (%s)", SDL_GetError())
 #define RENDER_COPY_WARN() TRACELOG(LOG_WARNING, "Failed to copy texture (%s)", SDL_GetError())
 #define SCALE_MODE_WARN() TRACELOG(LOG_WARNING, "Failed to set scale mode (%s)", SDL_GetError())
+#define SCALE_WARN() TRACELOG(LOG_WARNING, "Failed to set scale (%s)", SDL_GetError())
 
 #define APPLY_BLEND_RGBA(color_r, color_g, color_b, color_a) (\
     SDL_SetRenderDrawBlendMode(rl.r, (color_a) >= 255 ? SDL_BLENDMODE_NONE : SDL_BLENDMODE_BLEND) |\
@@ -119,6 +120,8 @@ extern "C" {
     width, height)
 #define APPLY_TEXTURE_BLEND(texture, color) SDL_SetTextureBlendMode(\
     texture, color.a >= 255 ? SDL_BLENDMODE_NONE : SDL_BLENDMODE_BLEND)
+#define RENDER_ENABLE_SCALE() SDL_RenderSetScale(rl.r, rl.z, rl.z)
+#define RENDER_DISABLE_SCALE() SDL_RenderSetScale(rl.r, 1.0f, 1.0f)
 
 #if (defined(__STDC__) && __STDC_VERSION__ >= 199901L) || (defined(_MSC_VER) && _MSC_VER >= 1800)
     #include <stdbool.h>
@@ -991,10 +994,12 @@ struct rl_type {
     Uint8* keypress_array;
 #endif
     char* clip_ptr;
+    float z;
     unsigned int fl;
     int num_kbd_keys;
     int log_level;
     int exit_key;
+    bool z_en;
     bool not_first_init;
     bool event_waiting;
     bool w_resized;

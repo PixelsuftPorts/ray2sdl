@@ -4,9 +4,15 @@
 #include <raygfx.h>
 
 RLCAPI void BeginMode2D(Camera2D camera) {
-    
+    if (camera.zoom < 0.0f) {
+        rl.z = -camera.zoom;
+    }
+    else {
+        rl.z = camera.zoom;
+    }
+    rl.z_en = true;
 }
 
 RLCAPI void EndMode2D(void) {
-
+    rl.z_en = false;
 }

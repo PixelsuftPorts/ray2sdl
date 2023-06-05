@@ -366,6 +366,8 @@ int roundedRectangleRGBA(Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2, float rad, 
         rad = h / 2.0f;
     }
 
+    rad = SDL_floorf(rad); // FIXME
+
     /*
      * Draw corners
      */
@@ -416,6 +418,7 @@ int roundedRectangleRGBA(Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2, float rad, 
 int roundedBoxRGBA(Sint16 x1, Sint16 y1, Sint16 x2,
                    Sint16 y2, float rad, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
 {
+    rad = SDL_floorf(rad); // FIXME
     int result;
     float w, h, r2, tmp;
     float cx = 0.0f;
@@ -1722,6 +1725,8 @@ int aaellipseRGBA(Sint16 x, Sint16 y, Sint16 rx, Sint16 ry, Uint8 r, Uint8 g, Ui
 */
 int filledEllipseRGBA(Sint16 x, Sint16 y, float rx, float ry, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
 {
+    rx = SDL_floorf(rx); // FIXME
+    ry = SDL_floorf(ry);
     int result;
     float ix, iy;
     float h, i, j, k;
