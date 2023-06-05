@@ -44,8 +44,9 @@ RLCAPI void BeginMode2D(Camera2D camera) {
         rl.cam_rot += 360.0;
     rl.cam_origin.x = camera.target.x;
     rl.cam_origin.y = camera.target.y;
-    rl.co.x = camera.offset.x - camera.target.x;
-    rl.co.y = camera.offset.y - camera.target.y;
+    // FIXME: how does with work?
+    rl.co.x = camera.offset.x / rl.z - camera.target.x;
+    rl.co.y = camera.offset.y / rl.z - camera.target.y;
     UpdateCameraTexture();
 }
 
