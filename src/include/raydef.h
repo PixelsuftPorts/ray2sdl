@@ -182,6 +182,7 @@ typedef struct Rectangle {
 
 // Image, pixel data stored in CPU memory (RAM)
 typedef struct Image {
+    SDL_Surface* surf;
     void *data;             // Image raw data
     int width;              // Image base width
     int height;             // Image base height

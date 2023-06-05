@@ -13,6 +13,7 @@ test
 push.bat
 test.txt
 test.h
+test.png
 *.exe
 *.zip
 *.gz

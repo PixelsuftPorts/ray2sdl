@@ -30,6 +30,8 @@ RLAPI void ToggleFullscreen(void);
 RLAPI void MaximizeWindow(void);
 RLAPI void MinimizeWindow(void);
 RLAPI void RestoreWindow(void);
+RLAPI void SetWindowIcon(Image image);
+RLAPI void SetWindowIcons(Image *images, int count);
 RLAPI void SetWindowTitle(const char *title);
 RLAPI void SetWindowPosition(int x, int y);
 RLAPI void SetWindowMonitor(int monitor);
