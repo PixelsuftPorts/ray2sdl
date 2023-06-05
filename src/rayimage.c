@@ -50,8 +50,8 @@ RLCAPI Image LoadImage(const char *fileName) {
         TRACELOG(LOG_WARNING, "Failed to load image (%s)", IMG_GetError());
         return GetDummyImage();
     }
-    // TODO: format
-    Image result = { .surf = surf, .format = 0, .mipmaps = 1, .width = surf->w, .height = surf->h };
+    Image result = { .surf = surf, .format = surf->format->format,
+     .mipmaps = 1, .width = surf->w, .height = surf->h };
     return result;
 }
 

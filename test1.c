@@ -13,7 +13,7 @@ int main(void)
     Camera2D camera;
     memset(&camera, 0, sizeof(Camera2D));
     camera.zoom = 1.0f;
-    SetConfigFlags(FLAG_WINDOW_ALWAYS_RUN | FLAG_VSYNC_HINT | FLAG_WINDOW_HIGHDPI | FLAG_WINDOW_RESIZABLE);
+    SetConfigFlags(FLAG_WINDOW_ALWAYS_RUN | FLAG_WINDOW_HIGHDPI | FLAG_WINDOW_RESIZABLE);
     InitWindow(800, 450, "raylib [core] example - basic window");
     img1 = LoadImage("assets/image.png");
     SetWindowIcon(img1);
@@ -42,21 +42,21 @@ int main(void)
             SetMouseCursor(MOUSE_CURSOR_DEFAULT);
         }
         if (IsKeyDown(KEY_RIGHT))
-            camera.offset.x += 1.0f;
+            camera.offset.x += 4.0f;
         else if (IsKeyDown(KEY_LEFT))
-            camera.offset.x -= 1.0f;
+            camera.offset.x -= 4.0f;
         if (IsKeyDown(KEY_UP))
-            camera.offset.y -= 1.0f;
+            camera.offset.y -= 4.0f;
         else if (IsKeyDown(KEY_DOWN))
-            camera.offset.y += 1.0f;
+            camera.offset.y += 4.0f;
         if (IsKeyDown(KEY_D))
-            camera.target.x += 1.0f;
+            camera.target.x += 4.0f;
         else if (IsKeyDown(KEY_A))
-            camera.target.x -= 1.0f;
+            camera.target.x -= 4.0f;
         if (IsKeyDown(KEY_W))
-            camera.target.y -= 1.0f;
+            camera.target.y -= 4.0f;
         else if (IsKeyDown(KEY_S))
-            camera.target.y += 1.0f;
+            camera.target.y += 4.0f;
         if (IsKeyDown(KEY_Z))
             camera.zoom += 0.05f;
         else if (IsKeyDown(KEY_X))
@@ -74,7 +74,9 @@ int main(void)
         if (IsKeyUp(KEY_B))
             BeginMode2D(camera);
         ClearBackground(BLACK);
-        // printf("%i\n", GetFPS());
+        char fps_buf[15] = "FPS: ";
+        itoa(GetFPS(), fps_buf + 5, 10);
+        SetWindowTitle(fps_buf);
         int screenWidth = GetRenderWidth();
         DrawRectangle(0, 0, screenWidth, GetRenderHeight(), (Color){ 50, 50, 50, 255 });
         DrawCircle(screenWidth/5, 120, 35, DARKBLUE);
