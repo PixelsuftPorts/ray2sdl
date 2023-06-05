@@ -92,8 +92,10 @@ int main(void)
                             (Vector2){ screenWidth/4.0f*3.0f + 20.0f, 230.0f }, DARKBLUE);
         DrawPixel(10, 10, RED);
         Vector2 screen_pos = GetScreenToWorld2D((Vector2){GetMouseX(), GetMouseY()}, camera);
+        //BeginBlendMode(BLEND_MULTIPLIED);
         DrawCircleGradient((int)screen_pos.x, (int)screen_pos.y, 25.0f, RED, (Color){ 0, 0, 0, 0 });
         //DrawText("Congrats! You created your first window!", 190, 200, 20, LIGHTGRAY);
+        //EndBlendMode();
         EndMode2D();
         EndDrawing();
     }
