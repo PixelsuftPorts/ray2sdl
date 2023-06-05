@@ -108,13 +108,14 @@ extern "C" {
 #define CREATE_TEXTURE_WARN() TRACELOG(LOG_WARNING, "Failed to create texture (%s)", SDL_GetError())
 #define RENDER_TARGET_WARN() TRACELOG(LOG_WARNING, "Failed to set render target (%s)", SDL_GetError())
 #define RENDER_COPY_WARN() TRACELOG(LOG_WARNING, "Failed to copy texture (%s)", SDL_GetError())
+#define SCALE_MODE_WARN() TRACELOG(LOG_WARNING, "Failed to set scale mode (%s)", SDL_GetError())
 
 #define APPLY_BLEND_RGBA(color_r, color_g, color_b, color_a) (\
     SDL_SetRenderDrawBlendMode(rl.r, (color_a) >= 255 ? SDL_BLENDMODE_NONE : SDL_BLENDMODE_BLEND) |\
     SDL_SetRenderDrawColor(rl.r, (color_r), (color_g), (color_b), (color_a)))
 #define APPLY_BLEND(color) APPLY_BLEND_RGBA((color.r), (color.g), (color.b), (color.a))
-#define CREATE_DRAW_TEXTURE(width, height, color) SDL_CreateTexture(\
-    rl.r, color.a >= 255 ? DRAW_TEXTURE_FORMAT : DRAW_TEXTURE_FORMAT_ALPHA, SDL_TEXTUREACCESS_TARGET,\
+#define CREATE_DRAW_TEXTURE(width, height, color_a) SDL_CreateTexture(\
+    rl.r, (color_a) >= 255 ? DRAW_TEXTURE_FORMAT : DRAW_TEXTURE_FORMAT_ALPHA, SDL_TEXTUREACCESS_TARGET,\
     width, height)
 #define APPLY_TEXTURE_BLEND(texture, color) SDL_SetTextureBlendMode(\
     texture, color.a >= 255 ? SDL_BLENDMODE_NONE : SDL_BLENDMODE_BLEND)

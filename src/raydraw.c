@@ -192,7 +192,7 @@ RLCAPI void DrawRectanglePro(Rectangle rec, Vector2 origin, float rotation, Colo
     if (rotation == 0.0f)
         return DrawRectangleRec(rec, color);
 #ifdef PREFER_GPU_FUNCTIONS
-    SDL_Texture* tex = CREATE_DRAW_TEXTURE(rec.width, rec.height, color);
+    SDL_Texture* tex = CREATE_DRAW_TEXTURE(rec.width, rec.height, color.a);
     if (tex == NULL) {
         CREATE_TEXTURE_WARN();
         return;
@@ -225,3 +225,107 @@ RLCAPI void DrawRectanglePro(Rectangle rec, Vector2 origin, float rotation, Colo
     // TODO
 #endif
 }
+
+RLAPI void DrawRectangleGradientV(int posX, int posY, int width, int height, Color color1, Color color2) {
+#ifdef PREFER_GPU_FUNCTIONS
+    SDL_Texture* tex = CREATE_DRAW_TEXTURE(width, 2, SDL_min(color1.a, color2.a));
+    if (tex == NULL) {
+        CREATE_TEXTURE_WARN();
+        return;
+    }
+    if (SDL_SetTextureScaleMode(tex, SDL_ScaleModeLinear) < 0)
+        SCALE_MODE_WARN();
+    SDL_Texture* target_before = SDL_GetRenderTarget(rl.r);
+    if (SDL_SetRenderTarget(rl.r, tex) < 0)
+        RENDER_TARGET_WARN();
+    if (APPLY_BLEND(color1) < 0)
+        BLEND_WARN();
+    if (SDL_RenderDrawLineF(rl.r, 0.0f, 0.0f, (float)width, 0.0f) < 0)
+        DRAW_WARN();
+    if (APPLY_BLEND(color2) < 0)
+        BLEND_WARN();
+    if (SDL_RenderDrawLineF(rl.r, 0.0f, 1.0f, (float)width, 1.0f) < 0)
+        DRAW_WARN();
+    if (SDL_SetRenderTarget(rl.r, target_before) < 0)
+        RENDER_TARGET_WARN();
+    SDL_FRect dst_rect = { (float)posX, (float)posY, (float)width, (float)height };
+    if (SDL_RenderCopyF(rl.r, tex, NULL, &dst_rect) < 0)
+        RENDER_COPY_WARN();
+    SDL_DestroyTexture(tex);
+#else
+    // TODO
+#endif
+}
+
+RLAPI void DrawRectangleGradientH(int posX, int posY, int width, int height, Color color1, Color color2) {
+#ifdef PREFER_GPU_FUNCTIONS
+    SDL_Texture* tex = CREATE_DRAW_TEXTURE(2, height, SDL_min(color1.a, color2.a));
+    if (tex == NULL) {
+        CREATE_TEXTURE_WARN();
+        return;
+    }
+    if (SDL_SetTextureScaleMode(tex, SDL_ScaleModeLinear) < 0)
+        SCALE_MODE_WARN();
+    SDL_Texture* target_before = SDL_GetRenderTarget(rl.r);
+    if (SDL_SetRenderTarget(rl.r, tex) < 0)
+        RENDER_TARGET_WARN();
+    if (APPLY_BLEND(color1) < 0)
+        BLEND_WARN();
+    if (SDL_RenderDrawLineF(rl.r, 0.0f, 0.0f, 0.0f, (float)height) < 0)
+        DRAW_WARN();
+    if (APPLY_BLEND(color2) < 0)
+        BLEND_WARN();
+    if (SDL_RenderDrawLineF(rl.r, 1.0f, 0.0f, 1.0f, (float)height) < 0)
+        DRAW_WARN();
+    if (SDL_SetRenderTarget(rl.r, target_before) < 0)
+        RENDER_TARGET_WARN();
+    SDL_FRect dst_rect = { (float)posX, (float)posY, (float)width, (float)height };
+    if (SDL_RenderCopyF(rl.r, tex, NULL, &dst_rect) < 0)
+        RENDER_COPY_WARN();
+    SDL_DestroyTexture(tex);
+#else
+    // TODO
+#endif
+}
+
+RLAPI void DrawRectangleGradientEx(Rectangle rec, Color col1, Color col2, Color col3, Color col4) {
+#ifdef PREFER_GPU_FUNCTIONS
+    SDL_Texture* tex = CREATE_DRAW_TEXTURE(
+        2, 2,
+        SDL_min(SDL_min(SDL_min(col1.a, col2.a), col3.a), col4.a)
+    );
+    if (tex == NULL) {
+        CREATE_TEXTURE_WARN();
+        return;
+    }
+    if (SDL_SetTextureScaleMode(tex, SDL_ScaleModeLinear) < 0)
+        SCALE_MODE_WARN();
+    SDL_Texture* target_before = SDL_GetRenderTarget(rl.r);
+    if (SDL_SetRenderTarget(rl.r, tex) < 0)
+        RENDER_TARGET_WARN();
+    if (APPLY_BLEND(col1) < 0)
+        BLEND_WARN();
+    if (SDL_RenderDrawPointF(rl.r, 0.0f, 0.0f) < 0)
+        DRAW_WARN();
+    if (APPLY_BLEND(col2) < 0)
+        BLEND_WARN();
+    if (SDL_RenderDrawPointF(rl.r, 0.0f, 1.0f) < 0)
+        DRAW_WARN();
+    if (APPLY_BLEND(col3) < 0)
+        BLEND_WARN();
+    if (SDL_RenderDrawPointF(rl.r, 1.0f, 1.0f) < 0)
+        DRAW_WARN();
+    if (APPLY_BLEND(col4) < 0)
+        BLEND_WARN();
+    if (SDL_RenderDrawPointF(rl.r, 1.0f, 0.0f) < 0)
+        DRAW_WARN();
+    if (SDL_SetRenderTarget(rl.r, target_before) < 0)
+        RENDER_TARGET_WARN();
+    if (SDL_RenderCopyF(rl.r, tex, NULL, (const SDL_FRect*)&rec) < 0)
+        RENDER_COPY_WARN();
+    SDL_DestroyTexture(tex);
+#else
+    // TODO
+#endif
+}
+

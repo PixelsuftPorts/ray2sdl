@@ -174,6 +174,9 @@ RLAPI void DrawRectangle(int posX, int posY, int width, int height, Color color)
 RLAPI void DrawRectangleV(Vector2 position, Vector2 size, Color color);
 RLAPI void DrawRectangleRec(Rectangle rec, Color color);
 RLAPI void DrawRectanglePro(Rectangle rec, Vector2 origin, float rotation, Color color);
+RLAPI void DrawRectangleGradientV(int posX, int posY, int width, int height, Color color1, Color color2);
+RLAPI void DrawRectangleGradientH(int posX, int posY, int width, int height, Color color1, Color color2);
+RLAPI void DrawRectangleGradientEx(Rectangle rec, Color col1, Color col2, Color col3, Color col4);
 
 RLAPI void ClearBackground(Color color);
 RLAPI void BeginDrawing(void);

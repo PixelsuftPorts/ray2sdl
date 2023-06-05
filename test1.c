@@ -36,8 +36,9 @@ int main(void)
         }
         BeginDrawing();
         ClearBackground(BLACK);
+        DrawRectangleGradientEx((Rectangle){ 100.0f, 100.0f, 200.0f, 100.0f }, WHITE, GREEN, BLUE, YELLOW);
         DrawCircleGradient(GetMouseX(), GetMouseY(), 50.0f, RED, (Color){ 0, 0, 0, 0 });
-        DrawRectanglePro((Rectangle) {100.0f, 10.0f, 50.0f, 50.0f}, (Vector2) {10.0f, 0.0f}, 30.0f, (Color){0, 255, 0, 128});
+        //DrawRectanglePro((Rectangle) {100.0f, 10.0f, 50.0f, 50.0f}, (Vector2) {10.0f, 0.0f}, 30.0f, (Color){0, 255, 0, 128});
         //DrawText("Congrats! You created your first window!", 190, 200, 20, LIGHTGRAY);
         EndDrawing();
     }
