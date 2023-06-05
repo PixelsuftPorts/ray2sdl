@@ -3,7 +3,7 @@
 #include <rayconf.h>
 #include <raygfx.h>
 
-// TODO: make raygfx.c normal
+// TODO: make raygfx.c clean
 
 RLCAPI void ClearBackground(Color color) {
     if (SDL_SetRenderDrawColor(rl.r, color.r, color.g, color.b, color.a) < 0)
