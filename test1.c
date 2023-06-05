@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 #include <raylib.h>
 
@@ -9,12 +10,8 @@ void __imp__wassert() {}
 int main(void)
 {
     Camera2D camera;
-    camera.offset.x = 0.0f;
-    camera.offset.y = 0.0f;
-    camera.rotation = 0.0f;
+    memset(&camera, 0, sizeof(Camera2D));
     camera.zoom = 1.0f;
-    camera.target.x = 0.0f;
-    camera.target.y = 0.0f;
     SetConfigFlags(FLAG_WINDOW_ALWAYS_RUN | FLAG_VSYNC_HINT | FLAG_WINDOW_HIGHDPI | FLAG_WINDOW_RESIZABLE);
     InitWindow(800, 450, "raylib [core] example - basic window");
     SetExitKey(KEY_Q);
@@ -66,12 +63,8 @@ int main(void)
         else if (IsKeyDown(KEY_V))
             camera.rotation -= 1.0f;
         if (IsKeyPressed(KEY_R)) {
-            camera.offset.x = 0.0f;
-            camera.offset.y = 0.0f;
-            camera.rotation = 0.0f;
+            memset(&camera, 0, sizeof(Camera2D));
             camera.zoom = 1.0f;
-            camera.target.x = 0.0f;
-            camera.target.y = 0.0f;
         }
         BeginDrawing();
         BeginMode2D(camera);
