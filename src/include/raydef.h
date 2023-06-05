@@ -986,7 +986,7 @@ struct rl_type {
     Vector2 wheel_move;
     Vector2 co;
     SDL_TouchID touch_dev;
-    SDL_FPoint rot_origin;
+    SDL_FPoint cam_origin;
     SDL_Cursor* cursor;
     SDL_Window* w;
     SDL_Renderer* r;

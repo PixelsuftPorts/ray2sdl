@@ -67,9 +67,9 @@ int main(void)
             camera.zoom = 1.0f;
         }
         BeginDrawing();
+        ClearBackground(BLACK);
         if (IsKeyUp(KEY_B))
             BeginMode2D(camera);
-        ClearBackground(BLACK);
         int screenWidth = GetScreenWidth();
         DrawRectangle(0, 0, screenWidth, GetScreenHeight(), (Color){ 50, 50, 50, 255 });
         DrawCircle(screenWidth/5, 120, 35, DARKBLUE);

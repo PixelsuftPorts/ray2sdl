@@ -3,9 +3,11 @@
 #include <rayconf.h>
 #include <raygfx.h>
 
+
+// TODO: support rendering outside of the bounds [0, 0, render_width, render_height]
 RLCAPI void UpdateCameraTexture() {
-    int w = GetScreenWidth();
-    int h = GetScreenHeight();
+    int w = GetRenderWidth();
+    int h = GetRenderHeight();
     if (rl.screen_tex)
         SDL_DestroyTexture(rl.screen_tex);
     rl.screen_tex = SDL_CreateTexture(
@@ -36,7 +38,8 @@ RLCAPI void BeginMode2D(Camera2D camera) {
         rl.cam_rot -= 360.0;
     while (rl.cam_rot < 0.0)
         rl.cam_rot += 360.0;
-    rl.rot_origin = *(SDL_FPoint*)&camera.target;
+    rl.cam_origin.x = camera.target.x;
+    rl.cam_origin.y = camera.target.y;
     rl.co = camera.offset;
     UpdateCameraTexture();
 }
@@ -45,9 +48,10 @@ RLCAPI void EndMode2D(void) {
     if (SDL_SetRenderTarget(rl.r, NULL) < 0)
         RENDER_TARGET_WARN();
     if (rl.screen_tex) {
+        SDL_FRect dst_rect = { -rl.cam_origin.x, -rl.cam_origin.y, (float)GetRenderWidth(), (float)GetRenderHeight() };
         if (SDL_RenderCopyExF(
-            rl.r, rl.screen_tex, NULL, NULL,
-            rl.cam_rot, &rl.rot_origin, SDL_FLIP_NONE
+            rl.r, rl.screen_tex, NULL, &dst_rect,
+            rl.cam_rot, &rl.cam_origin, SDL_FLIP_NONE
         ) < 0)
             RENDER_COPY_WARN();
         SDL_DestroyTexture(rl.screen_tex);
