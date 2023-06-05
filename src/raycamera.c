@@ -10,6 +10,7 @@ RLCAPI void BeginMode2D(Camera2D camera) {
     else {
         rl.z = camera.zoom;
     }
+    rl.co = camera.offset;
     rl.z_en = true;
 }
 

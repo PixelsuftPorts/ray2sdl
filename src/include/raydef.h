@@ -984,6 +984,7 @@ struct rl_type {
     LoadFileTextCallback loadFileText;
     SaveFileTextCallback saveFileText;
     Vector2 wheel_move;
+    Vector2 co;
     SDL_TouchID touch_dev;
     SDL_Cursor* cursor;
     SDL_Window* w;

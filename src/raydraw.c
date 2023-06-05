@@ -42,9 +42,12 @@ RLCAPI void DrawPixelV(Vector2 position, Color color) {
     if (APPLY_BLEND(color) < 0)
         BLEND_WARN();
     if (rl.z_en) {
-        SDL_FRect draw_rect = { position.x * rl.z, position.y * rl.z, rl.z, rl.z };
-        if (SDL_RenderFillRectF(rl.r, &draw_rect) < 0)
+        if (RENDER_ENABLE_SCALE() < 0)
+            SCALE_WARN();
+        if (SDL_RenderDrawPointF(rl.r, position.x + rl.co.x, position.y + rl.co.y) < 0)
             DRAW_WARN();
+        if (RENDER_DISABLE_SCALE() < 0)
+            SCALE_WARN();
     }
     else if (SDL_RenderDrawPointF(rl.r, position.x, position.y) < 0)
         DRAW_WARN();
@@ -56,7 +59,7 @@ RLCAPI void DrawLineV(Vector2 startPos, Vector2 endPos, Color color) {
     if (rl.z_en) {
         if (RENDER_ENABLE_SCALE() < 0)
             SCALE_WARN();
-        if (SDL_RenderDrawLineF(rl.r, startPos.x, startPos.y, endPos.x, endPos.y) < 0)
+        if (SDL_RenderDrawLineF(rl.r, startPos.x + rl.co.x, startPos.y + rl.co.y, endPos.x, endPos.y) < 0)
             DRAW_WARN();
         if (RENDER_DISABLE_SCALE() < 0)
             SCALE_WARN();
@@ -70,8 +73,9 @@ RLCAPI void DrawLineEx(Vector2 startPos, Vector2 endPos, float thick, Color colo
         return;
     if (rl.z_en) {
         if (thickLineRGBA(
-            (Sint16)(startPos.x * rl.z), (Sint16)(startPos.y * rl.z), (Sint16)(endPos.x * rl.z),
-            (Sint16)(endPos.y * rl.z), thick, color.r, color.g, color.b, color.a
+            (Sint16)((startPos.x + rl.co.x) * rl.z), (Sint16)((startPos.y + rl.co.x) * rl.z),
+            (Sint16)((endPos.x + rl.co.x) * rl.z), (Sint16)((endPos.y + rl.co.x) * rl.z),
+            thick, color.r, color.g, color.b, color.a
         ) < 0)
             GFX_WARN();
     }
@@ -88,6 +92,12 @@ RLCAPI void DrawLineStrip(Vector2 *points, int pointCount, Color color) {
     if (rl.z_en) {
         if (RENDER_ENABLE_SCALE() < 0)
             SCALE_WARN();
+        if (rl.co.x || rl.co.y) {
+            for (int i = 0; i < pointCount; i++) {
+                points[i].x += rl.co.x;
+                points[i].y += rl.co.y;
+            }
+        }
         if (SDL_RenderDrawLinesF(rl.r, (const SDL_FPoint*)points, pointCount) < 0)
             DRAW_WARN();
         if (RENDER_DISABLE_SCALE() < 0)
@@ -103,8 +113,8 @@ RLCAPI void DrawCircleGradient(int centerX, int centerY, float radius, Color col
         radius = 0.1f;
     if (rl.z_en)
         radius *= rl.z;
-    Sint16 cx = (Sint16)(rl.z_en ? ((float)centerX * rl.z) : centerX);
-    Sint16 cy = (Sint16)(rl.z_en ? ((float)centerY * rl.z) : centerY);
+    Sint16 cx = (Sint16)(rl.z_en ? (((float)centerX + rl.co.x) * rl.z) : centerX);
+    Sint16 cy = (Sint16)(rl.z_en ? (((float)centerY + rl.co.y) * rl.z) : centerY);
     float speed[4] = { (float)(color1.r - color2.r) / radius, (float)(color1.g - color2.g) / radius,
                     (float)(color1.b - color2.b) / radius, (float)(color1.a - color2.a) / radius };
     float color[4] = { (float)color2.r, (float)color2.g, (float)color2.b, (float)color2.a };
@@ -126,8 +136,8 @@ RLCAPI void DrawCircleSector(Vector2 center, float radius, float startAngle, flo
         radius = 0.1f;
     if (rl.z_en)
         radius *= rl.z;
-    Sint16 cx = (Sint16)(rl.z_en ? (center.x * rl.z) : center.x);
-    Sint16 cy = (Sint16)(rl.z_en ? (center.y * rl.z) : center.y);
+    Sint16 cx = (Sint16)(rl.z_en ? ((center.x + rl.co.x) * rl.z) : center.x);
+    Sint16 cy = (Sint16)(rl.z_en ? ((center.y + rl.co.y) * rl.z) : center.y);
     startAngle -= 135.0f;
     endAngle -= 135.0f;
     if (startAngle < 0.0f)
@@ -148,8 +158,8 @@ RLCAPI void DrawCircleSectorLines(Vector2 center, float radius, float startAngle
         radius *= rl.z;
     startAngle -= 135.0f;
     endAngle -= 135.0f;
-    Sint16 cx = (Sint16)(rl.z_en ? (center.x * rl.z) : center.x);
-    Sint16 cy = (Sint16)(rl.z_en ? (center.y * rl.z) : center.y);
+    Sint16 cx = (Sint16)(rl.z_en ? ((center.x + rl.co.x) * rl.z) : center.x);
+    Sint16 cy = (Sint16)(rl.z_en ? ((center.y + rl.co.y) * rl.z) : center.y);
     if (startAngle < 0.0f)
         startAngle += 360.0f;
     if (endAngle < 0.0f)
@@ -166,8 +176,8 @@ RLCAPI void DrawCircleV(Vector2 center, float radius, Color color) {
         radius = 0.1f;
     if (rl.z_en)
         radius *= rl.z;
-    Sint16 cx = (Sint16)(rl.z_en ? (center.x * rl.z) : center.x);
-    Sint16 cy = (Sint16)(rl.z_en ? (center.y * rl.z) : center.y);
+    Sint16 cx = (Sint16)(rl.z_en ? ((center.x + rl.co.x) * rl.z) : center.x);
+    Sint16 cy = (Sint16)(rl.z_en ? ((center.y + rl.co.y) * rl.z) : center.y);
     if (filledCircleRGBA(
         cx, cy, radius, color.r, color.g, color.b, color.a
     ) < 0)
@@ -179,8 +189,8 @@ RLCAPI void DrawCircleLines(int centerX, int centerY, float radius, Color color)
         radius = 0.1f;
     if (rl.z_en)
         radius *= rl.z;
-    Sint16 cx = (Sint16)(rl.z_en ? ((float)centerX * rl.z) : centerX);
-    Sint16 cy = (Sint16)(rl.z_en ? ((float)centerY * rl.z) : centerY);
+    Sint16 cx = (Sint16)(rl.z_en ? (((float)centerX + rl.co.x) * rl.z) : centerX);
+    Sint16 cy = (Sint16)(rl.z_en ? (((float)centerY + rl.co.y) * rl.z) : centerY);
     if (circleRGBA(
         cx, cy, radius, color.r, color.g, color.b, color.a
     ) < 0)
@@ -192,8 +202,8 @@ RLCAPI void DrawEllipse(int centerX, int centerY, float radiusH, float radiusV, 
         radiusH *= rl.z;
         radiusV *= rl.z;
     }
-    Sint16 cx = (Sint16)(rl.z_en ? ((float)centerX * rl.z) : centerX);
-    Sint16 cy = (Sint16)(rl.z_en ? ((float)centerY * rl.z) : centerY);
+    Sint16 cx = (Sint16)(rl.z_en ? (((float)centerX + rl.co.x) * rl.z) : centerX);
+    Sint16 cy = (Sint16)(rl.z_en ? (((float)centerY + rl.co.y) * rl.z) : centerY);
     if (filledEllipseRGBA(
         cx, cy, radiusH, radiusV, color.r, color.g, color.b, color.a
     ) < 0)
@@ -205,8 +215,8 @@ RLCAPI void DrawEllipseLines(int centerX, int centerY, float radiusH, float radi
         radiusH *= rl.z;
         radiusV *= rl.z;
     }
-    Sint16 cx = (Sint16)(rl.z_en ? ((float)centerX * rl.z) : centerX);
-    Sint16 cy = (Sint16)(rl.z_en ? ((float)centerY * rl.z) : centerY);
+    Sint16 cx = (Sint16)(rl.z_en ? (((float)centerX + rl.co.x) * rl.z) : centerX);
+    Sint16 cy = (Sint16)(rl.z_en ? (((float)centerY + rl.co.y) * rl.z) : centerY);
     if (ellipseRGBA(
         cx, cy, radiusH, radiusV, color.r, color.g, color.b, color.a
     ) < 0)
@@ -232,8 +242,8 @@ RLCAPI void DrawRingLines(Vector2 center, float innerRadius, float outerRadius, 
         innerRadius *= rl.z;
         outerRadius *= rl.z;
     }
-    Sint16 cx = (Sint16)(rl.z_en ? (center.x * rl.z) : center.x);
-    Sint16 cy = (Sint16)(rl.z_en ? (center.y * rl.z) : center.y);
+    Sint16 cx = (Sint16)(rl.z_en ? ((center.x + rl.co.x) * rl.z) : center.x);
+    Sint16 cy = (Sint16)(rl.z_en ? ((center.y + rl.co.y) * rl.z) : center.y);
     if (arcRGBA(
         cx, cy, (Sint16)innerRadius, (Sint16)startAngle, (Sint16)endAngle,
         color.r, color.g, color.b, color.a
@@ -253,6 +263,8 @@ RLCAPI void DrawRectangleRec(Rectangle rec, Color color) {
     if (rl.z_en) {
         if (RENDER_ENABLE_SCALE() < 0)
             SCALE_WARN();
+        rec.x += rl.co.x;
+        rec.y += rl.co.y;
         if (SDL_RenderFillRectF(rl.r, (const SDL_FRect*)&rec) < 0)
             DRAW_WARN();
         if (RENDER_DISABLE_SCALE() < 0)
@@ -267,6 +279,8 @@ RLCAPI void DrawRectanglePro(Rectangle rec, Vector2 origin, float rotation, Colo
         return DrawRectangleRec(rec, color);
 #ifdef PREFER_GPU_FUNCTIONS
     if (rl.z_en) {
+        rec.x += rl.co.x;
+        rec.y += rl.co.y;
         rec.x *= rl.z;
         rec.y *= rl.z;
         rec.width *= rl.z;
@@ -308,7 +322,7 @@ RLCAPI void DrawRectanglePro(Rectangle rec, Vector2 origin, float rotation, Colo
 
 RLCAPI void DrawRectangleGradientV(int posX, int posY, int width, int height, Color color1, Color color2) {
 #ifdef PREFER_GPU_FUNCTIONS
-    if (RENDER_ENABLE_SCALE() < 0)
+    if (rl.z_en && RENDER_ENABLE_SCALE() < 0)
         SCALE_WARN();
     SDL_Texture* tex = CREATE_DRAW_TEXTURE(width, 2, SDL_min(color1.a, color2.a));
     if (tex == NULL) {
@@ -330,7 +344,8 @@ RLCAPI void DrawRectangleGradientV(int posX, int posY, int width, int height, Co
         DRAW_WARN();
     if (SDL_SetRenderTarget(rl.r, target_before) < 0)
         RENDER_TARGET_WARN();
-    SDL_FRect dst_rect = { (float)posX, (float)posY, (float)width, (float)height };
+    SDL_FRect dst_rect = { (float)posX + (rl.z_en ? rl.co.x : 0.0f), (float)posY + (rl.z_en ? rl.co.y : 0.0f),
+        (float)width, (float)height };
     if (SDL_RenderCopyF(rl.r, tex, NULL, &dst_rect) < 0)
         RENDER_COPY_WARN();
     SDL_DestroyTexture(tex);
@@ -343,7 +358,7 @@ RLCAPI void DrawRectangleGradientV(int posX, int posY, int width, int height, Co
 
 RLCAPI void DrawRectangleGradientH(int posX, int posY, int width, int height, Color color1, Color color2) {
 #ifdef PREFER_GPU_FUNCTIONS
-    if (RENDER_ENABLE_SCALE() < 0)
+    if (rl.z_en && RENDER_ENABLE_SCALE() < 0)
         SCALE_WARN();
     SDL_Texture* tex = CREATE_DRAW_TEXTURE(2, height, SDL_min(color1.a, color2.a));
     if (tex == NULL) {
@@ -365,7 +380,8 @@ RLCAPI void DrawRectangleGradientH(int posX, int posY, int width, int height, Co
         DRAW_WARN();
     if (SDL_SetRenderTarget(rl.r, target_before) < 0)
         RENDER_TARGET_WARN();
-    SDL_FRect dst_rect = { (float)posX, (float)posY, (float)width, (float)height };
+    SDL_FRect dst_rect = { (float)posX + (rl.z_en ? rl.co.x : 0.0f), (float)posY + (rl.z_en ? rl.co.y : 0.0f),
+        (float)width, (float)height };
     if (SDL_RenderCopyF(rl.r, tex, NULL, &dst_rect) < 0)
         RENDER_COPY_WARN();
     SDL_DestroyTexture(tex);
@@ -379,6 +395,8 @@ RLCAPI void DrawRectangleGradientH(int posX, int posY, int width, int height, Co
 RLCAPI void DrawRectangleGradientEx(Rectangle rec, Color col1, Color col2, Color col3, Color col4) {
 #ifdef PREFER_GPU_FUNCTIONS
     if (rl.z_en) {
+        rec.x += rl.co.x;
+        rec.y += rl.co.y;
         rec.x *= rl.z;
         rec.y *= rl.z;
         rec.width *= rl.z;
@@ -428,6 +446,8 @@ RLCAPI void DrawRectangleLines(int posX, int posY, int width, int height, Color 
         BLEND_WARN();
     SDL_FRect draw_rect = { (float)posX, (float)posY, (float)width, (float)height };
     if (rl.z_en) {
+        draw_rect.x += rl.co.x;
+        draw_rect.y += rl.co.y;
         draw_rect.x *= rl.z;
         draw_rect.y *= rl.z;
         draw_rect.w *= rl.z;
@@ -442,6 +462,8 @@ RLCAPI void DrawRectangleLinesEx(Rectangle rec, float lineThick, Color color) {
         if (APPLY_BLEND(color) < 0)
             BLEND_WARN();
         if (rl.z_en) {
+            rec.x += rl.co.x;
+            rec.y += rl.co.y;
             rec.x *= rl.z;
             rec.y *= rl.z;
             rec.width *= rl.z;
@@ -459,6 +481,16 @@ RLCAPI void DrawRectangleLinesEx(Rectangle rec, float lineThick, Color color) {
         { rec.x, rec.y + rec.height - lineThick, rec.width, lineThick },
         { rec.x, rec.y + lineThick, lineThick, rec.height - lineThick - lineThick }
     };
+    if (rl.z_en) {
+        draw_rects[0].x += rl.co.x;
+        draw_rects[0].y += rl.co.y;
+        draw_rects[1].x += rl.co.x;
+        draw_rects[1].y += rl.co.y;
+        draw_rects[2].x += rl.co.x;
+        draw_rects[2].y += rl.co.y;
+        draw_rects[3].x += rl.co.x;
+        draw_rects[3].y += rl.co.y;
+    }
     if (RENDER_ENABLE_SCALE() < 0)
         SCALE_WARN();
     if (SDL_RenderFillRectsF(rl.r, draw_rects, 4) < 0)
@@ -475,8 +507,8 @@ RLCAPI void DrawRectangleRounded(Rectangle rec, float roundness, int segments, C
     if (roundness >= 1.0f) roundness = 1.0f;
     if (rl.z_en) {
         if (roundedBoxRGBA(
-            (Sint16)(rec.x * rl.z), (Sint16)(rec.y * rl.z),
-            (Sint16)((rec.width + rec.x) * rl.z), (Sint16)((rec.height + rec.y) * rl.z),
+            (Sint16)((rec.x + rl.co.x) * rl.z), (Sint16)((rec.y + rl.co.y) * rl.z),
+            (Sint16)((rec.width + rec.x + rl.co.x) * rl.z), (Sint16)((rec.height + rec.y + rl.co.y) * rl.z),
             roundness * rl.z * SDL_min(rec.width, rec.height) / 2.0f, color.r, color.g, color.b, color.a
         ) < 0)
             GFX_WARN();
@@ -498,8 +530,8 @@ RLCAPI void DrawRectangleRoundedLines(Rectangle rec, float roundness, int segmen
     if (roundness >= 1.0f) roundness = 1.0f;
     if (rl.z_en) {
         if (roundedRectangleRGBA(
-            (Sint16)(rec.x * rl.z), (Sint16)(rec.y * rl.z),
-            (Sint16)((rec.width + rec.x) * rl.z), (Sint16)((rec.height + rec.y) * rl.z),
+            (Sint16)((rec.x + rl.co.x) * rl.z), (Sint16)((rec.y + rl.co.y) * rl.z),
+            (Sint16)((rec.width + rec.x + rl.co.x) * rl.z), (Sint16)((rec.height + rec.y + rl.co.y) * rl.z),
             roundness * rl.z * SDL_min(rec.width, rec.height) / 2.0f, color.r, color.g, color.b, color.a
         ) < 0)
             GFX_WARN();
@@ -514,8 +546,8 @@ RLCAPI void DrawRectangleRoundedLines(Rectangle rec, float roundness, int segmen
 RLCAPI void DrawTriangle(Vector2 v1, Vector2 v2, Vector2 v3, Color color) {
     if (rl.z_en) {
         if (filledTrigonRGBA(
-            (Sint16)(v1.x * rl.z), (Sint16)(v1.y * rl.z), (Sint16)(v2.x * rl.z),
-            (Sint16)(v2.y * rl.z), (Sint16)(v3.x * rl.z), (Sint16)(v3.y * rl.z),
+            (Sint16)((v1.x + rl.co.x) * rl.z), (Sint16)((v1.y + rl.co.y) * rl.z), (Sint16)((v2.x + rl.co.x) * rl.z),
+            (Sint16)((v2.y + rl.co.y) * rl.z), (Sint16)((v3.x + rl.co.x) * rl.z), (Sint16)((v3.y + rl.co.y) * rl.z),
             color.r, color.g, color.b, color.a
         ) < 0)
             GFX_WARN();
@@ -530,8 +562,8 @@ RLCAPI void DrawTriangle(Vector2 v1, Vector2 v2, Vector2 v3, Color color) {
 RLCAPI void DrawTriangleLines(Vector2 v1, Vector2 v2, Vector2 v3, Color color) {
     if (rl.z_en) {
         if (trigonRGBA(
-            (Sint16)(v1.x * rl.z), (Sint16)(v1.y * rl.z), (Sint16)(v2.x * rl.z),
-            (Sint16)(v2.y * rl.z), (Sint16)(v3.x * rl.z), (Sint16)(v3.y * rl.z),
+            (Sint16)((v1.x + rl.co.x) * rl.z), (Sint16)((v1.y + rl.co.y) * rl.z), (Sint16)((v2.x + rl.co.x) * rl.z),
+            (Sint16)((v2.y + rl.co.y) * rl.z), (Sint16)((v3.x + rl.co.x) * rl.z), (Sint16)((v3.y + rl.co.y) * rl.z),
             color.r, color.g, color.b, color.a
         ) < 0)
             GFX_WARN();
@@ -550,8 +582,9 @@ RLCAPI void DrawTriangleFan(Vector2 *points, int pointCount, Color color) {
     if (rl.z_en) {
         for (int i = 0; i < pointCount; i++) {
             if (filledTrigonRGBA(
-                (Sint16)(points[i].x * rl.z), (Sint16)(points[i].y * rl.z), (Sint16)(points[i + 1].x * rl.z),
-                (Sint16)(points[i + 1].y * rl.z), (Sint16)(points[i + 1].x * rl.z), (Sint16)(points[i + 2].y * rl.z),
+                (Sint16)((points[i].x + rl.co.x) * rl.z), (Sint16)((points[i].y + rl.co.y) * rl.z),
+                (Sint16)((points[i + 1].x + rl.co.x) * rl.z), (Sint16)((points[i + 1].y + rl.co.y) * rl.z),
+                (Sint16)((points[i + 2].x + rl.co.x) * rl.z), (Sint16)((points[i + 2].y + rl.co.y) * rl.z),
                 color.r, color.g, color.b, color.a
             ) < 0)
                 GFX_WARN();
@@ -570,8 +603,9 @@ RLCAPI void DrawTriangleStrip(Vector2 *points, int pointCount, Color color) {
     if (rl.z_en) {
         for (int i = 0; i < pointCount; i++) {
             if (filledTrigonRGBA(
-                (Sint16)(points[i].x * rl.z), (Sint16)(points[i].y * rl.z), (Sint16)(points[i + 1].x * rl.z),
-                (Sint16)(points[i + 1].y * rl.z), (Sint16)(points[i + 1].x * rl.z), (Sint16)(points[i + 2].y * rl.z),
+                (Sint16)((points[i].x + rl.co.x) * rl.z), (Sint16)((points[i].y + rl.co.y) * rl.z),
+                (Sint16)((points[i + 1].x + rl.co.x) * rl.z), (Sint16)((points[i + 1].y + rl.co.y) * rl.z),
+                (Sint16)((points[i + 2].x + rl.co.x) * rl.z), (Sint16)((points[i + 2].y + rl.co.y) * rl.z),
                 color.r, color.g, color.b, color.a
             ) < 0)
                 GFX_WARN();
