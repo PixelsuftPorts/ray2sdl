@@ -58,9 +58,9 @@ int main(void)
         else if (IsKeyDown(KEY_DOWN))
             camera.target.x -= 1.0f;
         if (IsKeyDown(KEY_Z))
-            camera.zoom += 1.0f;
+            camera.zoom += 0.05f;
         else if (IsKeyDown(KEY_X))
-            camera.zoom += 1.0f;
+            camera.zoom -= 0.05f;
         if (IsKeyDown(KEY_C))
             camera.rotation += 1.0f;
         else if (IsKeyDown(KEY_V))
