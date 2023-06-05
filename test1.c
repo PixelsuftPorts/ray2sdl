@@ -71,7 +71,7 @@ int main(void)
         if (IsKeyUp(KEY_B))
             BeginMode2D(camera);
         ClearBackground(BLACK);
-        printf("%i\n", GetFPS());
+        // printf("%i\n", GetFPS());
         int screenWidth = GetRenderWidth();
         DrawRectangle(0, 0, screenWidth, GetRenderHeight(), (Color){ 50, 50, 50, 255 });
         DrawCircle(screenWidth/5, 120, 35, DARKBLUE);
