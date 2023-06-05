@@ -40,7 +40,8 @@ RLCAPI void BeginMode2D(Camera2D camera) {
         rl.cam_rot += 360.0;
     rl.cam_origin.x = camera.target.x;
     rl.cam_origin.y = camera.target.y;
-    rl.co = camera.offset;
+    rl.co.x = camera.offset.x - camera.target.x;
+    rl.co.y = camera.offset.y - camera.target.y;
     UpdateCameraTexture();
 }
 
@@ -48,10 +49,10 @@ RLCAPI void EndMode2D(void) {
     if (SDL_SetRenderTarget(rl.r, NULL) < 0)
         RENDER_TARGET_WARN();
     if (rl.screen_tex) {
-        SDL_FRect dst_rect = { -rl.cam_origin.x, -rl.cam_origin.y,
-            (float)GetRenderWidth(), (float)GetRenderHeight() };
+        //SDL_FRect dst_rect = { -rl.cam_origin.x, -rl.cam_origin.y,
+        //    (float)GetRenderWidth(), (float)GetRenderHeight() };
         if (SDL_RenderCopyExF(
-            rl.r, rl.screen_tex, NULL, &dst_rect,
+            rl.r, rl.screen_tex, NULL, NULL,
             rl.cam_rot, &rl.cam_origin, SDL_FLIP_NONE
         ) < 0)
             RENDER_COPY_WARN();

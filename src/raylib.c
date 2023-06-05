@@ -687,7 +687,7 @@ RLCAPI void OpenURL(const char *url) {
 
 RLCAPI void BeginDrawing(void) {
     rl.need_to_swap = true;
-    if (SDL_SetRenderTarget(rl.r, rl.screen_tex) < 0)
+    if (SDL_SetRenderTarget(rl.r, NULL) < 0)
         TRACELOG(LOG_WARNING, "Failed to set main target (%s)", SDL_GetError());
 }
 
