@@ -72,6 +72,7 @@ RLAPI void ClearBackground(Color color);
 RLAPI void BeginDrawing(void);
 RLAPI void EndDrawing(void);
 RLAPI void BeginMode2D(Camera2D camera);
+RLAPI void UpdateCameraTexture();
 RLAPI void EndMode2D(void);
 
 RLAPI void SetTargetFPS(int fps);

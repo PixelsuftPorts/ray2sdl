@@ -86,7 +86,7 @@ int main(void)
                             (Vector2){ screenWidth/4.0f*3.0f - 20.0f, 230.0f },
                             (Vector2){ screenWidth/4.0f*3.0f + 20.0f, 230.0f }, DARKBLUE);
         DrawPixel(10, 10, RED);
-        DrawCircleGradient(GetMouseX(), GetMouseY(), 50.0f, RED, (Color){ 0, 0, 0, 0 });
+        DrawCircleGradient(GetMouseX(), GetMouseY(), 25.0f, RED, (Color){ 0, 0, 0, 0 });
         //DrawText("Congrats! You created your first window!", 190, 200, 20, LIGHTGRAY);
         EndMode2D();
         EndDrawing();

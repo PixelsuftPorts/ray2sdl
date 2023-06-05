@@ -132,6 +132,11 @@ void PollEvents() {
                         rl.w_resized = true;
                         break;
                     }
+                    case SDL_WINDOWEVENT_SIZE_CHANGED: {
+                        if (rl.z_en)
+                            UpdateCameraTexture();
+                        break;
+                    }
                     case SDL_WINDOWEVENT_MAXIMIZED: {
                         rl.fl |= FLAG_WINDOW_MAXIMIZED;
                         break;

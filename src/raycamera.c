@@ -3,7 +3,7 @@
 #include <rayconf.h>
 #include <raygfx.h>
 
-void UpdateCameraTexture() {
+RLCAPI void UpdateCameraTexture() {
     int w = GetScreenWidth();
     int h = GetScreenHeight();
     if (rl.screen_tex)
