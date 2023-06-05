@@ -102,14 +102,22 @@ extern "C" {
 #define MAGENTA    CLITERAL(Color){ 255, 0, 255, 255 }     // Magenta
 #define RAYWHITE   CLITERAL(Color){ 245, 245, 245, 255 }   // My own White (raylib logo)
 
-#define BLEND_WARN() TRACELOG(LOG_WARNING, "Failed to apply blend with color (%s)", SDL_GetError())
+#define BLEND_WARN() TRACELOG(LOG_WARNING, "Failed to apply blend or color (%s)", SDL_GetError())
 #define DRAW_WARN() TRACELOG(LOG_WARNING, "Failed to draw (%s)", SDL_GetError())
 #define GFX_WARN() TRACELOG(LOG_WARNING, "Failed to draw complex graphics (%s)", SDL_GetError())
+#define CREATE_TEXTURE_WARN() TRACELOG(LOG_WARNING, "Failed to create texture (%s)", SDL_GetError())
+#define RENDER_TARGET_WARN() TRACELOG(LOG_WARNING, "Failed to set render target (%s)", SDL_GetError())
+#define RENDER_COPY_WARN() TRACELOG(LOG_WARNING, "Failed to copy texture (%s)", SDL_GetError())
 
 #define APPLY_BLEND_RGBA(color_r, color_g, color_b, color_a) (\
     SDL_SetRenderDrawBlendMode(rl.r, (color_a) >= 255 ? SDL_BLENDMODE_NONE : SDL_BLENDMODE_BLEND) |\
     SDL_SetRenderDrawColor(rl.r, (color_r), (color_g), (color_b), (color_a)))
 #define APPLY_BLEND(color) APPLY_BLEND_RGBA((color.r), (color.g), (color.b), (color.a))
+#define CREATE_DRAW_TEXTURE(width, height, color) SDL_CreateTexture(\
+    rl.r, color.a >= 255 ? DRAW_TEXTURE_FORMAT : DRAW_TEXTURE_FORMAT_ALPHA, SDL_TEXTUREACCESS_TARGET,\
+    width, height)
+#define APPLY_TEXTURE_BLEND(texture, color) SDL_SetTextureBlendMode(\
+    texture, color.a >= 255 ? SDL_BLENDMODE_NONE : SDL_BLENDMODE_BLEND)
 
 #if (defined(__STDC__) && __STDC_VERSION__ >= 199901L) || (defined(_MSC_VER) && _MSC_VER >= 1800)
     #include <stdbool.h>

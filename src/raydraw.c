@@ -187,3 +187,37 @@ RLCAPI void DrawRectangleRec(Rectangle rec, Color color) {
     if (SDL_RenderFillRectF(rl.r, (const SDL_FRect*)&rec) < 0)
         DRAW_WARN();
 }
+
+RLCAPI void DrawRectanglePro(Rectangle rec, Vector2 origin, float rotation, Color color) {
+    if (rotation == 0.0f)
+        return DrawRectangleRec(rec, color);
+    SDL_Texture* tex = CREATE_DRAW_TEXTURE(rec.width, rec.height, color);
+    if (tex == NULL) {
+        CREATE_TEXTURE_WARN();
+        return;
+    }
+    SDL_Texture* target_before = SDL_GetRenderTarget(rl.r);
+    if (SDL_SetRenderTarget(rl.r, tex) < 0)
+        RENDER_TARGET_WARN();
+    if (APPLY_TEXTURE_BLEND(tex, color) < 0)
+        BLEND_WARN();
+    if (APPLY_BLEND(color) < 0)
+        BLEND_WARN();
+    if (color.a >= 255) {
+        if (SDL_RenderClear(rl.r) < 0)
+            DRAW_WARN();
+    }
+    else {
+        SDL_FRect draw_rect = { 0.0f, 0.0f, rec.width, rec.height };
+        if (SDL_RenderFillRectF(rl.r, &draw_rect) < 0)
+            DRAW_WARN();
+    }
+    if (SDL_SetRenderTarget(rl.r, target_before) < 0)
+        RENDER_TARGET_WARN();
+    if (SDL_RenderCopyExF(
+        rl.r, tex, NULL, (const SDL_FRect*)&rec,
+        (double)rotation, (const SDL_FPoint*)&origin, SDL_FLIP_NONE
+    ) < 0)
+        DRAW_WARN();
+    SDL_DestroyTexture(tex);
+}
