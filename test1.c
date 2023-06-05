@@ -46,17 +46,17 @@ int main(void)
         else if (IsKeyDown(KEY_LEFT))
             camera.offset.x -= 1.0f;
         if (IsKeyDown(KEY_UP))
-            camera.offset.x += 1.0f;
+            camera.offset.y -= 1.0f;
         else if (IsKeyDown(KEY_DOWN))
-            camera.offset.x -= 1.0f;
+            camera.offset.y += 1.0f;
         if (IsKeyDown(KEY_D))
             camera.target.x += 1.0f;
         else if (IsKeyDown(KEY_A))
             camera.target.x -= 1.0f;
-        if (IsKeyDown(KEY_UP))
-            camera.target.x += 1.0f;
-        else if (IsKeyDown(KEY_DOWN))
-            camera.target.x -= 1.0f;
+        if (IsKeyDown(KEY_W))
+            camera.target.y -= 1.0f;
+        else if (IsKeyDown(KEY_S))
+            camera.target.y += 1.0f;
         if (IsKeyDown(KEY_Z))
             camera.zoom += 0.05f;
         else if (IsKeyDown(KEY_X))
@@ -77,6 +77,7 @@ int main(void)
         BeginMode2D(camera);
         ClearBackground(BLACK);
         int screenWidth = GetScreenWidth();
+        DrawRectangle(0, 0, screenWidth, GetScreenHeight(), (Color){ 50, 50, 50, 255 });
         DrawCircle(screenWidth/5, 120, 35, DARKBLUE);
         DrawCircleGradient(screenWidth/5, 220, 60, GREEN, SKYBLUE);
         DrawCircleLines(screenWidth/5, 340, 80, DARKBLUE);

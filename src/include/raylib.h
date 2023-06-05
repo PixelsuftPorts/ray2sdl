@@ -68,6 +68,12 @@ RLAPI void EnableCursor(void);
 RLAPI void DisableCursor(void);
 RLAPI bool IsCursorOnScreen(void);
 
+RLAPI void ClearBackground(Color color);
+RLAPI void BeginDrawing(void);
+RLAPI void EndDrawing(void);
+RLAPI void BeginMode2D(Camera2D camera);
+RLAPI void EndMode2D(void);
+
 RLAPI void SetTargetFPS(int fps);
 RLAPI int GetFPS(void);
 RLAPI float GetFrameTime(void);
@@ -188,10 +194,6 @@ RLAPI void DrawTriangleStrip(Vector2 *points, int pointCount, Color color);
 RLAPI void DrawPoly(Vector2 center, int sides, float radius, float rotation, Color color);
 RLAPI void DrawPolyLines(Vector2 center, int sides, float radius, float rotation, Color color);
 RLAPI void DrawPolyLinesEx(Vector2 center, int sides, float radius, float rotation, float lineThick, Color color);
-
-RLAPI void ClearBackground(Color color);
-RLAPI void BeginDrawing(void);
-RLAPI void EndDrawing(void); 
 
 #if defined(__cplusplus)
 }
