@@ -75,6 +75,10 @@ RLAPI void BeginMode2D(Camera2D camera);
 RLAPI void UpdateCameraTexture();
 RLAPI void EndMode2D(void);
 
+RLAPI Matrix GetCameraMatrix2D(Camera2D camera);
+RLAPI Vector2 GetScreenToWorld2D(Vector2 position, Camera2D camera);
+RLAPI Vector2 GetWorldToScreen2D(Vector2 position, Camera2D camera);
+
 RLAPI void SetTargetFPS(int fps);
 RLAPI int GetFPS(void);
 RLAPI float GetFrameTime(void);

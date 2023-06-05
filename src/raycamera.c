@@ -1,5 +1,6 @@
 #include <raylib.h>
 #include <raydef.h>
+#include <raymath.h>
 #include <rayconf.h>
 #include <raygfx.h>
 
@@ -61,4 +62,28 @@ RLCAPI void EndMode2D(void) {
         rl.screen_tex = NULL;
     }
     rl.z_en = false;
+}
+
+RLCAPI Matrix GetCameraMatrix2D(Camera2D camera) {
+    Matrix matTransform = { 0 };
+    Matrix matOrigin = MatrixTranslate(-camera.target.x, -camera.target.y, 0.0f);
+    Matrix matRotation = MatrixRotate((Vector3){ 0.0f, 0.0f, 1.0f }, camera.rotation*DEG2RAD);
+    Matrix matScale = MatrixScale(camera.zoom, camera.zoom, 1.0f);
+    Matrix matTranslation = MatrixTranslate(camera.offset.x, camera.offset.y, 0.0f);
+    matTransform = MatrixMultiply(MatrixMultiply(matOrigin, MatrixMultiply(matScale, matRotation)), matTranslation);
+    return matTransform;
+}
+
+RLCAPI Vector2 GetScreenToWorld2D(Vector2 position, Camera2D camera) {
+    Matrix invMatCamera = MatrixInvert(GetCameraMatrix2D(camera));
+    Vector3 transform = Vector3Transform((Vector3){ position.x, position.y, 0 }, invMatCamera);
+
+    return (Vector2){ transform.x, transform.y };
+}
+
+RLCAPI Vector2 GetWorldToScreen2D(Vector2 position, Camera2D camera) {
+    Matrix matCamera = GetCameraMatrix2D(camera);
+    Vector3 transform = Vector3Transform((Vector3){ position.x, position.y, 0 }, matCamera);
+
+    return (Vector2){ transform.x, transform.y };
 }
