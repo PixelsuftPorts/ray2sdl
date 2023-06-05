@@ -386,7 +386,13 @@ RLCAPI void DrawRectangleRoundedLines(Rectangle rec, float roundness, int segmen
         GFX_WARN();
 }
 
-RLCAPI void DrawTriangle(Vector2 v1, Vector2 v2, Vector2 v3, Color color) {}
+RLCAPI void DrawTriangle(Vector2 v1, Vector2 v2, Vector2 v3, Color color) {
+    if (filledTrigonRGBA(
+        (Sint16)v1.x, (Sint16)v1.y, (Sint16)v2.x, (Sint16)v2.y, (Sint16)v3.x, (Sint16)v3.y,
+        color.r, color.g, color.b, color.a
+    ) < 0)
+        GFX_WARN();
+}
 
 RLCAPI void DrawTriangleLines(Vector2 v1, Vector2 v2, Vector2 v3, Color color) {}
 
