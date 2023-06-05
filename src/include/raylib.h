@@ -202,6 +202,17 @@ RLAPI void DrawPoly(Vector2 center, int sides, float radius, float rotation, Col
 RLAPI void DrawPolyLines(Vector2 center, int sides, float radius, float rotation, Color color);
 RLAPI void DrawPolyLinesEx(Vector2 center, int sides, float radius, float rotation, float lineThick, Color color);
 
+RLAPI bool CheckCollisionRecs(Rectangle rec1, Rectangle rec2);
+RLAPI bool CheckCollisionCircles(Vector2 center1, float radius1, Vector2 center2, float radius2);
+RLAPI bool CheckCollisionCircleRec(Vector2 center, float radius, Rectangle rec);
+RLAPI bool CheckCollisionPointRec(Vector2 point, Rectangle rec);
+RLAPI bool CheckCollisionPointCircle(Vector2 point, Vector2 center, float radius);
+RLAPI bool CheckCollisionPointTriangle(Vector2 point, Vector2 p1, Vector2 p2, Vector2 p3);
+RLAPI bool CheckCollisionPointPoly(Vector2 point, Vector2 *points, int pointCount);
+RLAPI bool CheckCollisionLines(Vector2 startPos1, Vector2 endPos1, Vector2 startPos2, Vector2 endPos2, Vector2 *collisionPoint);
+RLAPI bool CheckCollisionPointLine(Vector2 point, Vector2 p1, Vector2 p2, int threshold);
+RLAPI Rectangle GetCollisionRec(Rectangle rec1, Rectangle rec2);
+
 #if defined(__cplusplus)
 }
 #endif

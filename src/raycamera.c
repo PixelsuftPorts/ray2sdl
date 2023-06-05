@@ -4,8 +4,10 @@
 #include <rayconf.h>
 #include <raygfx.h>
 
+// TODO:
+//  - Support rendering outside of the bounds [0, 0, render_width, render_height]
+//  - Fix offset when scaling
 
-// TODO: support rendering outside of the bounds [0, 0, render_width, render_height]
 RLCAPI void UpdateCameraTexture() {
     int w = GetRenderWidth();
     int h = GetRenderHeight();
