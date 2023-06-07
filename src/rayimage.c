@@ -503,6 +503,13 @@ RLCAPI void ImageColorInvert(Image *image) {
         NULLPTR_WARN();
         return;
     }
+    if (SDL_MUSTLOCK(image->surf) && SDL_LockSurface(image->surf) < 0)
+        TRACELOG(LOG_WARNING, "Failed to lock surface (%s)", SDL_GetError());
+    for (int i = 0; i < image->surf->pitch * image->height; i++) {
+        if (image->surf->format->BytesPerPixel == 4 && (i % 4 != 3)) // FIXME: Will work only with RGB(A)
+            ((unsigned char*)image->surf->pixels)[i] = 255 - ((unsigned char*)image->surf->pixels)[i];
+    }
+    SDL_UnlockSurface(image->surf);
 }
 
 RLCAPI void ImageColorGrayscale(Image *image) {
@@ -510,6 +517,7 @@ RLCAPI void ImageColorGrayscale(Image *image) {
         NULLPTR_WARN();
         return;
     }
+    ImageFormat(image, PIXELFORMAT_UNCOMPRESSED_GRAYSCALE);
 }
 
 RLCAPI void ImageColorContrast(Image *image, float contrast) {
@@ -530,6 +538,10 @@ RLCAPI void ImageColorReplace(Image *image, Color color, Color replace) {
     if (image == NULL || image->surf == NULL) {
         NULLPTR_WARN();
         return;
+    }
+    for (int i = 0; i < image->surf->pitch * image->height; i += image->surf->format->BytesPerPixel) {
+        if (!SDL_memcmp(&image->surf->pixels[i], &color, image->surf->format->BytesPerPixel))
+            SDL_memcpy(&image->surf->pixels[i], &replace, image->surf->format->BytesPerPixel);
     }
 }
 
