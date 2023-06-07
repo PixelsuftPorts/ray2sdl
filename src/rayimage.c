@@ -84,7 +84,7 @@ RLCAPI Image LoadImageFromTexture(Texture2D texture) {
 RLCAPI Image LoadImageFromScreen(void) {
     int w = GetRenderWidth();
     int h = GetRenderHeight();
-    SDL_Surface* surf = SDL_CreateRGBSurface(0, w, h, DEFAULT_BPP, 0, 0, 0, 0);
+    SDL_Surface* surf = SDL_CreateRGBSurfaceWithFormat(0, w, h, DEFAULT_BPP, DRAW_RGB_FORMAT);
     if (surf == NULL) {
         CREATE_SURF_WARN();
         return GetDummyImage();
