@@ -7,6 +7,7 @@
 // TODO:
 //  - Support rendering outside of the bounds [0, 0, render_width, render_height]
 //  - Fix offset when scaling
+//  - Support on textures
 
 RLCAPI void UpdateCameraTexture() {
     int w = GetRenderWidth();

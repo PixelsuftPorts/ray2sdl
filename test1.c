@@ -100,6 +100,9 @@ int main(void)
         //DrawText("Congrats! You created your first window!", 190, 200, 20, LIGHTGRAY);
         //EndBlendMode();
         EndMode2D();
+        /*Image img2 = LoadImageFromScreen();
+        SetWindowIcon(img2);
+        UnloadImage(img2);*/
         EndDrawing();
     }
 

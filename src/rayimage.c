@@ -56,10 +56,19 @@ RLCAPI Image LoadImage(const char *fileName) {
 }
 
 RLCAPI Image LoadImageRaw(const char *fileName, int width, int height, int format, int headerSize) {
+    if (fileName == NULL) {
+        NULLPTR_WARN();
+        return GetDummyImage();
+    }
+    // TODO
     return GetDummyImage();
 }
 
 RLCAPI Image LoadImageAnim(const char *fileName, int *frames) {
+    if (fileName == NULL) {
+        NULLPTR_WARN();
+        return GetDummyImage();
+    }
     return GetDummyImage();
 }
 
@@ -72,7 +81,25 @@ RLCAPI Image LoadImageFromTexture(Texture2D texture) {
 }
 
 RLCAPI Image LoadImageFromScreen(void) {
-    return GetDummyImage();
+    int w = GetRenderWidth();
+    int h = GetRenderHeight();
+    SDL_Surface* surf = SDL_CreateRGBSurface(0, w, h, 32, 0, 0, 0, 0);
+    if (surf == NULL) {
+        TRACELOG(LOG_WARNING, "Failed to create surface (%s)", SDL_GetError());
+        return GetDummyImage();
+    }
+    if (SDL_LockSurface(surf) < 0)
+        TRACELOG(LOG_WARNING, "Failed to lock surface (%s)", SDL_GetError());
+    if (SDL_RenderReadPixels(rl.r, NULL, DRAW_RGB_FORMAT, surf->pixels, surf->pitch) < 0) {
+        TRACELOG(LOG_WARNING, "Failed to read screen pixels (%s)", SDL_GetError());
+        SDL_UnlockSurface(surf);
+        SDL_FreeSurface(surf);
+        return GetDummyImage();
+    }
+    SDL_UnlockSurface(surf);
+    Image result = { .surf = surf, .format = surf->format->format,
+     .mipmaps = 1, .width = w, .height = h };
+    return result;
 }
 
 RLCAPI bool IsImageReady(Image image) {

@@ -44,7 +44,7 @@ RLCAPI void InitWindow(int width, int height, const char *title) {
     }
     rl.r = SDL_CreateRenderer(
         rl.w,
-        1, // TODO
+        RENDER_ID, // TODO
         SDL_RENDERER_ACCELERATED | (rl.fl & FLAG_VSYNC_HINT ? SDL_RENDERER_PRESENTVSYNC : 0)
     );
     CheckDarkMode(rl.w);
