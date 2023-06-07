@@ -180,19 +180,20 @@ RLCAPI Image GenImageColor(int width, int height, Color color) {
 }
 
 RLCAPI Image GenImageGradientV(int width, int height, Color top, Color bottom) {
-    return GetDummyImage();
+    // TODO
+    return GenImageColor(width, height, top);
 }
 
 RLCAPI Image GenImageGradientH(int width, int height, Color left, Color right) {
-    return GetDummyImage();
+    return GenImageColor(width, height, left);
 }
 
 RLCAPI Image GenImageGradientRadial(int width, int height, float density, Color inner, Color outer) {
-    return GetDummyImage();
+    return GenImageColor(width, height, inner);
 }
 
 RLCAPI Image GenImageChecked(int width, int height, int checksX, int checksY, Color col1, Color col2) {
-    return GetDummyImage();
+    return GenImageColor(width, height, col1);
 }
 
 RLCAPI Image GenImageWhiteNoise(int width, int height, float factor) {
