@@ -245,10 +245,11 @@ RLCAPI Image ImageCopy(Image image) {
 }
 
 RLCAPI Image ImageFromImage(Image image, Rectangle rec) {
+    SDL_Rect src_rect = { (int)rec.x, (int)rec.y, (int)rec.width, (int)rec.height };
     SDL_Surface* surf = SDL_CreateRGBSurfaceWithFormat(
         0,
-        rec.width,
-        rec.height,
+        src_rect.w,
+        src_rect.h,
         (image.surf->pitch << 3) / image.width,
         image.surf->format->format
     );
@@ -260,11 +261,10 @@ RLCAPI Image ImageFromImage(Image image, Rectangle rec) {
     if (SDL_SetSurfaceRLE(surf, 1) < 0)
         SET_RLE_WARN();
 #endif
-    SDL_Rect src_rect = { (int)rec.x, (int)rec.y, (int)rec.width, (int)rec.height };
     if (SDL_BlitSurface(image.surf, &src_rect, surf, NULL) < 0)
         TRACELOG(LOG_WARNING, "Failed to blit surface (%s)", SDL_GetError());
-    image.width = rec.width;
-    image.height = rec.height;
+    image.width = src_rect.w;
+    image.height = src_rect.h;
     image.surf = surf;
     image.data = surf->pixels;
     return image;
@@ -279,51 +279,197 @@ RLCAPI Image ImageTextEx(Font font, const char *text, float fontSize, float spac
 }
 
 RLCAPI void ImageFormat(Image *image, int newFormat) {
+    if (image == NULL || image->surf == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+    SDL_Surface* surf = SDL_ConvertSurfaceFormat(image->surf, (Uint32)newFormat, 0);
+    if (surf == NULL) {
+        TRACELOG(LOG_WARNING, "Failed to convert surface (%s)", SDL_GetError());
+        return;
+    }
+    SDL_FreeSurface(image->surf);
+    image->surf = surf;
+    image->data = surf->pixels;
 }
 
-RLCAPI void ImageToPOT(Image *image, Color fill) {}
+RLCAPI void ImageToPOT(Image *image, Color fill) {
+    if (image == NULL || image->surf == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+    // TODO
+}
 
-RLCAPI void ImageCrop(Image *image, Rectangle crop) {}
+RLCAPI void ImageCrop(Image *image, Rectangle crop) {
+    if (image == NULL || image->surf == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+    SDL_Rect src_rect = { (int)crop.x, (int)crop.y, (int)crop.width, (int)crop.height };
+    SDL_Surface* surf = SDL_CreateRGBSurfaceWithFormat(
+        0,
+        src_rect.w,
+        src_rect.h,
+        (image->surf->pitch << 3) / image->width,
+        image->surf->format->format
+    );
+    if (surf == NULL) {
+        CREATE_SURF_WARN();
+        return;
+    }
+#ifdef ENABLE_IMAGE_RLE
+    if (SDL_SetSurfaceRLE(surf, 1) < 0)
+        SET_RLE_WARN();
+#endif
+    if (SDL_BlitSurface(image->surf, &src_rect, surf, NULL) < 0)
+        TRACELOG(LOG_WARNING, "Failed to blit surface (%s)", SDL_GetError());
+    image->width = src_rect.w;
+    image->height = src_rect.h;
+    image->data = surf->pixels;
+    SDL_FreeSurface(image->surf);
+    image->surf = surf;
+}
 
-RLCAPI void ImageAlphaCrop(Image *image, float threshold) {}
+RLCAPI void ImageAlphaCrop(Image *image, float threshold) {
+    if (image == NULL || image->surf == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+}
 
-RLCAPI void ImageAlphaClear(Image *image, Color color, float threshold) {}
+RLCAPI void ImageAlphaClear(Image *image, Color color, float threshold) {
+    if (image == NULL || image->surf == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+}
 
-RLCAPI void ImageAlphaMask(Image *image, Image alphaMask) {}
+RLCAPI void ImageAlphaMask(Image *image, Image alphaMask) {
+    if (image == NULL || image->surf == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+}
 
-RLCAPI void ImageAlphaPremultiply(Image *image) {}
+RLCAPI void ImageAlphaPremultiply(Image *image) {
+    if (image == NULL || image->surf == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+}
 
-RLCAPI void ImageBlurGaussian(Image *image, int blurSize) {}
+RLCAPI void ImageBlurGaussian(Image *image, int blurSize) {
+    if (image == NULL || image->surf == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+}
 
-RLCAPI void ImageResize(Image *image, int newWidth, int newHeight) {}
+RLCAPI void ImageResize(Image *image, int newWidth, int newHeight) {
+    if (image == NULL || image->surf == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+}
 
-RLCAPI void ImageResizeNN(Image *image, int newWidth,int newHeight) {}
+RLCAPI void ImageResizeNN(Image *image, int newWidth,int newHeight) {
+    if (image == NULL || image->surf == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+}
 
-RLCAPI void ImageResizeCanvas(Image *image, int newWidth, int newHeight, int offsetX, int offsetY, Color fill) {}
+RLCAPI void ImageResizeCanvas(Image *image, int newWidth, int newHeight, int offsetX, int offsetY, Color fill) {
+    if (image == NULL || image->surf == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+}
 
-RLCAPI void ImageMipmaps(Image *image) {}
+RLCAPI void ImageMipmaps(Image *image) {
+    if (image == NULL || image->surf == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+}
 
-RLCAPI void ImageDither(Image *image, int rBpp, int gBpp, int bBpp, int aBpp) {}
+RLCAPI void ImageDither(Image *image, int rBpp, int gBpp, int bBpp, int aBpp) {
+    if (image == NULL || image->surf == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+}
 
-RLCAPI void ImageFlipVertical(Image *image) {}
+RLCAPI void ImageFlipVertical(Image *image) {
+    if (image == NULL || image->surf == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+}
 
-RLCAPI void ImageFlipHorizontal(Image *image) {}
+RLCAPI void ImageFlipHorizontal(Image *image) {
+    if (image == NULL || image->surf == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+}
 
-RLCAPI void ImageRotateCW(Image *image) {}
+RLCAPI void ImageRotateCW(Image *image) {
+    if (image == NULL || image->surf == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+}
 
-RLCAPI void ImageRotateCCW(Image *image) {}
+RLCAPI void ImageRotateCCW(Image *image) {
+    if (image == NULL || image->surf == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+}
 
-RLCAPI void ImageColorTint(Image *image, Color color) {}
+RLCAPI void ImageColorTint(Image *image, Color color) {
+    if (image == NULL || image->surf == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+}
 
-RLCAPI void ImageColorInvert(Image *image) {}
+RLCAPI void ImageColorInvert(Image *image) {
+    if (image == NULL || image->surf == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+}
 
-RLCAPI void ImageColorGrayscale(Image *image) {}
+RLCAPI void ImageColorGrayscale(Image *image) {
+    if (image == NULL || image->surf == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+}
 
-RLCAPI void ImageColorContrast(Image *image, float contrast) {}
+RLCAPI void ImageColorContrast(Image *image, float contrast) {
+    if (image == NULL || image->surf == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+}
 
-RLCAPI void ImageColorBrightness(Image *image, int brightness) {}
+RLCAPI void ImageColorBrightness(Image *image, int brightness) {
+    if (image == NULL || image->surf == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+}
 
-RLCAPI void ImageColorReplace(Image *image, Color color, Color replace) {}
+RLCAPI void ImageColorReplace(Image *image, Color color, Color replace) {
+    if (image == NULL || image->surf == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+}
 
 RLCAPI Color *LoadImageColors(Image image) {}
 

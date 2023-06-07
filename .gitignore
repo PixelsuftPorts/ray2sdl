@@ -14,6 +14,7 @@ push.bat
 test.txt
 test.h
 test.png
+test.bmp
 *.exe
 *.zip
 *.gz
