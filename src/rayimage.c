@@ -711,6 +711,14 @@ RLCAPI void ImageDraw(Image *dst, Image src, Rectangle srcRec, Rectangle dstRec,
         NULLPTR_WARN();
         return;
     }
+    SDL_Rect src_rect = { (int)srcRec.x, (int)srcRec.y, (int)srcRec.width, (int)srcRec.height };
+    SDL_Rect dst_rect = { (int)dstRec.x, (int)dstRec.y, (int)dstRec.width, (int)dstRec.height };
+    if (src_rect.w == dst_rect.w && src_rect.h == dst_rect.h) {
+        if (SDL_BlitSurface(dst->surf, &src_rect, dst, &dst_rect) < 0)
+            TRACELOG(LOG_WARNING, "Failed to blit surface (%s)", SDL_GetError());
+    }
+    else if (SDL_BlitScaled(dst->surf, &src_rect, dst, &dst_rect) < 0)
+        TRACELOG(LOG_WARNING, "Failed to blit surface (%s)", SDL_GetError());
 }
 
 RLCAPI void ImageDrawText(Image *dst, const char *text, int posX, int posY, int fontSize, Color color) {
