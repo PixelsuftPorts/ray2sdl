@@ -555,4 +555,15 @@ RLCAPI void UnloadImagePalette(Color *colors) {}
 
 RLCAPI Rectangle GetImageAlphaBorder(Image image, float threshold) {}
 
-RLCAPI Color GetImageColor(Image image, int x, int y) {}
+RLCAPI Color GetImageColor(Image image, int x, int y) {
+    if (image.surf == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+    Color result;
+    SDL_GetRGBA(
+        *((Uint32*)&image.surf->pixels[y * image.surf->pitch + x * image.surf->format->BytesPerPixel]),
+        image.surf->format, &result.r, &result.g, &result.b, &result.a
+    );
+    return result;
+}
