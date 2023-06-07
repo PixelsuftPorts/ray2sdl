@@ -7,6 +7,11 @@
 #define IMG_GetError SDL_GetError
 #endif
 
+// TODO:
+//  - security of non-sdl memory and other funcs (like out-of-bounds checking)
+//  - copy-paste a lot of stuff
+//  - adopt a lot of rgb888/rgba8888 code to other formats
+
 Image GetDummyImage() {
     Image result = { 0 };
     return result;
@@ -540,8 +545,8 @@ RLCAPI void ImageColorReplace(Image *image, Color color, Color replace) {
         return;
     }
     for (int i = 0; i < image->surf->pitch * image->height; i += image->surf->format->BytesPerPixel) {
-        if (!SDL_memcmp(&image->surf->pixels[i], &color, image->surf->format->BytesPerPixel))
-            SDL_memcpy(&image->surf->pixels[i], &replace, image->surf->format->BytesPerPixel);
+        if (!SDL_memcmp(image->surf->pixels + i, &color, image->surf->format->BytesPerPixel))
+            SDL_memcpy(image->surf->pixels + i, &replace, image->surf->format->BytesPerPixel);
     }
 }
 
@@ -577,12 +582,147 @@ RLCAPI Rectangle GetImageAlphaBorder(Image image, float threshold) {
 RLCAPI Color GetImageColor(Image image, int x, int y) {
     if (image.surf == NULL) {
         NULLPTR_WARN();
-        return;
+        return CLITERAL(Color){ 0 };
     }
     Color result;
     SDL_GetRGBA(
-        *((Uint32*)&image.surf->pixels[y * image.surf->pitch + x * image.surf->format->BytesPerPixel]),
+        ((Uint32*)image.surf->pixels)[y * image.surf->pitch + x * image.surf->format->BytesPerPixel],
         image.surf->format, &result.r, &result.g, &result.b, &result.a
     );
     return result;
+}
+
+RLCAPI void ImageClearBackground(Image *dst, Color color) {
+    if (dst == NULL || dst->surf == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+    if (SDL_FillRect(dst->surf, NULL, SDL_MapRGBA(dst->surf->format, color.r, color.g, color.b, color.a)) < 0)
+        TRACELOG(LOG_WARNING, "Failed to fill surface (%s)", SDL_GetError());
+}
+
+RLCAPI void ImageDrawPixel(Image *dst, int posX, int posY, Color color) {
+    if (dst == NULL || dst->surf == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+    if (SDL_MUSTLOCK(dst->surf) && SDL_LockSurface(dst->surf) < 0)
+        TRACELOG(LOG_WARNING, "Failed to lock surface (%s)", SDL_GetError());
+    SDL_memcpy(dst->surf->pixels + 
+        posY * dst->surf->pitch + posX * dst->surf->format->BytesPerPixel
+    , &color, dst->surf->format->BytesPerPixel);
+    SDL_UnlockSurface(dst->surf);
+}
+
+RLCAPI void ImageDrawPixelV(Image *dst, Vector2 position, Color color) {
+    if (dst == NULL || dst->surf == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+    if (SDL_MUSTLOCK(dst->surf) && SDL_LockSurface(dst->surf) < 0)
+        TRACELOG(LOG_WARNING, "Failed to lock surface (%s)", SDL_GetError());
+    SDL_memcpy(dst->surf->pixels + 
+        (int)(position.y * (float)dst->surf->pitch + position.x * (float)dst->surf->format->BytesPerPixel)
+    , &color, dst->surf->format->BytesPerPixel);
+    SDL_UnlockSurface(dst->surf);
+}
+
+RLCAPI void ImageDrawLine(Image *dst, int startPosX, int startPosY, int endPosX, int endPosY, Color color) {
+    if (dst == NULL || dst->surf == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+}
+
+RLCAPI void ImageDrawLineV(Image *dst, Vector2 start, Vector2 end, Color color) {
+    if (dst == NULL || dst->surf == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+}
+
+RLCAPI void ImageDrawCircle(Image *dst, int centerX, int centerY, int radius, Color color) {
+    if (dst == NULL || dst->surf == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+}
+
+RLCAPI void ImageDrawCircleV(Image *dst, Vector2 center, int radius, Color color) {
+    if (dst == NULL || dst->surf == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+}
+
+RLCAPI void ImageDrawCircleLines(Image *dst, int centerX, int centerY, int radius, Color color) {
+    if (dst == NULL || dst->surf == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+}
+
+RLCAPI void ImageDrawCircleLinesV(Image *dst, Vector2 center, int radius, Color color) {
+    if (dst == NULL || dst->surf == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+}
+
+RLCAPI void ImageDrawRectangle(Image *dst, int posX, int posY, int width, int height, Color color) {
+    if (dst == NULL || dst->surf == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+    SDL_Rect draw_rect = { posX, posY, width, height };
+    if (SDL_FillRect(dst->surf, &draw_rect, SDL_MapRGBA(dst->surf->format, color.r, color.g, color.b, color.a)) < 0)
+        TRACELOG(LOG_WARNING, "Failed to fill surface (%s)", SDL_GetError());
+}
+
+RLCAPI void ImageDrawRectangleV(Image *dst, Vector2 position, Vector2 size, Color color) {
+    if (dst == NULL || dst->surf == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+    SDL_Rect draw_rect = { (int)position.x, (int)position.y, (int)size.x, (int)size.y };
+    if (SDL_FillRect(dst->surf, &draw_rect, SDL_MapRGBA(dst->surf->format, color.r, color.g, color.b, color.a)) < 0)
+        TRACELOG(LOG_WARNING, "Failed to fill surface (%s)", SDL_GetError());
+}
+
+RLCAPI void ImageDrawRectangleRec(Image *dst, Rectangle rec, Color color) {
+    if (dst == NULL || dst->surf == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+    SDL_Rect draw_rect = { (int)rec.x, (int)rec.y, (int)rec.width, (int)rec.height };
+    if (SDL_FillRect(dst->surf, &draw_rect, SDL_MapRGBA(dst->surf->format, color.r, color.g, color.b, color.a)) < 0)
+        TRACELOG(LOG_WARNING, "Failed to fill surface (%s)", SDL_GetError());
+}
+
+RLCAPI void ImageDrawRectangleLines(Image *dst, Rectangle rec, int thick, Color color) {
+    if (dst == NULL || dst->surf == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+}
+
+RLCAPI void ImageDraw(Image *dst, Image src, Rectangle srcRec, Rectangle dstRec, Color tint) {
+    if (dst == NULL || dst->surf == NULL || src.surf) {
+        NULLPTR_WARN();
+        return;
+    }
+}
+
+RLCAPI void ImageDrawText(Image *dst, const char *text, int posX, int posY, int fontSize, Color color) {
+    if (dst == NULL || dst->surf == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+}
+
+RLCAPI void ImageDrawTextEx(Image *dst, Font font, const char *text, Vector2 position, float fontSize, float spacing, Color tint) {
+    if (dst == NULL || dst->surf == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
 }

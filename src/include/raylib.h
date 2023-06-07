@@ -270,6 +270,23 @@ RLAPI void UnloadImagePalette(Color *colors);
 RLAPI Rectangle GetImageAlphaBorder(Image image, float threshold);
 RLAPI Color GetImageColor(Image image, int x, int y);
 
+RLAPI void ImageClearBackground(Image *dst, Color color);
+RLAPI void ImageDrawPixel(Image *dst, int posX, int posY, Color color);
+RLAPI void ImageDrawPixelV(Image *dst, Vector2 position, Color color);
+RLAPI void ImageDrawLine(Image *dst, int startPosX, int startPosY, int endPosX, int endPosY, Color color);
+RLAPI void ImageDrawLineV(Image *dst, Vector2 start, Vector2 end, Color color);
+RLAPI void ImageDrawCircle(Image *dst, int centerX, int centerY, int radius, Color color);
+RLAPI void ImageDrawCircleV(Image *dst, Vector2 center, int radius, Color color);
+RLAPI void ImageDrawCircleLines(Image *dst, int centerX, int centerY, int radius, Color color);
+RLAPI void ImageDrawCircleLinesV(Image *dst, Vector2 center, int radius, Color color);
+RLAPI void ImageDrawRectangle(Image *dst, int posX, int posY, int width, int height, Color color);
+RLAPI void ImageDrawRectangleV(Image *dst, Vector2 position, Vector2 size, Color color);
+RLAPI void ImageDrawRectangleRec(Image *dst, Rectangle rec, Color color);
+RLAPI void ImageDrawRectangleLines(Image *dst, Rectangle rec, int thick, Color color);
+RLAPI void ImageDraw(Image *dst, Image src, Rectangle srcRec, Rectangle dstRec, Color tint);
+RLAPI void ImageDrawText(Image *dst, const char *text, int posX, int posY, int fontSize, Color color);
+RLAPI void ImageDrawTextEx(Image *dst, Font font, const char *text, Vector2 position, float fontSize, float spacing, Color tint);
+
 #if defined(__cplusplus)
 }
 #endif

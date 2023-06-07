@@ -16,7 +16,6 @@ int main(void)
     SetConfigFlags(FLAG_WINDOW_ALWAYS_RUN | FLAG_VSYNC_HINT | FLAG_WINDOW_HIGHDPI | FLAG_WINDOW_RESIZABLE);
     InitWindow(800, 450, "raylib [core] example - basic window");
     img1 = LoadImage("assets/image.png");
-    Color col = GetImageColor(img1, 20, 20);
     SetWindowIcon(img1);
     SetExitKey(KEY_Q);
 
