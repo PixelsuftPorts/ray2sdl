@@ -50,8 +50,12 @@ RLCAPI Image LoadImage(const char *fileName) {
         TRACELOG(LOG_WARNING, "Failed to load image (%s)", IMG_GetError());
         return GetDummyImage();
     }
+#ifdef ENABLE_IMAGE_RLE
+    if (SDL_SetSurfaceRLE(surf, 1) < 0)
+        SET_RLE_WARN();
+#endif
     Image result = { .surf = surf, .format = surf->format->format,
-     .mipmaps = 1, .width = surf->w, .height = surf->h };
+     .mipmaps = 1, .width = surf->w, .height = surf->h, .data = surf->pixels };
     return result;
 }
 
@@ -89,6 +93,10 @@ RLCAPI Image LoadImageFromScreen(void) {
         CREATE_SURF_WARN();
         return GetDummyImage();
     }
+#ifdef ENABLE_IMAGE_RLE
+    if (SDL_SetSurfaceRLE(surf, 1) < 0)
+        SET_RLE_WARN();
+#endif
     if (SDL_MUSTLOCK(surf) && SDL_LockSurface(surf) < 0)
         TRACELOG(LOG_WARNING, "Failed to lock surface (%s)", SDL_GetError());
     if (SDL_RenderReadPixels(rl.r, NULL, DRAW_RGB_FORMAT, surf->pixels, surf->pitch) < 0) {
@@ -99,7 +107,7 @@ RLCAPI Image LoadImageFromScreen(void) {
     }
     SDL_UnlockSurface(surf);
     Image result = { .surf = surf, .format = surf->format->format,
-     .mipmaps = 1, .width = w, .height = h };
+     .mipmaps = 1, .width = w, .height = h, .data = surf->pixels };
     return result;
 }
 
@@ -164,13 +172,17 @@ RLCAPI Image GenImageColor(int width, int height, Color color) {
         CREATE_SURF_WARN();
         return GetDummyImage();
     }
+#ifdef ENABLE_IMAGE_RLE
+    if (SDL_SetSurfaceRLE(surf, 1) < 0)
+        SET_RLE_WARN();
+#endif
     SDL_PixelFormat* format = SDL_AllocFormat(pixel_format);
     if (format == NULL)
         TRACELOG(LOG_WARNING, "Failed to allocate pixel format (%s)", SDL_GetError());
     if (SDL_FillRect(surf, NULL, SDL_MapRGBA(format, color.r, color.g, color.b, color.a)) < 0)
         TRACELOG(LOG_WARNING, "Failed to fill surface (%s)", SDL_GetError());
     Image result = { .surf = surf, .format = pixel_format,
-     .mipmaps = 1, .width = width, .height = height };
+     .mipmaps = 1, .width = width, .height = height, .data = surf->pixels };
     return result;
 }
 
@@ -212,28 +224,62 @@ RLCAPI Image ImageCopy(Image image) {
         0,
         image.width,
         image.height,
-        image.surf->pitch * 8 / image.width,
+        (image.surf->pitch << 3) / image.width,
         image.surf->format->format
     );
     if (surf == NULL) {
         CREATE_SURF_WARN();
         return GetDummyImage();
     }
+#ifdef ENABLE_IMAGE_RLE
+    if (SDL_SetSurfaceRLE(surf, 1) < 0)
+        SET_RLE_WARN();
+#endif
     if (SDL_MUSTLOCK(surf) && SDL_LockSurface(surf) < 0)
         TRACELOG(LOG_WARNING, "Failed to lock surface (%s)", SDL_GetError());
     SDL_memcpy(surf->pixels, image.surf->pixels, image.surf->pitch * image.height);
     SDL_UnlockSurface(surf);
     image.surf = surf;
+    image.data = surf->pixels;
     return image;
 }
 
-RLCAPI Image ImageFromImage(Image image, Rectangle rec) {}
+RLCAPI Image ImageFromImage(Image image, Rectangle rec) {
+    SDL_Surface* surf = SDL_CreateRGBSurfaceWithFormat(
+        0,
+        rec.width,
+        rec.height,
+        (image.surf->pitch << 3) / image.width,
+        image.surf->format->format
+    );
+    if (surf == NULL) {
+        CREATE_SURF_WARN();
+        return GetDummyImage();
+    }
+#ifdef ENABLE_IMAGE_RLE
+    if (SDL_SetSurfaceRLE(surf, 1) < 0)
+        SET_RLE_WARN();
+#endif
+    SDL_Rect src_rect = { (int)rec.x, (int)rec.y, (int)rec.width, (int)rec.height };
+    if (SDL_BlitSurface(image.surf, &src_rect, surf, NULL) < 0)
+        TRACELOG(LOG_WARNING, "Failed to blit surface (%s)", SDL_GetError());
+    image.width = rec.width;
+    image.height = rec.height;
+    image.surf = surf;
+    image.data = surf->pixels;
+    return image;
+}
 
-RLCAPI Image ImageText(const char *text, int fontSize, Color color) {}
+RLCAPI Image ImageText(const char *text, int fontSize, Color color) {
+    return GetDummyImage();
+}
 
-RLCAPI Image ImageTextEx(Font font, const char *text, float fontSize, float spacing, Color tint) {}
+RLCAPI Image ImageTextEx(Font font, const char *text, float fontSize, float spacing, Color tint) {
+    return GetDummyImage();
+}
 
-RLCAPI void ImageFormat(Image *image, int newFormat) {}
+RLCAPI void ImageFormat(Image *image, int newFormat) {
+}
 
 RLCAPI void ImageToPOT(Image *image, Color fill) {}
 
