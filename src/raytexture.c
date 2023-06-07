@@ -91,6 +91,17 @@ RLCAPI bool IsRenderTextureReady(RenderTexture2D target) {
 
 RLCAPI void UnloadRenderTexture(RenderTexture2D target) {}
 
-RLCAPI void UpdateTexture(Texture2D texture, const void *pixels) {}
+RLCAPI void UpdateTexture(Texture2D texture, const void *pixels) {
+    if (texture.tex == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+    // Maybe re-create texture?
+}
 
-RLCAPI void UpdateTextureRec(Texture2D texture, Rectangle rec, const void *pixels) {}
+RLCAPI void UpdateTextureRec(Texture2D texture, Rectangle rec, const void *pixels) {
+    if (texture.tex == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+}
