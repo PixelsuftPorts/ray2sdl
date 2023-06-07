@@ -105,11 +105,13 @@ extern "C" {
 #define BLEND_WARN() TRACELOG(LOG_WARNING, "Failed to apply blend or color (%s)", SDL_GetError())
 #define DRAW_WARN() TRACELOG(LOG_WARNING, "Failed to draw (%s)", SDL_GetError())
 #define GFX_WARN() TRACELOG(LOG_WARNING, "Failed to draw complex graphics (%s)", SDL_GetError())
+#define CREATE_SURF_WARN() TRACELOG(LOG_WARNING, "Failed to create surface (%s)", SDL_GetError())
 #define CREATE_TEXTURE_WARN() TRACELOG(LOG_WARNING, "Failed to create texture (%s)", SDL_GetError())
 #define RENDER_TARGET_WARN() TRACELOG(LOG_WARNING, "Failed to set render target (%s)", SDL_GetError())
 #define RENDER_COPY_WARN() TRACELOG(LOG_WARNING, "Failed to copy texture (%s)", SDL_GetError())
 #define SCALE_MODE_WARN() TRACELOG(LOG_WARNING, "Failed to set scale mode (%s)", SDL_GetError())
 #define SCALE_WARN() TRACELOG(LOG_WARNING, "Failed to set scale (%s)", SDL_GetError())
+#define GET_COLOR_MASK_WARN() TRACELOG(LOG_WARNING, "Failed to get color masks for pixel format (%s)", SDL_GetError())
 #define FILENAME_WARN() TRACELOG(LOG_WARNING, "File name provided is not valid")
 #define NULLPTR_WARN() TRACELOG(LOG_WARNING, "NULL pointer passed")
 

@@ -226,6 +226,16 @@ RLAPI void UnloadImage(Image image);
 RLAPI bool ExportImage(Image image, const char *fileName);
 RLAPI bool ExportImageAsCode(Image image, const char *fileName);
 
+RLAPI Image GenImageColor(int width, int height, Color color);
+RLAPI Image GenImageGradientV(int width, int height, Color top, Color bottom);
+RLAPI Image GenImageGradientH(int width, int height, Color left, Color right);
+RLAPI Image GenImageGradientRadial(int width, int height, float density, Color inner, Color outer);
+RLAPI Image GenImageChecked(int width, int height, int checksX, int checksY, Color col1, Color col2);
+RLAPI Image GenImageWhiteNoise(int width, int height, float factor);
+RLAPI Image GenImagePerlinNoise(int width, int height, int offsetX, int offsetY, float scale);
+RLAPI Image GenImageCellular(int width, int height, int tileSize);
+RLAPI Image GenImageText(int width, int height, const char *text); 
+
 #if defined(__cplusplus)
 }
 #endif

@@ -84,9 +84,9 @@ RLCAPI Image LoadImageFromTexture(Texture2D texture) {
 RLCAPI Image LoadImageFromScreen(void) {
     int w = GetRenderWidth();
     int h = GetRenderHeight();
-    SDL_Surface* surf = SDL_CreateRGBSurface(0, w, h, 32, 0, 0, 0, 0);
+    SDL_Surface* surf = SDL_CreateRGBSurface(0, w, h, DEFAULT_BPP, 0, 0, 0, 0);
     if (surf == NULL) {
-        TRACELOG(LOG_WARNING, "Failed to create surface (%s)", SDL_GetError());
+        CREATE_SURF_WARN();
         return GetDummyImage();
     }
     if (SDL_LockSurface(surf) < 0)
@@ -119,6 +119,7 @@ RLCAPI void UnloadImage(Image image) {
 RLCAPI bool ExportImage(Image image, const char *fileName) {
     if (fileName == NULL) {
         NULLPTR_WARN();
+        return false;
     }
 #ifdef IMG_SUPPORT
     if (IsFileExtension(fileName, ".png")) {
@@ -148,5 +149,64 @@ RLCAPI bool ExportImage(Image image, const char *fileName) {
 }
 
 RLCAPI bool ExportImageAsCode(Image image, const char *fileName) {
+    if (fileName == NULL) {
+        NULLPTR_WARN();
+        return false;
+    }
     return false;
+}
+
+RLCAPI Image GenImageColor(int width, int height, Color color) {
+    int pixel_format = color.a >= 255 ? DRAW_RGB_FORMAT : DRAW_RGBA_FORMAT;
+    int bpp = DEFAULT_BPP;
+    Uint32 r_m, g_m, b_m, a_m;
+    if (SDL_PixelFormatEnumToMasks(pixel_format, &bpp, &r_m, &g_m, &b_m, &a_m) == SDL_FALSE) {
+        GET_COLOR_MASK_WARN();
+        return GetDummyImage();
+    }
+    SDL_Surface* surf = SDL_CreateRGBSurface(0, width, height, bpp, r_m, g_m, b_m, a_m);
+    if (surf == NULL) {
+        CREATE_SURF_WARN();
+        return GetDummyImage();
+    }
+    SDL_PixelFormat* format = SDL_AllocFormat(pixel_format);
+    if (format == NULL)
+        TRACELOG(LOG_WARNING, "Failed to allocate pixel format (%s)", SDL_GetError());
+    if (SDL_FillRect(surf, NULL, SDL_MapRGBA(format, color.r, color.g, color.b, color.a)) < 0)
+        TRACELOG(LOG_WARNING, "Failed to fill surface (%s)", SDL_GetError());
+    Image result = { .surf = surf, .format = pixel_format,
+     .mipmaps = 1, .width = width, .height = height };
+    return result;
+}
+
+RLCAPI Image GenImageGradientV(int width, int height, Color top, Color bottom) {
+    return GetDummyImage();
+}
+
+RLCAPI Image GenImageGradientH(int width, int height, Color left, Color right) {
+    return GetDummyImage();
+}
+
+RLCAPI Image GenImageGradientRadial(int width, int height, float density, Color inner, Color outer) {
+    return GetDummyImage();
+}
+
+RLCAPI Image GenImageChecked(int width, int height, int checksX, int checksY, Color col1, Color col2) {
+    return GetDummyImage();
+}
+
+RLCAPI Image GenImageWhiteNoise(int width, int height, float factor) {
+    return GetDummyImage();
+}
+
+RLCAPI Image GenImagePerlinNoise(int width, int height, int offsetX, int offsetY, float scale) {
+    return GetDummyImage();
+}
+
+RLCAPI Image GenImageCellular(int width, int height, int tileSize) {
+    return GetDummyImage();
+}
+
+RLCAPI Image GenImageText(int width, int height, const char *text) {
+    return GetDummyImage();
 }
