@@ -157,14 +157,9 @@ RLCAPI bool ExportImageAsCode(Image image, const char *fileName) {
 }
 
 RLCAPI Image GenImageColor(int width, int height, Color color) {
-    int pixel_format = color.a >= 255 ? DRAW_RGB_FORMAT : DRAW_RGBA_FORMAT;
+    Uint32 pixel_format = color.a >= 255 ? DRAW_RGB_FORMAT : DRAW_RGBA_FORMAT;
     int bpp = DEFAULT_BPP;
-    Uint32 r_m, g_m, b_m, a_m;
-    if (SDL_PixelFormatEnumToMasks(pixel_format, &bpp, &r_m, &g_m, &b_m, &a_m) == SDL_FALSE) {
-        GET_COLOR_MASK_WARN();
-        return GetDummyImage();
-    }
-    SDL_Surface* surf = SDL_CreateRGBSurface(0, width, height, bpp, r_m, g_m, b_m, a_m);
+    SDL_Surface* surf = SDL_CreateRGBSurfaceWithFormat(0, width, height, bpp, pixel_format);
     if (surf == NULL) {
         CREATE_SURF_WARN();
         return GetDummyImage();
@@ -211,3 +206,72 @@ RLCAPI Image GenImageCellular(int width, int height, int tileSize) {
 RLCAPI Image GenImageText(int width, int height, const char *text) {
     return GetDummyImage();
 }
+
+RLCAPI Image ImageCopy(Image image) {
+    //SDL_Surface* surf = SDL_CreateRGBSurfaceWithFormat()
+    return image;
+}
+
+RLCAPI Image ImageFromImage(Image image, Rectangle rec) {}
+
+RLCAPI Image ImageText(const char *text, int fontSize, Color color) {}
+
+RLCAPI Image ImageTextEx(Font font, const char *text, float fontSize, float spacing, Color tint) {}
+
+RLCAPI void ImageFormat(Image *image, int newFormat) {}
+
+RLCAPI void ImageToPOT(Image *image, Color fill) {}
+
+RLCAPI void ImageCrop(Image *image, Rectangle crop) {}
+
+RLCAPI void ImageAlphaCrop(Image *image, float threshold) {}
+
+RLCAPI void ImageAlphaClear(Image *image, Color color, float threshold) {}
+
+RLCAPI void ImageAlphaMask(Image *image, Image alphaMask) {}
+
+RLCAPI void ImageAlphaPremultiply(Image *image) {}
+
+RLCAPI void ImageBlurGaussian(Image *image, int blurSize) {}
+
+RLCAPI void ImageResize(Image *image, int newWidth, int newHeight) {}
+
+RLCAPI void ImageResizeNN(Image *image, int newWidth,int newHeight) {}
+
+RLCAPI void ImageResizeCanvas(Image *image, int newWidth, int newHeight, int offsetX, int offsetY, Color fill) {}
+
+RLCAPI void ImageMipmaps(Image *image) {}
+
+RLCAPI void ImageDither(Image *image, int rBpp, int gBpp, int bBpp, int aBpp) {}
+
+RLCAPI void ImageFlipVertical(Image *image) {}
+
+RLCAPI void ImageFlipHorizontal(Image *image) {}
+
+RLCAPI void ImageRotateCW(Image *image) {}
+
+RLCAPI void ImageRotateCCW(Image *image) {}
+
+RLCAPI void ImageColorTint(Image *image, Color color) {}
+
+RLCAPI void ImageColorInvert(Image *image) {}
+
+RLCAPI void ImageColorGrayscale(Image *image) {}
+
+RLCAPI void ImageColorContrast(Image *image, float contrast) {}
+
+RLCAPI void ImageColorBrightness(Image *image, int brightness) {}
+
+RLCAPI void ImageColorReplace(Image *image, Color color, Color replace) {}
+
+RLCAPI Color *LoadImageColors(Image image) {}
+
+RLCAPI Color *LoadImagePalette(Image image, int maxPaletteSize, int *colorCount) {}
+
+RLCAPI void UnloadImageColors(Color *colors) {}
+
+RLCAPI void UnloadImagePalette(Color *colors) {}
+
+RLCAPI Rectangle GetImageAlphaBorder(Image image, float threshold) {}
+
+RLCAPI Color GetImageColor(Image image, int x, int y) {}

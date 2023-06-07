@@ -17,8 +17,8 @@ int main(void)
     InitWindow(800, 450, "raylib [core] example - basic window");
     img1 = LoadImage("assets/image.png");
     UnloadImage(img1);
-    //img1 = GenImageColor(64, 64, (Color){ 255, 0, 0, 255 });
-    //SetWindowIcon(img1);
+    img1 = GenImageColor(64, 64, (Color){ 255, 0, 0, 255 });
+    SetWindowIcon(img1);
     SetExitKey(KEY_Q);
 
     while (!WindowShouldClose())

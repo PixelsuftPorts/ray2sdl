@@ -234,7 +234,41 @@ RLAPI Image GenImageChecked(int width, int height, int checksX, int checksY, Col
 RLAPI Image GenImageWhiteNoise(int width, int height, float factor);
 RLAPI Image GenImagePerlinNoise(int width, int height, int offsetX, int offsetY, float scale);
 RLAPI Image GenImageCellular(int width, int height, int tileSize);
-RLAPI Image GenImageText(int width, int height, const char *text); 
+RLAPI Image GenImageText(int width, int height, const char *text);
+
+RLAPI Image ImageCopy(Image image);
+RLAPI Image ImageFromImage(Image image, Rectangle rec);
+RLAPI Image ImageText(const char *text, int fontSize, Color color);
+RLAPI Image ImageTextEx(Font font, const char *text, float fontSize, float spacing, Color tint);
+RLAPI void ImageFormat(Image *image, int newFormat);
+RLAPI void ImageToPOT(Image *image, Color fill);
+RLAPI void ImageCrop(Image *image, Rectangle crop);
+RLAPI void ImageAlphaCrop(Image *image, float threshold);
+RLAPI void ImageAlphaClear(Image *image, Color color, float threshold);
+RLAPI void ImageAlphaMask(Image *image, Image alphaMask);
+RLAPI void ImageAlphaPremultiply(Image *image);
+RLAPI void ImageBlurGaussian(Image *image, int blurSize);
+RLAPI void ImageResize(Image *image, int newWidth, int newHeight);
+RLAPI void ImageResizeNN(Image *image, int newWidth,int newHeight);
+RLAPI void ImageResizeCanvas(Image *image, int newWidth, int newHeight, int offsetX, int offsetY, Color fill);
+RLAPI void ImageMipmaps(Image *image);
+RLAPI void ImageDither(Image *image, int rBpp, int gBpp, int bBpp, int aBpp);
+RLAPI void ImageFlipVertical(Image *image);
+RLAPI void ImageFlipHorizontal(Image *image);
+RLAPI void ImageRotateCW(Image *image);
+RLAPI void ImageRotateCCW(Image *image);
+RLAPI void ImageColorTint(Image *image, Color color);
+RLAPI void ImageColorInvert(Image *image);
+RLAPI void ImageColorGrayscale(Image *image);
+RLAPI void ImageColorContrast(Image *image, float contrast);
+RLAPI void ImageColorBrightness(Image *image, int brightness);
+RLAPI void ImageColorReplace(Image *image, Color color, Color replace);
+RLAPI Color *LoadImageColors(Image image);
+RLAPI Color *LoadImagePalette(Image image, int maxPaletteSize, int *colorCount);
+RLAPI void UnloadImageColors(Color *colors);
+RLAPI void UnloadImagePalette(Color *colors);
+RLAPI Rectangle GetImageAlphaBorder(Image image, float threshold);
+RLAPI Color GetImageColor(Image image, int x, int y);
 
 #if defined(__cplusplus)
 }
