@@ -336,6 +336,9 @@ RLCAPI void ImageAlphaCrop(Image *image, float threshold) {
         NULLPTR_WARN();
         return;
     }
+    Rectangle crop = GetImageAlphaBorder(*image, threshold);
+    if ((bool)crop.width && (bool)crop.height)
+        ImageCrop(image, crop);
 }
 
 RLCAPI void ImageAlphaClear(Image *image, Color color, float threshold) {
@@ -343,6 +346,7 @@ RLCAPI void ImageAlphaClear(Image *image, Color color, float threshold) {
         NULLPTR_WARN();
         return;
     }
+    // TODO
 }
 
 RLCAPI void ImageAlphaMask(Image *image, Image alphaMask) {
@@ -371,13 +375,36 @@ RLCAPI void ImageResize(Image *image, int newWidth, int newHeight) {
         NULLPTR_WARN();
         return;
     }
+    SDL_Surface* surf = SDL_CreateRGBSurfaceWithFormat(
+        0,
+        newWidth,
+        newHeight,
+        (image->surf->pitch << 3) / image->width,
+        image->surf->format->format
+    );
+    if (surf == NULL) {
+        CREATE_SURF_WARN();
+        return;
+    }
+#ifdef ENABLE_IMAGE_RLE
+    if (SDL_SetSurfaceRLE(surf, 1) < 0)
+        SET_RLE_WARN();
+#endif
+    if (SDL_BlitScaled(image->surf, NULL, surf, NULL) < 0)
+        TRACELOG(LOG_WARNING, "Failed to blit surface (%s)", SDL_GetError());
+    image->width = newWidth;
+    image->height = newHeight;
+    image->data = surf->pixels;
+    SDL_FreeSurface(image->surf);
+    image->surf = surf;
 }
 
-RLCAPI void ImageResizeNN(Image *image, int newWidth,int newHeight) {
+RLCAPI void ImageResizeNN(Image *image, int newWidth, int newHeight) {
     if (image == NULL || image->surf == NULL) {
         NULLPTR_WARN();
         return;
     }
+    ImageResize(image, newWidth, newHeight);
 }
 
 RLCAPI void ImageResizeCanvas(Image *image, int newWidth, int newHeight, int offsetX, int offsetY, Color fill) {
@@ -385,6 +412,29 @@ RLCAPI void ImageResizeCanvas(Image *image, int newWidth, int newHeight, int off
         NULLPTR_WARN();
         return;
     }
+    SDL_Surface* surf = SDL_CreateRGBSurfaceWithFormat(
+        0,
+        newWidth,
+        newHeight,
+        (image->surf->pitch << 3) / image->width,
+        image->surf->format->format
+    );
+    if (surf == NULL) {
+        CREATE_SURF_WARN();
+        return;
+    }
+#ifdef ENABLE_IMAGE_RLE
+    if (SDL_SetSurfaceRLE(surf, 1) < 0)
+        SET_RLE_WARN();
+#endif
+    // TODO: fill image with color
+    if (SDL_BlitSurface(image->surf, NULL, surf, NULL) < 0)
+        TRACELOG(LOG_WARNING, "Failed to blit surface (%s)", SDL_GetError());
+    image->width = newWidth;
+    image->height = newHeight;
+    image->data = surf->pixels;
+    SDL_FreeSurface(image->surf);
+    image->surf = surf;
 }
 
 RLCAPI void ImageMipmaps(Image *image) {
@@ -399,6 +449,7 @@ RLCAPI void ImageDither(Image *image, int rBpp, int gBpp, int bBpp, int aBpp) {
         NULLPTR_WARN();
         return;
     }
+    ImageFormat(image, PIXELFORMAT_UNCOMPRESSED_GRAY_ALPHA);
 }
 
 RLCAPI void ImageFlipVertical(Image *image) {
@@ -406,6 +457,17 @@ RLCAPI void ImageFlipVertical(Image *image) {
         NULLPTR_WARN();
         return;
     }
+    if (SDL_MUSTLOCK(image->surf) && SDL_LockSurface(image->surf) < 0)
+        TRACELOG(LOG_WARNING, "Failed to lock surface (%s)", SDL_GetError());
+    unsigned char temp[image->surf->pitch];
+    for (int i = 0; i < image->surf->h / 2; i++) {
+        void* row1 = image->surf->pixels + i * image->surf->pitch;
+        void* row2 = image->surf->pixels + (image->surf->h - i - 1) * image->surf->pitch;
+        SDL_memcpy(temp, row1, image->surf->pitch);
+        SDL_memcpy(row1, row2, image->surf->pitch);
+        SDL_memcpy(row2, temp, image->surf->pitch);
+    }
+    SDL_UnlockSurface(image->surf);
 }
 
 RLCAPI void ImageFlipHorizontal(Image *image) {
