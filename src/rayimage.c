@@ -545,15 +545,34 @@ RLCAPI void ImageColorReplace(Image *image, Color color, Color replace) {
     }
 }
 
-RLCAPI Color *LoadImageColors(Image image) {}
+RLCAPI Color *LoadImageColors(Image image) {
+    return NULL; // TODO: copy + paste code from raylib
+}
 
-RLCAPI Color *LoadImagePalette(Image image, int maxPaletteSize, int *colorCount) {}
+RLCAPI Color *LoadImagePalette(Image image, int maxPaletteSize, int *colorCount) {
+    return NULL;
+}
 
-RLCAPI void UnloadImageColors(Color *colors) {}
+RLCAPI void UnloadImageColors(Color *colors) {
+    if (colors == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+    SDL_free(colors);
+}
 
-RLCAPI void UnloadImagePalette(Color *colors) {}
+RLCAPI void UnloadImagePalette(Color *colors) {
+    if (colors == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+    SDL_free(colors);
+}
 
-RLCAPI Rectangle GetImageAlphaBorder(Image image, float threshold) {}
+RLCAPI Rectangle GetImageAlphaBorder(Image image, float threshold) {
+    Rectangle result = { 0 };
+    return result;
+}
 
 RLCAPI Color GetImageColor(Image image, int x, int y) {
     if (image.surf == NULL) {
