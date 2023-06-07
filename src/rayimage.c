@@ -89,7 +89,7 @@ RLCAPI Image LoadImageFromScreen(void) {
         CREATE_SURF_WARN();
         return GetDummyImage();
     }
-    if (SDL_LockSurface(surf) < 0)
+    if (SDL_MUSTLOCK(surf) && SDL_LockSurface(surf) < 0)
         TRACELOG(LOG_WARNING, "Failed to lock surface (%s)", SDL_GetError());
     if (SDL_RenderReadPixels(rl.r, NULL, DRAW_RGB_FORMAT, surf->pixels, surf->pitch) < 0) {
         TRACELOG(LOG_WARNING, "Failed to read screen pixels (%s)", SDL_GetError());
@@ -117,7 +117,7 @@ RLCAPI void UnloadImage(Image image) {
 }
 
 RLCAPI bool ExportImage(Image image, const char *fileName) {
-    if (fileName == NULL) {
+    if (image.surf == NULL || fileName == NULL) {
         NULLPTR_WARN();
         return false;
     }
@@ -149,7 +149,7 @@ RLCAPI bool ExportImage(Image image, const char *fileName) {
 }
 
 RLCAPI bool ExportImageAsCode(Image image, const char *fileName) {
-    if (fileName == NULL) {
+    if (image.surf == NULL || fileName == NULL) {
         NULLPTR_WARN();
         return false;
     }
@@ -208,7 +208,22 @@ RLCAPI Image GenImageText(int width, int height, const char *text) {
 }
 
 RLCAPI Image ImageCopy(Image image) {
-    //SDL_Surface* surf = SDL_CreateRGBSurfaceWithFormat()
+    SDL_Surface* surf = SDL_CreateRGBSurfaceWithFormat(
+        0,
+        image.width,
+        image.height,
+        image.surf->pitch * 8 / image.width,
+        image.surf->format->format
+    );
+    if (surf == NULL) {
+        CREATE_SURF_WARN();
+        return GetDummyImage();
+    }
+    if (SDL_MUSTLOCK(surf) && SDL_LockSurface(surf) < 0)
+        TRACELOG(LOG_WARNING, "Failed to lock surface (%s)", SDL_GetError());
+    SDL_memcpy(surf->pixels, image.surf->pixels, image.surf->pitch * image.height);
+    SDL_UnlockSurface(surf);
+    image.surf = surf;
     return image;
 }
 
