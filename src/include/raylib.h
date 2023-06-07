@@ -297,6 +297,10 @@ RLAPI void UnloadRenderTexture(RenderTexture2D target);
 RLAPI void UpdateTexture(Texture2D texture, const void *pixels);
 RLAPI void UpdateTextureRec(Texture2D texture, Rectangle rec, const void *pixels);
 
+RLAPI void GenTextureMipmaps(Texture2D *texture);
+RLAPI void SetTextureFilter(Texture2D texture, int filter);
+RLAPI void SetTextureWrap(Texture2D texture, int wrap);
+
 #if defined(__cplusplus)
 }
 #endif

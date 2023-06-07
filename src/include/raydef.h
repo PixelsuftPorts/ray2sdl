@@ -645,12 +645,12 @@ typedef enum {
 // NOTE 1: Filtering considers mipmaps if available in the texture
 // NOTE 2: Filter is accordingly set for minification and magnification
 typedef enum {
-    TEXTURE_FILTER_POINT = 0,               // No filter, just pixel approximation
-    TEXTURE_FILTER_BILINEAR,                // Linear filtering
-    TEXTURE_FILTER_TRILINEAR,               // Trilinear filtering (linear with mipmaps)
-    TEXTURE_FILTER_ANISOTROPIC_4X,          // Anisotropic filtering 4x
-    TEXTURE_FILTER_ANISOTROPIC_8X,          // Anisotropic filtering 8x
-    TEXTURE_FILTER_ANISOTROPIC_16X,         // Anisotropic filtering 16x
+    TEXTURE_FILTER_POINT = SDL_ScaleModeNearest,               // No filter, just pixel approximation
+    TEXTURE_FILTER_BILINEAR = SDL_ScaleModeLinear,                // Linear filtering
+    TEXTURE_FILTER_TRILINEAR = SDL_ScaleModeLinear,               // Trilinear filtering (linear with mipmaps)
+    TEXTURE_FILTER_ANISOTROPIC_4X = SDL_ScaleModeLinear,          // Anisotropic filtering 4x
+    TEXTURE_FILTER_ANISOTROPIC_8X = SDL_ScaleModeLinear,          // Anisotropic filtering 8x
+    TEXTURE_FILTER_ANISOTROPIC_16X = SDL_ScaleModeLinear         // Anisotropic filtering 16x
 } TextureFilter;
 
 // Texture parameters: wrap mode

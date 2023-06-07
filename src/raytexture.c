@@ -105,3 +105,26 @@ RLCAPI void UpdateTextureRec(Texture2D texture, Rectangle rec, const void *pixel
         return;
     }
 }
+
+RLCAPI void GenTextureMipmaps(Texture2D *texture) {
+    if (texture == NULL || texture->tex == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+}
+
+RLCAPI void SetTextureFilter(Texture2D texture, int filter) {
+    if (texture.tex == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+    if (SDL_SetTextureScaleMode(texture.tex, filter) < 0)
+        TRACELOG(LOG_WARNING, "Invalid texture");
+}
+
+RLCAPI void SetTextureWrap(Texture2D texture, int wrap) {
+    if (texture.tex == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+}
