@@ -37,7 +37,7 @@ RLCAPI Texture2D LoadTexture(const char *fileName) {
 #endif
     if (tex == NULL) {
         TRACELOG(LOG_WARNING, "Failed to load texture %s (%s)", fileName, IMG_GetError());
-        return;
+        return GetDummyTexture();
     }
     Texture result = { .tex = tex, .mipmaps = 1 };
     Uint32 temp_format;
@@ -51,12 +51,12 @@ RLCAPI Texture2D LoadTexture(const char *fileName) {
 RLCAPI Texture2D LoadTextureFromImage(Image image) {
     if (image.surf == NULL) {
         NULLPTR_WARN();
-        return;
+        return GetDummyTexture();
     }
     SDL_Texture* tex = SDL_CreateTextureFromSurface(rl.r, image.surf);
     if (tex == NULL) {
         TRACELOG(LOG_WARNING, "Failed to convert image into texture (%s)", IMG_GetError());
-        return;
+        return GetDummyTexture();
     }
     Texture result = { .tex = tex, .mipmaps = 1 };
     Uint32 temp_format;
@@ -67,7 +67,10 @@ RLCAPI Texture2D LoadTextureFromImage(Image image) {
     return result;
 }
 
-RLCAPI RenderTexture2D LoadRenderTexture(int width, int height) {}
+RLCAPI RenderTexture2D LoadRenderTexture(int width, int height) {
+    RenderTexture2D result = { 0 };
+    return result;
+}
 
 RLCAPI bool IsTextureReady(Texture2D texture) {
     return (bool)texture.tex;
@@ -82,7 +85,9 @@ RLCAPI void UnloadTexture(Texture2D texture) {
     texture.tex = NULL;
 }
 
-RLCAPI bool IsRenderTextureReady(RenderTexture2D target) {}
+RLCAPI bool IsRenderTextureReady(RenderTexture2D target) {
+    return false;
+}
 
 RLCAPI void UnloadRenderTexture(RenderTexture2D target) {}
 
