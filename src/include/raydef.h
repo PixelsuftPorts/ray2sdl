@@ -112,6 +112,7 @@ extern "C" {
 #define SCALE_MODE_WARN() TRACELOG(LOG_WARNING, "Failed to set scale mode (%s)", SDL_GetError())
 #define SCALE_WARN() TRACELOG(LOG_WARNING, "Failed to set scale (%s)", SDL_GetError())
 #define SET_RLE_WARN() TRACELOG(LOG_WARNING, "Failed to set surface RLE (%s)", SDL_GetError())
+#define QUERY_TEXTURE_WARN() TRACELOG(LOG_WARNING, "Failed to query texture (%s)", SDL_GetError())
 #define GET_COLOR_MASK_WARN() TRACELOG(LOG_WARNING, "Failed to get color masks for pixel format (%s)", SDL_GetError())
 #define FILENAME_WARN() TRACELOG(LOG_WARNING, "File name provided is not valid")
 #define NULLPTR_WARN() TRACELOG(LOG_WARNING, "NULL pointer passed")
@@ -195,6 +196,7 @@ typedef struct Image {
 
 // Texture, tex data stored in GPU memory (VRAM)
 typedef struct Texture {
+    SDL_Texture* tex;
     unsigned int id;        // OpenGL texture id
     int width;              // Texture base width
     int height;             // Texture base height

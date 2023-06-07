@@ -9,14 +9,16 @@ void __imp__wassert() {}
 
 int main(void)
 {
-    Image img1;
     Camera2D camera;
     memset(&camera, 0, sizeof(Camera2D));
     camera.zoom = 1.0f;
     SetConfigFlags(FLAG_WINDOW_ALWAYS_RUN | FLAG_VSYNC_HINT | FLAG_WINDOW_HIGHDPI | FLAG_WINDOW_RESIZABLE);
     InitWindow(800, 450, "raylib [core] example - basic window");
-    img1 = LoadImage("assets/image.png");
+    Image img1 = LoadImage("assets/image.png");
     SetWindowIcon(img1);
+    UnloadImage(img1);
+    Texture tex1 = LoadTexture("assets/win7.png");
+    UnloadTexture(tex1);
     SetExitKey(KEY_Q);
 
     while (!WindowShouldClose())
@@ -106,7 +108,6 @@ int main(void)
         EndDrawing();
     }
 
-    UnloadImage(img1);
     CloseWindow();
 
     return 0;

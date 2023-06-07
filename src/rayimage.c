@@ -52,7 +52,7 @@ RLCAPI Image LoadImage(const char *fileName) {
     SDL_Surface* surf = SDL_LoadBMP(fileName);
 #endif
     if (surf == NULL) {
-        TRACELOG(LOG_WARNING, "Failed to load image (%s)", IMG_GetError());
+        TRACELOG(LOG_WARNING, "Failed to load image %s (%s)", fileName, IMG_GetError());
         return GetDummyImage();
     }
 #ifdef ENABLE_IMAGE_RLE

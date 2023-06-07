@@ -287,6 +287,16 @@ RLAPI void ImageDraw(Image *dst, Image src, Rectangle srcRec, Rectangle dstRec, 
 RLAPI void ImageDrawText(Image *dst, const char *text, int posX, int posY, int fontSize, Color color);
 RLAPI void ImageDrawTextEx(Image *dst, Font font, const char *text, Vector2 position, float fontSize, float spacing, Color tint);
 
+RLAPI Texture2D LoadTexture(const char *fileName);
+RLAPI Texture2D LoadTextureFromImage(Image image);
+RLAPI RenderTexture2D LoadRenderTexture(int width, int height);
+RLAPI bool IsTextureReady(Texture2D texture);
+RLAPI void UnloadTexture(Texture2D texture);
+RLAPI bool IsRenderTextureReady(RenderTexture2D target);
+RLAPI void UnloadRenderTexture(RenderTexture2D target);
+RLAPI void UpdateTexture(Texture2D texture, const void *pixels);
+RLAPI void UpdateTextureRec(Texture2D texture, Rectangle rec, const void *pixels);
+
 #if defined(__cplusplus)
 }
 #endif
