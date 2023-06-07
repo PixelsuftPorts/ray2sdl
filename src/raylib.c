@@ -115,7 +115,7 @@ void PollEvents() {
                 if (rl.event.button.which == SDL_TOUCH_MOUSEID)
                     break;
 #endif 
-                rl.mousepress_array[rl.event.button.button] = 2;
+                rl.mousepress_array[rl.event.button.button] = 2; // TODO: handle in different array in case if released at the same frame
                 break;
             }
             case SDL_KEYDOWN: {
