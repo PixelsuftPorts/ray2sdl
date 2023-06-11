@@ -324,6 +324,16 @@ RLAPI Color GetPixelColor(void *srcPtr, int format);
 RLAPI void SetPixelColor(void *dstPtr, Color color, int format);
 RLAPI int GetPixelDataSize(int width, int height, int format);
 
+RLAPI char *LoadUTF8(const int *codepoints, int length);
+RLAPI void UnloadUTF8(char *text);
+RLAPI int *LoadCodepoints(const char *text, int *count);
+RLAPI void UnloadCodepoints(int *codepoints);
+RLAPI int GetCodepointCount(const char *text);
+RLAPI int GetCodepoint(const char *text, int *codepointSize);
+RLAPI int GetCodepointNext(const char *text, int *codepointSize);
+RLAPI int GetCodepointPrevious(const char *text, int *codepointSize);
+RLAPI const char *CodepointToUTF8(int codepoint, int *utf8Size);
+
 #if defined(__cplusplus)
 }
 #endif
