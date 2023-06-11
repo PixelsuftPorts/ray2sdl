@@ -69,5 +69,4 @@ RLCAPI float GetMusicTimeLength(Music music) {
 RLCAPI float GetMusicTimePlayed(Music music) {
     return 0.0f;
 }
-
 #endif

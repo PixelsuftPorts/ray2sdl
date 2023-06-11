@@ -350,12 +350,12 @@ RLAPI const char *TextToLower(const char *text);
 RLAPI const char *TextToPascal(const char *text);
 RLAPI int TextToInteger(const char *text); 
 
+#ifdef MIX_IMPL
 RLAPI void InitAudioDevice(void);
 RLAPI void CloseAudioDevice(void);
 RLAPI bool IsAudioDeviceReady(void);
 RLAPI void SetMasterVolume(float volume);
 
-#ifdef MIX_IMPL
 RLAPI Music LoadMusicStream(const char *fileName);
 RLAPI Music LoadMusicStreamFromMemory(const char *fileType, const unsigned char *data, int dataSize);
 RLAPI bool IsMusicReady(Music music);
