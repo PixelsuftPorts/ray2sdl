@@ -2,6 +2,8 @@
 #include <raydef.h>
 #include <rayconf.h>
 
+// TODO: most of the functions work with channels, so we must cache values if sound is not playing 
+
 #ifdef MIX_IMPL
 Sound GetDummySound() {
     Sound result = { 0 };
@@ -115,41 +117,75 @@ RLCAPI bool ExportWaveAsCode(Wave wave, const char *fileName) {
 
 RLCAPI void PlaySound(Sound sound) {
 #ifdef MIX_SUPPORT
+    if (sound.chunk == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
 #endif
 }
 
 RLCAPI void StopSound(Sound sound) {
 #ifdef MIX_SUPPORT
+    if (sound.chunk == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
 #endif
 }
 
 RLCAPI void PauseSound(Sound sound) {
 #ifdef MIX_SUPPORT
+    if (sound.chunk == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
 #endif
 }
 
 RLCAPI void ResumeSound(Sound sound) {
 #ifdef MIX_SUPPORT
+    if (sound.chunk == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
 #endif
 }
 
 RLCAPI bool IsSoundPlaying(Sound sound) {
 #ifdef MIX_SUPPORT
+    if (sound.chunk == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
 #endif
 }
 
 RLCAPI void SetSoundVolume(Sound sound, float volume) {
 #ifdef MIX_SUPPORT
+    if (sound.chunk == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+    Mix_VolumeChunk(sound.chunk, (int)(volume * (float)MIX_MAX_VOLUME));
 #endif
 }
 
 RLCAPI void SetSoundPitch(Sound sound, float pitch) {
 #ifdef MIX_SUPPORT
+    if (sound.chunk == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
 #endif
 }
 
 RLCAPI void SetSoundPan(Sound sound, float pan) {
 #ifdef MIX_SUPPORT
+    if (sound.chunk == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+    pan = SDL_max(SDL_min(pan, 1.0f), 0.0f);
 #endif
 }
 
