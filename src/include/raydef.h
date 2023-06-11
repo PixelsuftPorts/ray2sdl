@@ -377,6 +377,7 @@ typedef struct BoundingBox {
     Vector3 max;            // Maximum vertex box-corner
 } BoundingBox;
 
+#ifdef MIX_IMPL
 // Wave, audio wave data
 typedef struct Wave {
     unsigned int frameCount;    // Total number of frames (considering channels)
@@ -386,7 +387,17 @@ typedef struct Wave {
     void *data;                 // Buffer data pointer
 } Wave;
 
-#ifdef MIX_IMPL
+typedef enum {
+    MUSIC_AUDIO_NONE = MUS_NONE,
+    MUSIC_AUDIO_WAV = MUS_WAV,
+    MUSIC_AUDIO_OGG = MUS_OGG,
+    MUSIC_AUDIO_FLAC = MUS_FLAC,
+    MUSIC_AUDIO_MP3 = MUS_MP3,
+    MUSIC_AUDIO_QOA = MUS_NONE,
+    MUSIC_MODULE_XM = MUS_NONE,
+    MUSIC_MODULE_MOD = MUS_MOD
+} MusicContextType;
+
 // Opaque structs declaration
 // NOTE: Actual structs are defined internally in raudio module
 typedef struct rAudioBuffer rAudioBuffer;

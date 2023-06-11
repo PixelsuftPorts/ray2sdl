@@ -14,15 +14,18 @@ int main(void)
     camera.zoom = 1.0f;
     SetConfigFlags(FLAG_WINDOW_ALWAYS_RUN | FLAG_VSYNC_HINT | FLAG_WINDOW_HIGHDPI | FLAG_WINDOW_RESIZABLE);
     InitWindow(800, 450, "raylib [core] example - basic window");
-    InitAudioDevice();
     Image img1 = LoadImage("assets/image.png");
     SetWindowIcon(img1);
     UnloadImage(img1);
+    InitAudioDevice();
+    Music mus1 = LoadMusicStream("assets/music1.mp3");
+    SetMusicVolume(mus1, 0.2f);
     Texture tex1 = LoadTexture("assets/win7.png");
     SetExitKey(KEY_Q);
 
     while (!WindowShouldClose())
     {
+        UpdateMusicStream(mus1);
         if (IsWindowResized()) {
             printf("Window Resized: %ix%i\n", GetScreenWidth(), GetScreenHeight());
         }
@@ -34,6 +37,7 @@ int main(void)
             UnloadDroppedFiles(files);
         }
         if (IsKeyPressed(KEY_SPACE)) {
+            IsMusicStreamPlaying(mus1) ? StopMusicStream(mus1) : PlayMusicStream(mus1);
             printf("Space Down\n");
         }
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
@@ -106,13 +110,15 @@ int main(void)
         //DrawText("Congrats! You created your first window!", 190, 200, 20, LIGHTGRAY);
         //EndBlendMode();
         EndMode2D();
-        /*Image img2 = LoadImageFromScreen();
-        SetWindowIcon(img2);
-        UnloadImage(img2);*/
+        DrawRectangleRec((Rectangle){
+            GetMusicTimePlayed(mus1) / GetMusicTimeLength(mus1) * ((float)GetRenderWidth() - 50.0f),
+            (float)GetRenderHeight() - 50.0f, 50.0f, 50.0f
+        }, RED);
         EndDrawing();
     }
 
     UnloadTexture(tex1);
+    UnloadMusicStream(mus1);
     CloseAudioDevice();
     CloseWindow();
 

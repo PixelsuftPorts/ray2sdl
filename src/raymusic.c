@@ -4,6 +4,9 @@
 #include <rayconf.h>
 #include <raygfx.h>
 
+// TODO:
+//  - fill Music struct with needed data
+
 #ifdef MIX_IMPL
 Music GetDummyMusic() {
     Music result = { 0 };
@@ -16,7 +19,24 @@ RLCAPI Music LoadMusicStream(const char *fileName) {
         NULLPTR_WARN();
         return GetDummyMusic();
     }
-    return GetDummyMusic();
+    Mix_Music* mus = Mix_LoadMUS(fileName);
+    if (mus == NULL) {
+        TRACELOG(LOG_WARNING, "Failed to load music (%s)", Mix_GetError());
+        return GetDummyMusic();
+    }
+    Music result = { 0 };
+    result.stream.buffer = NULL;
+    result.stream.processor = NULL;
+    result.stream.channels = MIX_CHANNELS;
+    result.stream.sampleRate = MIX_FREQ;
+    result.stream.sampleSize = MIX_CHUNK_SIZE;
+    result.mus = mus;
+    result.looping = false;
+    result.ctxType = Mix_GetMusicType(mus);
+    result.looping = Mix_GetMusicLoopStartTime(mus) >= 0.0;
+    result.frameCount = (unsigned int)(Mix_MusicDuration(mus) * (double)result.stream.sampleRate);
+    result.ctxData = NULL;
+    return result;
 #else
     return GetDummyMusic();
 #endif
@@ -28,6 +48,7 @@ RLCAPI Music LoadMusicStreamFromMemory(const char *fileType, const unsigned char
         NULLPTR_WARN();
         return GetDummyMusic();
     }
+    // TODO
     return GetDummyMusic();
 #else
     return GetDummyMusic();
@@ -35,38 +56,159 @@ RLCAPI Music LoadMusicStreamFromMemory(const char *fileType, const unsigned char
 }
 
 RLCAPI bool IsMusicReady(Music music) {
+#ifdef MIX_SUPPORT
+    return (bool)music.mus;
+#else
     return false;
+#endif
 }
 
-RLCAPI void UnloadMusicStream(Music music) {}
+RLCAPI void UnloadMusicStream(Music music) {
+#ifdef MIX_SUPPORT
+    if (music.mus == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+    Mix_FreeMusic(music.mus);
+    music.mus = NULL;
+#endif
+}
 
-RLCAPI void PlayMusicStream(Music music) {}
+RLCAPI void PlayMusicStream(Music music) {
+#ifdef MIX_SUPPORT
+    if (music.mus == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+    if (Mix_PlayMusic(music.mus, 0) < 0)
+        TRACELOG(LOG_WARNING, "Failed to play music (%s)", Mix_GetError());
+#endif
+}
 
 RLCAPI bool IsMusicStreamPlaying(Music music) {
+#ifdef MIX_SUPPORT
+    if (music.mus == NULL) {
+        NULLPTR_WARN();
+        return false;
+    }
+    return (bool)Mix_PlayingMusic(); // Only 1 music channel is supported
+#else
     return false;
+#endif
 }
 
-RLCAPI void UpdateMusicStream(Music music) {}
+RLCAPI void UpdateMusicStream(Music music) {
+#ifdef MIX_SUPPORT
+    if (music.mus == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+    // Lol we don't need this
+#endif
+}
 
-RLCAPI void StopMusicStream(Music music) {}
+RLCAPI void StopMusicStream(Music music) {
+#ifdef MIX_SUPPORT
+    if (music.mus == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+    Mix_HaltMusic();
+#endif
+}
 
-RLCAPI void PauseMusicStream(Music music) {}
+RLCAPI void PauseMusicStream(Music music) {
+#ifdef MIX_SUPPORT
+    if (music.mus == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+    Mix_PauseMusic();
+#endif
+}
 
-RLCAPI void ResumeMusicStream(Music music) {}
+RLCAPI void ResumeMusicStream(Music music) {
+#ifdef MIX_SUPPORT
+    if (music.mus == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+    Mix_ResumeMusic();
+#endif
+}
 
-RLCAPI void SeekMusicStream(Music music, float position) {}
+RLCAPI void SeekMusicStream(Music music, float position) {
+#ifdef MIX_SUPPORT
+    if (music.mus == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+    if (Mix_SetMusicPosition((double)position) < 0)
+        TRACELOG(LOG_WARNING, "Failed to set music position (%s)", Mix_GetError());
+#endif
+}
 
-RLCAPI void SetMusicVolume(Music music, float volume) {}
+RLCAPI void SetMusicVolume(Music music, float volume) {
+#ifdef MIX_SUPPORT
+    if (music.mus == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+    Mix_VolumeMusic((int)(volume * (float)MIX_MAX_VOLUME));
+#endif
+}
 
-RLCAPI void SetMusicPitch(Music music, float pitch) {}
+RLCAPI void SetMusicPitch(Music music, float pitch) {
+#ifdef MIX_SUPPORT
+    if (music.mus == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+    // TODO: speed change
+#endif
+}
 
-RLCAPI void SetMusicPan(Music music, float pan) {}
+RLCAPI void SetMusicPan(Music music, float pan) {
+#ifdef MIX_SUPPORT
+    if (music.mus == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+    // Only for sound lol
+#endif
+}
 
 RLCAPI float GetMusicTimeLength(Music music) {
+#ifdef MIX_SUPPORT
+    if (music.mus == NULL) {
+        NULLPTR_WARN();
+        return 0.0f;
+    }
+    double result = Mix_MusicDuration(music.mus);
+    if (result < 0.0) {
+        TRACELOG(LOG_WARNING, "Failed to get music duration (%s)", Mix_GetError());
+        return 0.0f;
+    }
+    return (float)result;
+#else
     return 0.0f;
+#endif
 }
 
 RLCAPI float GetMusicTimePlayed(Music music) {
+#ifdef MIX_SUPPORT
+    if (music.mus == NULL) {
+        NULLPTR_WARN();
+        return 0.0f;
+    }
+    double result = Mix_GetMusicPosition(music.mus);
+    if (result < 0.0) {
+        TRACELOG(LOG_WARNING, "Failed to get music position (Feature is not supported)");
+        return 0.0f;
+    }
+    return (float)result;
+#else
     return 0.0f;
+#endif
 }
 #endif

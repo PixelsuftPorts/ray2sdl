@@ -46,13 +46,13 @@ RLCAPI void InitWindow(int width, int height, const char *title) {
 #ifdef MIX_SUPPORT
         rl.mix_enabled = true;
         int mix_formats = MIX_FORMATS;
-        int mix_init_formats = Mix_Init(img_formats);
+        int mix_init_formats = Mix_Init(mix_formats);
         if (mix_init_formats == 0) {
             rl.mix_enabled = false;
             TRACELOG(LOG_WARNING, "Failed to init SDL2_mixer (%s)", Mix_GetError());
         }
         else if (mix_init_formats != mix_formats) {
-            TRACELOG(LOG_WARNING, "Failed to init some mixer formats (%s)", Mix_GetError());
+            TRACELOG(LOG_WARNING, "Failed to init some mixer formats (%s)", mix_init_formats, Mix_GetError());
         }
         else TRACELOG(LOG_INFO, "SDL2_mixer initialized successfully");
         rl.mix_device_opened = false;

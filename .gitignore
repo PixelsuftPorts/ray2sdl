@@ -16,6 +16,7 @@ test.txt
 test.h
 test.png
 test.bmp
+*.dll
 *.exe
 *.zip
 *.gz

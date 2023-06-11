@@ -12,9 +12,9 @@
 RLCAPI void InitAudioDevice(void) {
 #ifdef MIX_SUPPORT
     if (rl.mix_enabled)
-        rl.mix_device_opened = Mix_OpenAudioDevice(
-            MIX_FREQ, MIX_FORMAT, MIX_CHANNELS, MIX_CHANNELS, MIX_DEVICE, MIX_ALLOWED_CHANGES
-        ) == 0;
+        rl.mix_device_opened = !Mix_OpenAudioDevice(
+            MIX_FREQ, MIX_FORMAT, MIX_CHANNELS, MIX_CHUNK_SIZE, MIX_DEVICE, MIX_ALLOWED_CHANGES
+        );
     if (rl.mix_device_opened) {
         TRACELOG(LOG_INFO, "AUDIO: Device initialized successfully");
         int freq, channels;
@@ -24,6 +24,7 @@ RLCAPI void InitAudioDevice(void) {
             TRACELOG(LOG_INFO, "    > Backend:       %s", SDL_GetCurrentAudioDriver());
             TRACELOG(LOG_INFO, "    > Channels:      %i", channels);
             TRACELOG(LOG_INFO, "    > Sample rate:   %i", freq);
+            TRACELOG(LOG_INFO, "    > Periods size:  %i", MIX_CHUNK_SIZE);
         }
         char* dev_name;
         SDL_AudioSpec dev_spec;
