@@ -17,7 +17,7 @@ RLCAPI void InitAudioDevice(void) {
     if (rl.mix_device_opened)
         TRACELOG(LOG_INFO, "Audio device opened");
     else
-        TRACELOG(LOG_WARNING, "Failed to open audio device");
+        TRACELOG(LOG_WARNING, "Failed to open audio device (%s)", Mix_GetError());
 #endif
 }
 

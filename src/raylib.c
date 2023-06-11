@@ -36,10 +36,10 @@ RLCAPI void InitWindow(int width, int height, const char *title) {
         int img_init_formats = IMG_Init(img_formats);
         if (img_init_formats == 0) {
             rl.img_enabled = false;
-            TRACELOG(LOG_WARNING, "Failed to init SDL2_image");
+            TRACELOG(LOG_WARNING, "Failed to init SDL2_image (%s)", IMG_GetError());
         }
         else if (img_init_formats != img_formats) {
-            TRACELOG(LOG_WARNING, "Failed to init some image formats");
+            TRACELOG(LOG_WARNING, "Failed to init some image formats (%s)", IMG_GetError());
         }
         else TRACELOG(LOG_INFO, "SDL2_image initialized successfully");
 #endif
@@ -49,10 +49,10 @@ RLCAPI void InitWindow(int width, int height, const char *title) {
         int mix_init_formats = Mix_Init(img_formats);
         if (mix_init_formats == 0) {
             rl.mix_enabled = false;
-            TRACELOG(LOG_WARNING, "Failed to init SDL2_mixer");
+            TRACELOG(LOG_WARNING, "Failed to init SDL2_mixer (%s)", Mix_GetError());
         }
         else if (mix_init_formats != mix_formats) {
-            TRACELOG(LOG_WARNING, "Failed to init some mixer formats");
+            TRACELOG(LOG_WARNING, "Failed to init some mixer formats (%s)", Mix_GetError());
         }
         else TRACELOG(LOG_INFO, "SDL2_mixer initialized successfully");
         rl.mix_device_opened = false;
