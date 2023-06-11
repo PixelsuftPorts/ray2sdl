@@ -386,9 +386,9 @@ typedef struct Wave {
     void *data;                 // Buffer data pointer
 } Wave;
 
+#ifdef MIX_IMPL
 // Opaque structs declaration
 // NOTE: Actual structs are defined internally in raudio module
-#ifdef MIX_IMPL
 typedef struct rAudioBuffer rAudioBuffer;
 typedef struct rAudioProcessor rAudioProcessor;
 
