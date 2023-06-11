@@ -55,14 +55,7 @@ RLCAPI void InitWindow(int width, int height, const char *title) {
             TRACELOG(LOG_WARNING, "Failed to init some mixer formats");
         }
         else TRACELOG(LOG_INFO, "SDL2_mixer initialized successfully");
-        if (rl.mix_enabled)
-            rl.mix_device_opened = Mix_OpenAudioDevice(
-                MIX_FREQ, MIX_FORMAT, MIX_CHANNELS, MIX_CHANNELS, MIX_DEVICE, MIX_ALLOWED_CHANGES
-            ) == 0;
-        if (rl.mix_device_opened)
-            TRACELOG(LOG_INFO, "Audio device opened");
-        else
-            TRACELOG(LOG_WARNING, "Failed to open audio device");
+        rl.mix_device_opened = false;
 #endif
         rl.was_init = true;
     } 
@@ -278,10 +271,6 @@ RLCAPI void CloseWindow(void) {
         rl.should_close = false;
     }
 #ifdef MIX_SUPPORT
-    if (rl.mix_device_opened) {
-        rl.mix_device_opened = false;
-        Mix_CloseAudio();
-    }
     if (rl.mix_enabled) {
         rl.mix_enabled = false;
         Mix_Quit();

@@ -14,6 +14,7 @@ int main(void)
     camera.zoom = 1.0f;
     SetConfigFlags(FLAG_WINDOW_ALWAYS_RUN | FLAG_VSYNC_HINT | FLAG_WINDOW_HIGHDPI | FLAG_WINDOW_RESIZABLE);
     InitWindow(800, 450, "raylib [core] example - basic window");
+    InitAudioDevice();
     Image img1 = LoadImage("assets/image.png");
     SetWindowIcon(img1);
     UnloadImage(img1);
@@ -112,6 +113,7 @@ int main(void)
     }
 
     UnloadTexture(tex1);
+    CloseAudioDevice();
     CloseWindow();
 
     return 0;

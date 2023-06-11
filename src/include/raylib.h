@@ -350,6 +350,11 @@ RLAPI const char *TextToLower(const char *text);
 RLAPI const char *TextToPascal(const char *text);
 RLAPI int TextToInteger(const char *text); 
 
+RLAPI void InitAudioDevice(void);
+RLAPI void CloseAudioDevice(void);
+RLAPI bool IsAudioDeviceReady(void);
+RLAPI void SetMasterVolume(float volume);
+
 #if defined(__cplusplus)
 }
 #endif
