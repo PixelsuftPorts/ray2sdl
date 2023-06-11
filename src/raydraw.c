@@ -629,3 +629,89 @@ RLCAPI void DrawPoly(Vector2 center, int sides, float radius, float rotation, Co
 RLCAPI void DrawPolyLines(Vector2 center, int sides, float radius, float rotation, Color color) {}
 
 RLCAPI void DrawPolyLinesEx(Vector2 center, int sides, float radius, float rotation, float lineThick, Color color) {}
+
+RLCAPI Color Fade(Color color, float alpha) {
+    color.a = (unsigned char)(255.0f * SDL_max(SDL_min(alpha, 1.0f), 0.0f));
+    return color;
+}
+
+RLCAPI int ColorToInt(Color color) {
+    // I don't think it's good for BE
+    return (((int)color.r << 24) | ((int)color.g << 16) | ((int)color.b << 8) | (int)color.a);
+}
+
+RLCAPI Vector4 ColorNormalize(Color color) {
+    Vector4 result;
+    result.x = (float)color.r/255.0f;
+    result.y = (float)color.g/255.0f;
+    result.z = (float)color.b/255.0f;
+    result.w = (float)color.a/255.0f;
+    return result;
+}
+
+RLCAPI Color ColorFromNormalized(Vector4 normalized) {
+    Color result;
+    result.r = (unsigned char)(normalized.x*255.0f);
+    result.g = (unsigned char)(normalized.y*255.0f);
+    result.b = (unsigned char)(normalized.z*255.0f);
+    result.a = (unsigned char)(normalized.w*255.0f);
+    return result;
+}
+
+RLCAPI Vector3 ColorToHSV(Color color) {
+    Vector3 result = { 0 };
+    return result; // TODO
+}
+
+RLCAPI Color ColorFromHSV(float hue, float saturation, float value) {
+    Color result = { 0 };
+    return result;
+}
+
+RLCAPI Color ColorTint(Color color, Color tint) {
+    color.r = (unsigned char)((float)color.r * (float)tint.r / 255.0f);
+    color.g = (unsigned char)((float)color.g * (float)tint.g / 255.0f);
+    color.b = (unsigned char)((float)color.b * (float)tint.b / 255.0f);
+    color.a = (unsigned char)((float)color.a * (float)tint.a / 255.0f);
+    return color;
+}
+
+RLCAPI Color ColorBrightness(Color color, float factor) {
+    Color result = { 0 };
+    return result;
+}
+
+RLCAPI Color ColorContrast(Color color, float contrast) {
+    Color result = { 0 };
+    return result;
+}
+
+RLCAPI Color ColorAlpha(Color color, float alpha) {
+    color.a = (unsigned char)((float)color.a * SDL_max(SDL_min(alpha, 1.0f), 0.0f));
+    return color;
+}
+
+RLCAPI Color ColorAlphaBlend(Color dst, Color src, Color tint) {
+    Color result = { 0 };
+    return result;
+}
+
+RLCAPI Color GetColor(unsigned int hexValue) {
+    Color color;
+    color.r = (unsigned char)(hexValue >> 24) & 0xFF;
+    color.g = (unsigned char)(hexValue >> 16) & 0xFF;
+    color.b = (unsigned char)(hexValue >> 8) & 0xFF;
+    color.a = (unsigned char)hexValue & 0xFF;
+    return color;
+}
+
+RLCAPI Color GetPixelColor(void *srcPtr, int format) {
+    Color result = { 0 };
+    return result;
+}
+
+RLCAPI void SetPixelColor(void *dstPtr, Color color, int format) {}
+
+RLCAPI int GetPixelDataSize(int width, int height, int format) {
+    return 0;
+}

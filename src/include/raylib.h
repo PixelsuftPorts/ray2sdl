@@ -308,6 +308,22 @@ RLAPI void DrawTextureRec(Texture2D texture, Rectangle source, Vector2 position,
 RLAPI void DrawTexturePro(Texture2D texture, Rectangle source, Rectangle dest, Vector2 origin, float rotation, Color tint);
 RLAPI void DrawTextureNPatch(Texture2D texture, NPatchInfo nPatchInfo, Rectangle dest, Vector2 origin, float rotation, Color tint);
 
+RLAPI Color Fade(Color color, float alpha);
+RLAPI int ColorToInt(Color color);
+RLAPI Vector4 ColorNormalize(Color color);
+RLAPI Color ColorFromNormalized(Vector4 normalized);
+RLAPI Vector3 ColorToHSV(Color color);
+RLAPI Color ColorFromHSV(float hue, float saturation, float value);
+RLAPI Color ColorTint(Color color, Color tint);
+RLAPI Color ColorBrightness(Color color, float factor);
+RLAPI Color ColorContrast(Color color, float contrast);
+RLAPI Color ColorAlpha(Color color, float alpha);
+RLAPI Color ColorAlphaBlend(Color dst, Color src, Color tint);
+RLAPI Color GetColor(unsigned int hexValue);
+RLAPI Color GetPixelColor(void *srcPtr, int format);
+RLAPI void SetPixelColor(void *dstPtr, Color color, int format);
+RLAPI int GetPixelDataSize(int width, int height, int format);
+
 #if defined(__cplusplus)
 }
 #endif
