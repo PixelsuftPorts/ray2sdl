@@ -31,7 +31,20 @@ RLCAPI Sound LoadSound(const char *fileName) {
         NULLPTR_WARN();
         return GetDummySound();
     }
-    return GetDummySound();
+    Mix_Chunk* chunk = Mix_LoadWAV(fileName);
+    if (chunk == NULL) {
+        TRACELOG(LOG_WARNING, "Failed to load sound %s (%s)", fileName, Mix_GetError());
+        return GetDummySound();
+    }
+    Sound result = { 0 };
+    result.stream.buffer = (rAudioBuffer*)chunk->abuf;
+    result.stream.processor = NULL;
+    result.stream.channels = MIX_CHANNELS;
+    result.stream.sampleRate = MIX_FREQ;
+    result.stream.sampleSize = MIX_CHUNK_SIZE;
+    result.chunk = chunk;
+    result.frameCount = (unsigned int)chunk->alen;
+    return result;
 #else
     return GetDummySound();
 #endif
@@ -51,29 +64,51 @@ RLCAPI bool IsSoundReady(Sound sound) {
 }
 
 RLCAPI void UpdateSound(Sound sound, const void *data, int sampleCount) {
+#ifdef MIX_SUPPORT
     if (data == NULL) {
         NULLPTR_WARN();
         return;
     }
+#endif
 }
 
-RLCAPI void UnloadWave(Wave wave) {}
+RLCAPI void UnloadWave(Wave wave) {
+#ifdef MIX_SUPPORT
+#endif
+}
 
-RLCAPI void UnloadSound(Sound sound) {}
+RLCAPI void UnloadSound(Sound sound) {
+#ifdef MIX_SUPPORT
+    if (sound.chunk == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+    Mix_FreeChunk(sound.chunk);
+    sound.chunk = NULL;
+#endif
+}
 
 RLCAPI bool ExportWave(Wave wave, const char *fileName) {
+#ifdef MIX_SUPPORT
     if (fileName == NULL) {
         NULLPTR_WARN();
         return false;
     }
     return false;
+#else
+    return false;
+#endif
 }
 
 RLCAPI bool ExportWaveAsCode(Wave wave, const char *fileName) {
+#ifdef MIX_SUPPORT
     if (fileName == NULL) {
         NULLPTR_WARN();
         return false;
     }
     return false;
+#else
+    return false;
+#endif
 }
 #endif

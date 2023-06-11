@@ -16,7 +16,7 @@ RLCAPI Music LoadMusicStream(const char *fileName) {
     }
     Mix_Music* mus = Mix_LoadMUS(fileName);
     if (mus == NULL) {
-        TRACELOG(LOG_WARNING, "Failed to load music (%s)", Mix_GetError());
+        TRACELOG(LOG_WARNING, "Failed to load music %s (%s)", fileName, Mix_GetError());
         return GetDummyMusic();
     }
     Music result = { 0 };
