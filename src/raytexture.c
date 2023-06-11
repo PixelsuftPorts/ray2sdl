@@ -206,7 +206,7 @@ RLCAPI void DrawTexturePro(Texture2D texture, Rectangle source, Rectangle dest, 
         NULLPTR_WARN();
         return;
     }
-    // TODO: support src_rect > texture size
+    // TODO: copy texture many times istead of scaling when dst rect > src rect
     SDL_Rect src_rect = { (int)source.x, (int)source.y, (int)source.width, (int)source.height };
     if (APPLY_TEXTURE_TINT(texture.tex, tint) < 0)
         TINT_WARN();
