@@ -4,14 +4,164 @@
 
 // WARNING: too much code was copy pasted
 
-unsigned int TextLength(const char *text)
+RLCAPI unsigned int TextLength(const char *text)
 {
     unsigned int length = 0;
-    if (text != NULL)
-    {
+    if (text == NULL) {
+        NULLPTR_WARN();
+    }
+    else {
         length = SDL_strlen(text);
     }
     return length;
+}
+
+RLCAPI int TextCopy(char *dst, const char *src) {
+    if (dst == NULL || src == NULL) {
+        NULLPTR_WARN();
+        return 0;
+    }
+    return (int)SDL_strlcpy(dst, src, (size_t)MAX_STR_LENGTH);
+}
+
+RLCAPI bool TextIsEqual(const char *text1, const char *text2) {
+    if (text1 == NULL || text2 == NULL) {
+        NULLPTR_WARN();
+        return false;
+    }
+    return !SDL_strcmp(text1, text2);
+}
+
+RLCAPI const char *TextFormat(const char *text, ...) {
+    if (text == NULL) {
+        NULLPTR_WARN();
+        return false;
+    }
+    // TODO
+    return text;
+}
+
+RLCAPI const char *TextSubtext(const char *text, int position, int length) {
+    if (text == NULL) {
+        NULLPTR_WARN();
+        return false;
+    }
+    static char buffer[MAX_STR_LENGTH] = { 0 };
+    SDL_memset(buffer, 0, MAX_STR_LENGTH);
+    int textLength = TextLength(text);
+    if (position >= textLength)
+    {
+        position = textLength - 1;
+        length = 0;
+    }
+    if (length >= textLength) length = textLength;
+    for (int c = 0 ; c < length ; c++)
+    {
+        *(buffer + c) = *(text + position);
+        text++;
+    }
+    *(buffer + length) = '\0';
+    return buffer;
+}
+
+RLCAPI char *TextReplace(char *text, const char *replace, const char *by) {
+    if (text == NULL || replace == NULL || by == NULL) {
+        NULLPTR_WARN();
+        return NULL;
+    }
+    return NULL;
+}
+
+RLCAPI char *TextInsert(const char *text, const char *insert, int position) {
+    if (text == NULL || insert == NULL) {
+        NULLPTR_WARN();
+        return NULL;
+    }
+    return NULL;
+}
+
+RLCAPI const char *TextJoin(const char **textList, int count, const char *delimiter) {
+    if (textList == NULL || delimiter == NULL) {
+        NULLPTR_WARN();
+        return NULL;
+    }
+    return NULL;
+}
+
+RLCAPI const char **TextSplit(const char *text, char delimiter, int *count) {
+    if (text == NULL) {
+        NULLPTR_WARN();
+        return (const char**)NULL;
+    }
+    return NULL;
+}
+
+RLCAPI void TextAppend(char *text, const char *append, int *position) {
+    if (text == NULL || append == NULL || position == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+    SDL_strlcpy(text + *position, append, MAX_STR_LENGTH);
+    *position += TextLength(append);
+}
+
+RLCAPI int TextFindIndex(const char *text, const char *find) {
+    if (text == NULL || find == NULL) {
+        NULLPTR_WARN();
+        return false;
+    }
+    char *ptr = SDL_strstr(text, find);
+    if (ptr == NULL)
+        return -1;
+    return (int)(ptr - text);
+}
+
+RLCAPI const char *TextToUpper(const char *text) {
+    if (text == NULL) {
+        NULLPTR_WARN();
+        return false;
+    }
+    static char buffer[MAX_STR_LENGTH] = { 0 };
+    SDL_memset(buffer, 0, MAX_STR_LENGTH);
+    for (size_t i = 0; i < MAX_STR_LENGTH; i++) {
+        if (!text[i]) {
+            return buffer;
+        }
+        buffer[i] = SDL_toupper(text[i]);
+    }
+    return NULL;
+}
+
+RLCAPI const char *TextToLower(const char *text) {
+    if (text == NULL) {
+        NULLPTR_WARN();
+        return false;
+    }
+    static char buffer[MAX_STR_LENGTH] = { 0 };
+    SDL_memset(buffer, 0, MAX_STR_LENGTH);
+    for (size_t i = 0; i < MAX_STR_LENGTH; i++) {
+        if (!text[i]) {
+            return buffer;
+        }
+        buffer[i] = SDL_tolower(text[i]);
+    }
+    return NULL;
+}
+
+RLCAPI const char *TextToPascal(const char *text) {
+    if (text == NULL) {
+        NULLPTR_WARN();
+        return NULL;
+    }
+    return NULL;
+}
+
+RLCAPI int TextToInteger(const char *text) {
+    if (text == NULL) {
+        NULLPTR_WARN();
+        return 0;
+    }
+    return SDL_atoi(text);
 }
 
 RLCAPI char *LoadUTF8(const int *codepoints, int length) {

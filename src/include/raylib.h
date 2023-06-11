@@ -334,6 +334,22 @@ RLAPI int GetCodepointNext(const char *text, int *codepointSize);
 RLAPI int GetCodepointPrevious(const char *text, int *codepointSize);
 RLAPI const char *CodepointToUTF8(int codepoint, int *utf8Size);
 
+RLAPI int TextCopy(char *dst, const char *src);
+RLAPI bool TextIsEqual(const char *text1, const char *text2);
+RLAPI unsigned int TextLength(const char *text);
+RLAPI const char *TextFormat(const char *text, ...);
+RLAPI const char *TextSubtext(const char *text, int position, int length);
+RLAPI char *TextReplace(char *text, const char *replace, const char *by);
+RLAPI char *TextInsert(const char *text, const char *insert, int position);
+RLAPI const char *TextJoin(const char **textList, int count, const char *delimiter);
+RLAPI const char **TextSplit(const char *text, char delimiter, int *count);
+RLAPI void TextAppend(char *text, const char *append, int *position);
+RLAPI int TextFindIndex(const char *text, const char *find);
+RLAPI const char *TextToUpper(const char *text);
+RLAPI const char *TextToLower(const char *text);
+RLAPI const char *TextToPascal(const char *text);
+RLAPI int TextToInteger(const char *text); 
+
 #if defined(__cplusplus)
 }
 #endif
