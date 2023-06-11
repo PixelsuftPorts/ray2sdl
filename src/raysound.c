@@ -191,7 +191,7 @@ RLCAPI void UnloadWaveSamples(float *samples) {
 #ifdef MIX_SUPPORT
     if (samples == NULL) {
         NULLPTR_WARN();
-        return
+        return;
     }
 #endif
 }
