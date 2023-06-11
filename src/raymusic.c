@@ -34,7 +34,13 @@ RLCAPI Music LoadMusicStream(const char *fileName) {
     result.looping = false;
     result.ctxType = Mix_GetMusicType(mus);
     result.looping = Mix_GetMusicLoopStartTime(mus) >= 0.0;
-    result.frameCount = (unsigned int)(Mix_MusicDuration(mus) * (double)result.stream.sampleRate);
+    double duration = Mix_MusicDuration(mus);
+    if (duration < 0.0) {
+        duration = 0.0;
+        TRACELOG(LOG_WARNING, "Failed to get music duration (%s)", Mix_GetError());
+    }
+    result.duration = (float)duration;
+    result.frameCount = (unsigned int)(duration * (double)result.stream.sampleRate);
     result.ctxData = NULL;
     return result;
 #else
@@ -184,12 +190,7 @@ RLCAPI float GetMusicTimeLength(Music music) {
         NULLPTR_WARN();
         return 0.0f;
     }
-    double result = Mix_MusicDuration(music.mus);
-    if (result < 0.0) {
-        TRACELOG(LOG_WARNING, "Failed to get music duration (%s)", Mix_GetError());
-        return 0.0f;
-    }
-    return (float)result;
+    return music.duration;
 #else
     return 0.0f;
 #endif

@@ -422,6 +422,7 @@ typedef struct Sound {
 // Music, audio stream, anything longer than ~10 seconds should be streamed
 typedef struct Music {
 #ifdef MIX_SUPPORT
+    float duration;
     Mix_Music* mus;
 #endif
     AudioStream stream;         // Audio stream
