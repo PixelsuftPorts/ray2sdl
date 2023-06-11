@@ -415,22 +415,29 @@ typedef struct AudioStream {
 
 // Sound
 typedef struct Sound {
-    AudioStream stream;         // Audio stream
-    unsigned int frameCount;    // Total number of frames (considering channels)
+#ifdef MIX_SUPPORT
+    Mix_Chunk* chunk;
+    AudioStream stream;
+    // float duration;
+#else
+    AudioStream stream;
+#endif
+    unsigned int frameCount;
 } Sound;
 
 // Music, audio stream, anything longer than ~10 seconds should be streamed
 typedef struct Music {
+    void *ctxData;
 #ifdef MIX_SUPPORT
-    float duration;
     Mix_Music* mus;
+    AudioStream stream;
+    float duration;
+#else
+    AudioStream stream;
 #endif
-    AudioStream stream;         // Audio stream
-    unsigned int frameCount;    // Total number of frames (considering channels)
-    bool looping;               // Music looping enable
-
-    int ctxType;                // Type of music context (audio filetype)
-    void *ctxData;              // Audio context data, depends on type
+    unsigned int frameCount;
+    bool looping;
+    int ctxType;
 } Music;
 #endif
 

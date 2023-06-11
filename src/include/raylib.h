@@ -356,6 +356,18 @@ RLAPI void CloseAudioDevice(void);
 RLAPI bool IsAudioDeviceReady(void);
 RLAPI void SetMasterVolume(float volume);
 
+RLAPI Wave LoadWave(const char *fileName);
+RLAPI Wave LoadWaveFromMemory(const char *fileType, const unsigned char *fileData, int dataSize);
+RLAPI bool IsWaveReady(Wave wave);
+RLAPI Sound LoadSound(const char *fileName);
+RLAPI Sound LoadSoundFromWave(Wave wave);
+RLAPI bool IsSoundReady(Sound sound);
+RLAPI void UpdateSound(Sound sound, const void *data, int sampleCount);
+RLAPI void UnloadWave(Wave wave);
+RLAPI void UnloadSound(Sound sound);
+RLAPI bool ExportWave(Wave wave, const char *fileName);
+RLAPI bool ExportWaveAsCode(Wave wave, const char *fileName); 
+
 RLAPI Music LoadMusicStream(const char *fileName);
 RLAPI Music LoadMusicStreamFromMemory(const char *fileType, const unsigned char *data, int dataSize);
 RLAPI bool IsMusicReady(Music music);
