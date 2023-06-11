@@ -113,6 +113,7 @@ extern "C" {
 #define SCALE_WARN() TRACELOG(LOG_WARNING, "Failed to set scale (%s)", SDL_GetError())
 #define SET_RLE_WARN() TRACELOG(LOG_WARNING, "Failed to set surface RLE (%s)", SDL_GetError())
 #define QUERY_TEXTURE_WARN() TRACELOG(LOG_WARNING, "Failed to query texture (%s)", SDL_GetError())
+#define TINT_WARN() TRACELOG(LOG_WARNING, "Failed to set texture color/alpha mod (%s)", SDL_GetError())
 #define GET_COLOR_MASK_WARN() TRACELOG(LOG_WARNING, "Failed to get color masks for pixel format (%s)", SDL_GetError())
 #define FILENAME_WARN() TRACELOG(LOG_WARNING, "File name provided is not valid")
 #define NULLPTR_WARN() TRACELOG(LOG_WARNING, "NULL pointer passed")
@@ -128,6 +129,9 @@ extern "C" {
     texture, color.a >= 255 ? SDL_BLENDMODE_NONE : SDL_BLENDMODE_BLEND)
 #define RENDER_ENABLE_SCALE() SDL_RenderSetScale(rl.r, rl.z, rl.z)
 #define RENDER_DISABLE_SCALE() SDL_RenderSetScale(rl.r, 1.0f, 1.0f)
+#define SET_TEXTURE_TINT(texture, tint) (SDL_SetTextureColorMod(texture, tint.r, tint.g, tint.b) |\
+    SDL_SetTextureBlendMode(texture, tint.a >= 255 ? SDL_BLENDMODE_NONE : SDL_BLENDMODE_BLEND) |\
+    SDL_SetTextureAlphaMod(texture, tint.a))
 
 #if (defined(__STDC__) && __STDC_VERSION__ >= 199901L) || (defined(_MSC_VER) && _MSC_VER >= 1800)
     #include <stdbool.h>

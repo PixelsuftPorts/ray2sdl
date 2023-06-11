@@ -18,7 +18,6 @@ int main(void)
     SetWindowIcon(img1);
     UnloadImage(img1);
     Texture tex1 = LoadTexture("assets/win7.png");
-    UnloadTexture(tex1);
     SetExitKey(KEY_Q);
 
     while (!WindowShouldClose())
@@ -82,6 +81,7 @@ int main(void)
         SetWindowTitle(fps_buf);
         int screenWidth = GetRenderWidth();
         DrawRectangle(0, 0, screenWidth, GetRenderHeight(), (Color){ 50, 50, 50, 255 });
+        DrawTextureEx(tex1, (Vector2){0.0f, 0.0f}, 20.0f, 1.0f, WHITE);
         DrawCircle(screenWidth/5, 120, 35, DARKBLUE);
         DrawCircleGradient(screenWidth/5, 220, 60, GREEN, SKYBLUE);
         DrawCircleLines(screenWidth/5, 340, 80, DARKBLUE);
@@ -108,6 +108,7 @@ int main(void)
         EndDrawing();
     }
 
+    UnloadTexture(tex1);
     CloseWindow();
 
     return 0;

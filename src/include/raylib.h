@@ -301,6 +301,13 @@ RLAPI void GenTextureMipmaps(Texture2D *texture);
 RLAPI void SetTextureFilter(Texture2D texture, int filter);
 RLAPI void SetTextureWrap(Texture2D texture, int wrap);
 
+RLAPI void DrawTexture(Texture2D texture, int posX, int posY, Color tint);
+RLAPI void DrawTextureV(Texture2D texture, Vector2 position, Color tint);
+RLAPI void DrawTextureEx(Texture2D texture, Vector2 position, float rotation, float scale, Color tint);
+RLAPI void DrawTextureRec(Texture2D texture, Rectangle source, Vector2 position, Color tint);
+RLAPI void DrawTexturePro(Texture2D texture, Rectangle source, Rectangle dest, Vector2 origin, float rotation, Color tint);
+RLAPI void DrawTextureNPatch(Texture2D texture, NPatchInfo nPatchInfo, Rectangle dest, Vector2 origin, float rotation, Color tint);
+
 #if defined(__cplusplus)
 }
 #endif
