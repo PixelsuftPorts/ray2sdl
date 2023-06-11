@@ -35,5 +35,7 @@ RLCAPI bool IsAudioDeviceReady(void) {
 }
 
 RLCAPI void SetMasterVolume(float volume) {
+#ifdef MIX_SUPPORT
     Mix_MasterVolume((int)(volume * (float)MIX_MAX_VOLUME));
+#endif
 }
