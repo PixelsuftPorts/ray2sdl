@@ -24,7 +24,7 @@ RLCAPI void InitWindow(int width, int height, const char *title) {
         rl.exit_key = KEY_ESCAPE;
         TRACELOG(LOG_INFO, "Initializing ray2sdl %s", RAYLIB_VERSION);
         TRACELOG(LOG_INFO, "Supported raylib modules:");
-        TRACELOG(LOG_INFO, "     > bruh:...... loaded (mandatory)");
+        TRACELOG(LOG_INFO, "    > bruh:...... loaded (mandatory)");
     }
     if (!rl.was_init) {
         if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS | SDL_INIT_TIMER) < 0) {
@@ -88,15 +88,15 @@ RLCAPI void InitWindow(int width, int height, const char *title) {
         int mon = GetCurrentMonitor();
         SDL_RendererInfo info;
         TRACELOG(LOG_INFO, "DISPLAY: Device initialized successfully");
-        TRACELOG(LOG_INFO, "     > Display size: %ix%i", GetMonitorWidth(mon), GetMonitorHeight(mon));
-        TRACELOG(LOG_INFO, "     > Screen size:  %ix%i", GetScreenWidth(), GetScreenHeight());
-        TRACELOG(LOG_INFO, "     > Render size:  %ix%i", GetRenderWidth(), GetRenderHeight());
+        TRACELOG(LOG_INFO, "    > Display size: %ix%i", GetMonitorWidth(mon), GetMonitorHeight(mon));
+        TRACELOG(LOG_INFO, "    > Screen size:  %ix%i", GetScreenWidth(), GetScreenHeight());
+        TRACELOG(LOG_INFO, "    > Render size:  %ix%i", GetRenderWidth(), GetRenderHeight());
         if (SDL_GetRendererInfo(rl.r, &info) < 0)
             TRACELOG(LOG_WARNING, "Failed to get renderer info (%s)", SDL_GetError());
         else {
             TRACELOG(LOG_INFO, "RENDER: Information:");
-            TRACELOG(LOG_INFO, "     > Name:             %s", info.name);
-            TRACELOG(LOG_INFO, "     > Max texture size: %ix%i", info.max_texture_width, info.max_texture_width);
+            TRACELOG(LOG_INFO, "    > Name:             %s", info.name);
+            TRACELOG(LOG_INFO, "    > Max texture size: %ix%i", info.max_texture_width, info.max_texture_width);
         }
     }
     rl.kbd_array = SDL_GetKeyboardState(&rl.num_kbd_keys);

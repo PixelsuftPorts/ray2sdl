@@ -355,6 +355,23 @@ RLAPI void CloseAudioDevice(void);
 RLAPI bool IsAudioDeviceReady(void);
 RLAPI void SetMasterVolume(float volume);
 
+RLAPI Music LoadMusicStream(const char *fileName);
+RLAPI Music LoadMusicStreamFromMemory(const char *fileType, const unsigned char *data, int dataSize);
+RLAPI bool IsMusicReady(Music music);
+RLAPI void UnloadMusicStream(Music music);
+RLAPI void PlayMusicStream(Music music);
+RLAPI bool IsMusicStreamPlaying(Music music);
+RLAPI void UpdateMusicStream(Music music);
+RLAPI void StopMusicStream(Music music);
+RLAPI void PauseMusicStream(Music music);
+RLAPI void ResumeMusicStream(Music music);
+RLAPI void SeekMusicStream(Music music, float position);
+RLAPI void SetMusicVolume(Music music, float volume);
+RLAPI void SetMusicPitch(Music music, float pitch);
+RLAPI void SetMusicPan(Music music, float pan);
+RLAPI float GetMusicTimeLength(Music music);
+RLAPI float GetMusicTimePlayed(Music music);
+
 #if defined(__cplusplus)
 }
 #endif
