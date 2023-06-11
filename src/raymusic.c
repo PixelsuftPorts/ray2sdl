@@ -2,6 +2,8 @@
 #include <raydef.h>
 #include <rayconf.h>
 
+// TODO: nullptr checks
+
 #ifdef MIX_IMPL
 Music GetDummyMusic() {
     Music result = { 0 };

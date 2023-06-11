@@ -112,3 +112,86 @@ RLCAPI bool ExportWaveAsCode(Wave wave, const char *fileName) {
 #endif
 }
 #endif
+
+RLCAPI void PlaySound(Sound sound) {
+#ifdef MIX_SUPPORT
+#endif
+}
+
+RLCAPI void StopSound(Sound sound) {
+#ifdef MIX_SUPPORT
+#endif
+}
+
+RLCAPI void PauseSound(Sound sound) {
+#ifdef MIX_SUPPORT
+#endif
+}
+
+RLCAPI void ResumeSound(Sound sound) {
+#ifdef MIX_SUPPORT
+#endif
+}
+
+RLCAPI bool IsSoundPlaying(Sound sound) {
+#ifdef MIX_SUPPORT
+#endif
+}
+
+RLCAPI void SetSoundVolume(Sound sound, float volume) {
+#ifdef MIX_SUPPORT
+#endif
+}
+
+RLCAPI void SetSoundPitch(Sound sound, float pitch) {
+#ifdef MIX_SUPPORT
+#endif
+}
+
+RLCAPI void SetSoundPan(Sound sound, float pan) {
+#ifdef MIX_SUPPORT
+#endif
+}
+
+RLCAPI Wave WaveCopy(Wave wave) {
+#ifdef MIX_SUPPORT
+    return GetDummyWave();
+#else
+    return GetDummyWave();
+#endif
+}
+
+RLCAPI void WaveCrop(Wave *wave, int initSample, int finalSample) {
+#ifdef MIX_SUPPORT
+    if (wave == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+#endif
+}
+
+RLCAPI void WaveFormat(Wave *wave, int sampleRate, int sampleSize, int channels) {
+#ifdef MIX_SUPPORT
+    if (wave == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+#endif
+}
+
+RLCAPI float *LoadWaveSamples(Wave wave) {
+#ifdef MIX_SUPPORT
+    return NULL;
+#else
+    return NULL;
+#endif
+}
+
+RLCAPI void UnloadWaveSamples(float *samples) {
+#ifdef MIX_SUPPORT
+    if (samples == NULL) {
+        NULLPTR_WARN();
+        return
+    }
+#endif
+}

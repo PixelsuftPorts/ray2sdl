@@ -418,7 +418,7 @@ typedef struct Sound {
 #ifdef MIX_SUPPORT
     Mix_Chunk* chunk;
     AudioStream stream;
-    // float duration;
+    int channel;
 #else
     AudioStream stream;
 #endif

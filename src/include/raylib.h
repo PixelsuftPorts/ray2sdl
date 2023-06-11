@@ -366,7 +366,21 @@ RLAPI void UpdateSound(Sound sound, const void *data, int sampleCount);
 RLAPI void UnloadWave(Wave wave);
 RLAPI void UnloadSound(Sound sound);
 RLAPI bool ExportWave(Wave wave, const char *fileName);
-RLAPI bool ExportWaveAsCode(Wave wave, const char *fileName); 
+RLAPI bool ExportWaveAsCode(Wave wave, const char *fileName);
+
+RLAPI void PlaySound(Sound sound);
+RLAPI void StopSound(Sound sound);
+RLAPI void PauseSound(Sound sound);
+RLAPI void ResumeSound(Sound sound);
+RLAPI bool IsSoundPlaying(Sound sound);
+RLAPI void SetSoundVolume(Sound sound, float volume);
+RLAPI void SetSoundPitch(Sound sound, float pitch);
+RLAPI void SetSoundPan(Sound sound, float pan);
+RLAPI Wave WaveCopy(Wave wave);
+RLAPI void WaveCrop(Wave *wave, int initSample, int finalSample);
+RLAPI void WaveFormat(Wave *wave, int sampleRate, int sampleSize, int channels);
+RLAPI float *LoadWaveSamples(Wave wave);
+RLAPI void UnloadWaveSamples(float *samples); 
 
 RLAPI Music LoadMusicStream(const char *fileName);
 RLAPI Music LoadMusicStreamFromMemory(const char *fileType, const unsigned char *data, int dataSize);

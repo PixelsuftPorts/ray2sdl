@@ -19,6 +19,7 @@ int main(void)
     UnloadImage(img1);
     InitAudioDevice();
     Music mus1 = LoadMusicStream("assets/music1.mp3");
+    Sound sound1 = LoadSound("assets/sound1.ogg");
     SetMusicVolume(mus1, 0.2f);
     Texture tex1 = LoadTexture("assets/win7.png");
     SetExitKey(KEY_Q);
@@ -41,6 +42,8 @@ int main(void)
             printf("Space Down\n");
         }
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            SetSoundPan(sound1, 1.0f - (float)GetMouseX() / (float)GetScreenWidth());
+            PlaySound(sound1);
             printf("Click at %ix%i\n", GetMouseX(), GetMouseY());
             SetMouseCursor(MOUSE_CURSOR_POINTING_HAND);
         }
@@ -118,6 +121,7 @@ int main(void)
     }
 
     UnloadTexture(tex1);
+    UnloadSound(sound1);
     UnloadMusicStream(mus1);
     CloseAudioDevice();
     CloseWindow();
