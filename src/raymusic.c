@@ -3,7 +3,7 @@
 #include <raymath.h>
 #include <rayconf.h>
 #include <raygfx.h>
-#ifdef MIX_ENABLED
+#ifdef MIX_SUPPORT
 #include <SDL2/SDL_mixer.h>
 #endif
 
