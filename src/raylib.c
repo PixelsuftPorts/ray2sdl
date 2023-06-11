@@ -287,6 +287,7 @@ RLCAPI void CloseWindow(void) {
         rl.was_init = false;
     }
     TRACELOG(LOG_INFO, "Window closed successfully");
+    TRACELOG(LOG_INFO, "Allocations: %i", SDL_GetNumAllocations());
 }
 
 RLCAPI bool IsWindowReady(void) {
