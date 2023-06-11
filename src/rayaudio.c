@@ -8,6 +8,7 @@
 #include <SDL2/SDL_mixer.h>
 #endif
 
+#ifdef MIX_IMPL
 RLCAPI void InitAudioDevice(void) {
 #ifdef MIX_SUPPORT
     if (rl.mix_enabled)
@@ -57,3 +58,4 @@ RLCAPI void SetMasterVolume(float volume) {
     Mix_MasterVolume((int)(volume * (float)MIX_MAX_VOLUME));
 #endif
 }
+#endif

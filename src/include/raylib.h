@@ -355,6 +355,7 @@ RLAPI void CloseAudioDevice(void);
 RLAPI bool IsAudioDeviceReady(void);
 RLAPI void SetMasterVolume(float volume);
 
+#ifdef MIX_IMPL
 RLAPI Music LoadMusicStream(const char *fileName);
 RLAPI Music LoadMusicStreamFromMemory(const char *fileType, const unsigned char *data, int dataSize);
 RLAPI bool IsMusicReady(Music music);
@@ -371,6 +372,7 @@ RLAPI void SetMusicPitch(Music music, float pitch);
 RLAPI void SetMusicPan(Music music, float pan);
 RLAPI float GetMusicTimeLength(Music music);
 RLAPI float GetMusicTimePlayed(Music music);
+#endif
 
 #if defined(__cplusplus)
 }

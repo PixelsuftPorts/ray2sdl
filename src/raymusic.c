@@ -4,6 +4,7 @@
 #include <rayconf.h>
 #include <raygfx.h>
 
+#ifdef MIX_IMPL
 Music GetDummyMusic() {
     Music result = { 0 };
     return result;
@@ -68,3 +69,5 @@ RLCAPI float GetMusicTimeLength(Music music) {
 RLCAPI float GetMusicTimePlayed(Music music) {
     return 0.0f;
 }
+
+#endif
