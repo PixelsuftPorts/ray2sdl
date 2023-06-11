@@ -81,7 +81,10 @@ int main(void)
         SetWindowTitle(fps_buf);
         int screenWidth = GetRenderWidth();
         DrawRectangle(0, 0, screenWidth, GetRenderHeight(), (Color){ 50, 50, 50, 255 });
-        DrawTextureEx(tex1, (Vector2){0.0f, 0.0f}, 20.0f, 1.0f, WHITE);
+        DrawTexturePro(
+            tex1, (Rectangle){0.0f, 0.0f, 1000.0f, 5000.0f},
+            (Rectangle){0.0f, 0.0f, 2000.0f, 1000.0f}, (Vector2){0.0f, 0.0f}, 20.0f, WHITE
+        );
         DrawCircle(screenWidth/5, 120, 35, DARKBLUE);
         DrawCircleGradient(screenWidth/5, 220, 60, GREEN, SKYBLUE);
         DrawCircleLines(screenWidth/5, 340, 80, DARKBLUE);

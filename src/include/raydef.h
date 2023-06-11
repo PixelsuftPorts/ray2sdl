@@ -129,7 +129,7 @@ extern "C" {
     texture, color.a >= 255 ? SDL_BLENDMODE_NONE : SDL_BLENDMODE_BLEND)
 #define RENDER_ENABLE_SCALE() SDL_RenderSetScale(rl.r, rl.z, rl.z)
 #define RENDER_DISABLE_SCALE() SDL_RenderSetScale(rl.r, 1.0f, 1.0f)
-#define SET_TEXTURE_TINT(texture, tint) (SDL_SetTextureColorMod(texture, tint.r, tint.g, tint.b) |\
+#define APPLY_TEXTURE_TINT(texture, tint) (SDL_SetTextureColorMod(texture, tint.r, tint.g, tint.b) |\
     SDL_SetTextureBlendMode(texture, tint.a >= 255 ? SDL_BLENDMODE_NONE : SDL_BLENDMODE_BLEND) |\
     SDL_SetTextureAlphaMod(texture, tint.a))
 

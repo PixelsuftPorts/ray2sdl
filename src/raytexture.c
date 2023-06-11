@@ -139,7 +139,7 @@ RLCAPI void DrawTextureV(Texture2D texture, Vector2 position, Color tint) {
         return;
     }
     SDL_FRect dst_rect = { position.x, position.y, (float)texture.width, (float)texture.height };
-    if (SET_TEXTURE_TINT(texture.tex, tint) < 0)
+    if (APPLY_TEXTURE_TINT(texture.tex, tint) < 0)
         TINT_WARN();
     if (rl.z_en) {
         if (RENDER_ENABLE_SCALE() < 0)
@@ -156,9 +156,13 @@ RLCAPI void DrawTextureV(Texture2D texture, Vector2 position, Color tint) {
 }
 
 RLCAPI void DrawTextureEx(Texture2D texture, Vector2 position, float rotation, float scale, Color tint) {
+    if (texture.tex == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
     SDL_FRect dst_rect = { position.x, position.y, (float)texture.width * scale, (float)texture.height * scale };
     SDL_FPoint center = { 0.0f, 0.0f };
-    if (SET_TEXTURE_TINT(texture.tex, tint) < 0)
+    if (APPLY_TEXTURE_TINT(texture.tex, tint) < 0)
         TINT_WARN();
     if (rl.z_en) {
         if (RENDER_ENABLE_SCALE() < 0)
@@ -174,8 +178,61 @@ RLCAPI void DrawTextureEx(Texture2D texture, Vector2 position, float rotation, f
         RENDER_COPY_WARN();
 }
 
-RLCAPI void DrawTextureRec(Texture2D texture, Rectangle source, Vector2 position, Color tint) {}
+RLCAPI void DrawTextureRec(Texture2D texture, Rectangle source, Vector2 position, Color tint) {
+    if (texture.tex == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+    SDL_Rect src_rect = { (int)source.x, (int)source.y, (int)source.width, (int)source.height };
+    SDL_FRect dst_rect = { position.x, position.y, source.width, source.height };
+    if (APPLY_TEXTURE_TINT(texture.tex, tint) < 0)
+        TINT_WARN();
+    if (rl.z_en) {
+        if (RENDER_ENABLE_SCALE() < 0)
+            SCALE_WARN();
+        dst_rect.x += rl.co.x;
+        dst_rect.y += rl.co.y;
+        if (SDL_RenderCopyF(rl.r, texture.tex, &src_rect, &dst_rect) < 0)
+            RENDER_COPY_WARN();
+        if (RENDER_DISABLE_SCALE() < 0)
+            SCALE_WARN();
+    }
+    else if (SDL_RenderCopyF(rl.r, texture.tex, &src_rect, &dst_rect) < 0)
+        RENDER_COPY_WARN();
+}
 
-RLCAPI void DrawTexturePro(Texture2D texture, Rectangle source, Rectangle dest, Vector2 origin, float rotation, Color tint) {}
+RLCAPI void DrawTexturePro(Texture2D texture, Rectangle source, Rectangle dest, Vector2 origin, float rotation, Color tint) {
+    if (texture.tex == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+    // TODO: support src_rect > texture size
+    SDL_Rect src_rect = { (int)source.x, (int)source.y, (int)source.width, (int)source.height };
+    if (APPLY_TEXTURE_TINT(texture.tex, tint) < 0)
+        TINT_WARN();
+    if (rl.z_en) {
+        if (RENDER_ENABLE_SCALE() < 0)
+            SCALE_WARN();
+        dest.x += rl.co.x;
+        dest.y += rl.co.y;
+        if (SDL_RenderCopyExF(
+            rl.r, texture.tex, &src_rect, (const SDL_FRect*)&dest,
+            (double)rotation, (const SDL_FPoint*)&origin, SDL_FLIP_NONE
+        ) < 0)
+            RENDER_COPY_WARN();
+        if (RENDER_DISABLE_SCALE() < 0)
+            SCALE_WARN();
+    }
+    else if (SDL_RenderCopyExF(
+            rl.r, texture.tex, &src_rect, (const SDL_FRect*)&dest,
+            (double)rotation, (const SDL_FPoint*)&origin, SDL_FLIP_NONE
+        ) < 0)
+        RENDER_COPY_WARN();
+}
 
-RLCAPI void DrawTextureNPatch(Texture2D texture, NPatchInfo nPatchInfo, Rectangle dest, Vector2 origin, float rotation, Color tint) {}
+RLCAPI void DrawTextureNPatch(Texture2D texture, NPatchInfo nPatchInfo, Rectangle dest, Vector2 origin, float rotation, Color tint) {
+    if (texture.tex == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+}
