@@ -1024,6 +1024,13 @@ struct rl_type {
     int num_kbd_keys;
     int log_level;
     int exit_key;
+#ifdef IMG_SUPPORT
+    bool img_enabled;
+#endif
+#ifdef MIX_SUPPORT
+    bool mix_enabled;
+    bool mix_device_opened;
+#endif
     bool z_en;
     bool not_first_init;
     bool event_waiting;

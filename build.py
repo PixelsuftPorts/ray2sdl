@@ -130,6 +130,7 @@ class App:
             return [
                 r'-ISDL2\include',
                 r'-ISDL2_image\include',
+                r'-ISDL2_mixer\include',
                 r'-Isrc\include',
                 r'-Wall'
             ]
@@ -153,7 +154,7 @@ class App:
                 r'-lSDL2main',
                 r'-lSDL2',
                 # r'-lSDL2_ttf',
-                # r'-lSDL2_mixer',
+                r'-lSDL2_mixer',
                 r'-lSDL2_image'
             ]
         result = self.get_output(['sdl2-config', '--libs']).split('\n')[0].strip().split(' ') + [

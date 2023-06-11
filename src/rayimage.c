@@ -10,7 +10,7 @@
 // TODO:
 //  - security of non-sdl memory and other funcs (like out-of-bounds checking)
 //  - copy-paste a lot of stuff
-//  - adopt a lot of rgb888/rgba8888 code to other formats
+//  - port a lot of rgb888/rgba8888 code to other formats
 
 Image GetDummyImage() {
     Image result = { 0 };

@@ -6,6 +6,12 @@
 #ifdef SUPPORT_TRACELOG
 #include <stdarg.h>
 #endif
+#ifdef IMG_SUPPORT
+#include <SDL2/SDL_image.h>
+#endif
+#ifdef MIX_SUPPORT
+#include <SDL2/SDL_mixer.h>
+#endif
 
 RLCAPI void InitWindow(int width, int height, const char *title) {
     if (!rl.not_first_init) {
@@ -23,7 +29,41 @@ RLCAPI void InitWindow(int width, int height, const char *title) {
     if (!rl.was_init) {
         if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS | SDL_INIT_TIMER) < 0) {
             TRACELOG(LOG_ERROR, "Failed to initialize SDL (%s)", SDL_GetError());
-        } 
+        }
+#ifdef IMG_SUPPORT
+        rl.img_enabled = true;
+        int img_formats = IMG_FORMATS;
+        int img_init_formats = IMG_Init(img_formats);
+        if (img_init_formats == 0) {
+            rl.img_enabled = false;
+            TRACELOG(LOG_WARNING, "Failed to init SDL2_image");
+        }
+        else if (img_init_formats != img_formats) {
+            TRACELOG(LOG_WARNING, "Failed to init some image formats");
+        }
+        else TRACELOG(LOG_INFO, "SDL2_image initialized successfully");
+#endif
+#ifdef MIX_SUPPORT
+        rl.mix_enabled = true;
+        int mix_formats = MIX_FORMATS;
+        int mix_init_formats = Mix_Init(img_formats);
+        if (mix_init_formats == 0) {
+            rl.mix_enabled = false;
+            TRACELOG(LOG_WARNING, "Failed to init SDL2_mixer");
+        }
+        else if (mix_init_formats != mix_formats) {
+            TRACELOG(LOG_WARNING, "Failed to init some mixer formats");
+        }
+        else TRACELOG(LOG_INFO, "SDL2_mixer initialized successfully");
+        if (rl.mix_enabled)
+            rl.mix_device_opened = Mix_OpenAudioDevice(
+                MIX_FREQ, MIX_FORMAT, MIX_CHANNELS, MIX_CHANNELS, MIX_DEVICE, MIX_ALLOWED_CHANGES
+            ) == 0;
+        if (rl.mix_device_opened)
+            TRACELOG(LOG_INFO, "Audio device opened");
+        else
+            TRACELOG(LOG_WARNING, "Failed to open audio device");
+#endif
         rl.was_init = true;
     } 
     rl.w = SDL_CreateWindow(
@@ -237,6 +277,22 @@ RLCAPI void CloseWindow(void) {
         rl.w = NULL;
         rl.should_close = false;
     }
+#ifdef MIX_SUPPORT
+    if (rl.mix_device_opened) {
+        rl.mix_device_opened = false;
+        Mix_CloseAudio();
+    }
+    if (rl.mix_enabled) {
+        rl.mix_enabled = false;
+        Mix_Quit();
+    }
+#endif
+#ifdef IMG_SUPPORT
+    if (rl.img_enabled) {
+        rl.img_enabled = false;
+        IMG_Quit();
+    }
+#endif
     if (rl.was_init) {
         SDL_Quit();
         rl.was_init = false;
