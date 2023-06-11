@@ -385,6 +385,7 @@ typedef struct Wave {
 
 // Opaque structs declaration
 // NOTE: Actual structs are defined internally in raudio module
+#ifdef MIX_IMPL
 typedef struct rAudioBuffer rAudioBuffer;
 typedef struct rAudioProcessor rAudioProcessor;
 
@@ -413,6 +414,7 @@ typedef struct Music {
     int ctxType;                // Type of music context (audio filetype)
     void *ctxData;              // Audio context data, depends on type
 } Music;
+#endif
 
 // VrDeviceInfo, Head-Mounted-Display device parameters
 typedef struct VrDeviceInfo {

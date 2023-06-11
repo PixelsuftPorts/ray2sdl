@@ -3,6 +3,9 @@
 #include <raymath.h>
 #include <rayconf.h>
 #include <raygfx.h>
+#ifdef MIX_ENABLED
+#include <SDL2/SDL_mixer.h>
+#endif
 
 #ifdef MIX_IMPL
 Music GetDummyMusic() {
