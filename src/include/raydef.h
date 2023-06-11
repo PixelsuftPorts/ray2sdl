@@ -1,6 +1,9 @@
 #pragma once
-#include <SDL2/SDL.h>
 #include <rayconf.h>
+#include <SDL2/SDL.h>
+#ifdef MIX_SUPPORT
+#include <SDL2/SDL_mixer.h>
+#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -407,6 +410,9 @@ typedef struct Sound {
 
 // Music, audio stream, anything longer than ~10 seconds should be streamed
 typedef struct Music {
+#ifdef MIX_SUPPORT
+    Mix_Music* mus;
+#endif
     AudioStream stream;         // Audio stream
     unsigned int frameCount;    // Total number of frames (considering channels)
     bool looping;               // Music looping enable
