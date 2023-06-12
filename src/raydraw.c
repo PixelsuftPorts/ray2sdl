@@ -715,3 +715,17 @@ RLCAPI void SetPixelColor(void *dstPtr, Color color, int format) {}
 RLCAPI int GetPixelDataSize(int width, int height, int format) {
     return 0;
 }
+
+RLAPI void BeginBlendMode(int mode) {
+    SDL_Texture* target = SDL_GetRenderTarget(rl.r);
+    if (target) {
+        if (SDL_SetTextureBlendMode(target, (SDL_BlendMode)mode) < 0)
+            BLEND_WARN();
+    }
+    if (SDL_SetRenderDrawBlendMode(rl.r, (SDL_BlendMode)mode) < 0)
+        BLEND_WARN();
+}
+
+RLAPI void EndBlendMode(void) {
+    BeginBlendMode(DEFAULT_BLEND);
+}
