@@ -2178,7 +2178,7 @@ int polygon(const Sint16 *vx, const Sint16 *vy, int n)
      * Create array of points
      */
     nn = n + 1;
-    points = (SDL_Point *)malloc(sizeof(SDL_Point) * nn);
+    points = (SDL_Point *)SDL_malloc(sizeof(SDL_Point) * nn);
     if (points == NULL)
     {
         return -1;
@@ -2195,7 +2195,7 @@ int polygon(const Sint16 *vx, const Sint16 *vy, int n)
      * Draw
      */
     result |= SDL_RenderDrawLines(rl.r, points, nn);
-    free(points);
+    SDL_free(points);
 
     return (result);
 }
@@ -3001,13 +3001,13 @@ int bezierRGBA(const Sint16 *vx, const Sint16 *vy, int n, int s, Uint8 r, Uint8 
     stepsize = (double)1.0 / (double)s;
 
     /* Transfer vertices into float arrays */
-    if ((x = (double *)malloc(sizeof(double) * (n + 1))) == NULL)
+    if ((x = (double *)SDL_malloc(sizeof(double) * (n + 1))) == NULL)
     {
         return (-1);
     }
-    if ((y = (double *)malloc(sizeof(double) * (n + 1))) == NULL)
+    if ((y = (double *)SDL_malloc(sizeof(double) * (n + 1))) == NULL)
     {
-        free(x);
+        SDL_free(x);
         return (-1);
     }
     for (i = 0; i < n; i++)
@@ -3041,8 +3041,8 @@ int bezierRGBA(const Sint16 *vx, const Sint16 *vy, int n, int s, Uint8 r, Uint8 
     }
 
     /* Clean up temporary array */
-    free(x);
-    free(y);
+    SDL_free(x);
+    SDL_free(y);
 
     return (result);
 }
@@ -3556,7 +3556,7 @@ static int renderdrawline(int x1, int y1, int x2, int y2)
             x1 = x2;
             x2 = x;
         }
-        SDL_Point *points = (SDL_Point *)malloc((x2 - x1 + 1) * sizeof(SDL_Point));
+        SDL_Point *points = (SDL_Point *)SDL_malloc((x2 - x1 + 1) * sizeof(SDL_Point));
         if (points == NULL)
             return -1;
         for (x = x1; x <= x2; x++)
@@ -3565,7 +3565,7 @@ static int renderdrawline(int x1, int y1, int x2, int y2)
             points[x - x1].y = y1;
         }
         result = SDL_RenderDrawPoints(rl.r, points, x2 - x1 + 1);
-        free(points);
+        SDL_free(points);
     }
     else if (x1 == x2)
     {
@@ -3576,7 +3576,7 @@ static int renderdrawline(int x1, int y1, int x2, int y2)
             y1 = y2;
             y2 = y;
         }
-        SDL_Point *points = (SDL_Point *)malloc((y2 - y1 + 1) * sizeof(SDL_Point));
+        SDL_Point *points = (SDL_Point *)SDL_malloc((y2 - y1 + 1) * sizeof(SDL_Point));
         if (points == NULL)
             return -1;
         for (y = y1; y <= y2; y++)
@@ -3585,7 +3585,7 @@ static int renderdrawline(int x1, int y1, int x2, int y2)
             points[y - y1].y = y;
         }
         result = SDL_RenderDrawPoints(rl.r, points, y2 - y1 + 1);
-        free(points);
+        SDL_free(points);
     }
     else
 #endif
@@ -3822,13 +3822,13 @@ int filledPolyBezierRGBA(const Sint16 *x, const Sint16 *y, int n, int s, Uint8 r
         return -1;
 
     /* Transfer vertices into float arrays */
-    if ((dx = (double *)malloc(sizeof(double) * n)) == NULL)
+    if ((dx = (double *)SDL_malloc(sizeof(double) * n)) == NULL)
     {
         return (-1);
     }
-    if ((dy = (double *)malloc(sizeof(double) * n)) == NULL)
+    if ((dy = (double *)SDL_malloc(sizeof(double) * n)) == NULL)
     {
-        free(dx);
+        SDL_free(dx);
         return (-1);
     }
     for (i = 0; i < n; i++)
@@ -3840,11 +3840,11 @@ int filledPolyBezierRGBA(const Sint16 *x, const Sint16 *y, int n, int s, Uint8 r
     // Create combined vertex array:
     nbeziers = (n - 1) / 3;
     nverts = nbeziers * 4 * s + 1;
-    vx = (Sint16 *)malloc(nverts * 2 * sizeof(Sint16));
+    vx = (Sint16 *)SDL_malloc(nverts * 2 * sizeof(Sint16));
     if (vx == NULL)
     {
-        free(dy);
-        free(dx);
+        SDL_free(dy);
+        SDL_free(dx);
         return -1;
     }
     vy = vx + nverts;
@@ -3873,12 +3873,12 @@ int filledPolyBezierRGBA(const Sint16 *x, const Sint16 *y, int n, int s, Uint8 r
     vx[j * s * 4] = SDL_floor(x1 + 0.5);
     vy[j * s * 4] = SDL_floor(y1 + 0.5);
 
-    free(dy);
-    free(dx);
+    SDL_free(dy);
+    SDL_free(dx);
 
     result = filledPolygonRGBA(vx, vy, nverts, r, g, b, a);
 
-    free(vx);
+    SDL_free(vx);
     return (result);
 }
 
@@ -3930,7 +3930,7 @@ int aaFilledEllipseRGBA(float cx, float cy, float rx, float ry, Uint8 r, Uint8 g
                 }
             }
             s = 8 * ry * ry;
-            dy = fabs(y - cy) - 1.0;
+            dy = SDL_fabs(y - cy) - 1.0;
             xi = cx - x; // left
             while (1)
             {
@@ -3987,7 +3987,7 @@ int aaFilledEllipseRGBA(float cx, float cy, float rx, float ry, Uint8 r, Uint8 g
                 }
             }
             s = 8 * rx * rx;
-            dx = fabs(x - cx) - 1.0;
+            dx = SDL_fabs(x - cx) - 1.0;
             yi = cy - y; // top
             while (1)
             {
@@ -4011,7 +4011,7 @@ int aaFilledEllipseRGBA(float cx, float cy, float rx, float ry, Uint8 r, Uint8 g
                 v = s - 4 * (dy - dx) * (dy - dx);
                 if (v < 0)
                     break;
-                v = (sqrt(v) - 2 * (dy + dx)) / 4;
+                v = (SDL_sqrt(v) - 2 * (dy + dx)) / 4;
                 if (v < 0)
                     break;
                 if (v > 1.0)
@@ -4070,7 +4070,7 @@ int aaFilledPolygonRGBA(const double *vx, const double *vy, int n, Uint8 r, Uint
     for (i = 0; i < n; i++)
     {
         double x = vx[i];
-        double y = fabs(vy[i]);
+        double y = SDL_fabs(vy[i]);
         if (x < minx)
             minx = x;
         if (x > maxx)
@@ -4083,7 +4083,7 @@ int aaFilledPolygonRGBA(const double *vx, const double *vy, int n, Uint8 r, Uint
     prec = SDL_floor(SDL_pow(2, 19) / prec);
 
     // Allocate main array, this determines the maximum polygon size and complexity:
-    list = (float *)malloc(POLYSIZE * sizeof(float));
+    list = (float *)SDL_malloc(POLYSIZE * sizeof(float));
     if (list == NULL)
         return -2;
 
@@ -4096,7 +4096,7 @@ int aaFilledPolygonRGBA(const double *vx, const double *vy, int n, Uint8 r, Uint
     {
         if (yi > POLYSIZE - 4)
         {
-            free(list);
+            SDL_free(list);
             return -2;
         }
         y2 = SDL_floor(vy[i % n] * prec) / prec;
@@ -4126,7 +4126,7 @@ int aaFilledPolygonRGBA(const double *vx, const double *vy, int n, Uint8 r, Uint
     xi = yi;
 
     // Sort vertex list:
-    qsort(list, yi / 2, sizeof(float) * 2, _gfxPrimitivesCompareFloat2);
+    SDL_qsort(list, yi / 2, sizeof(float) * 2, _gfxPrimitivesCompareFloat2);
 
     // Append line list to vertex list:
     for (i = 1; i <= n; i++)
@@ -4161,7 +4161,7 @@ int aaFilledPolygonRGBA(const double *vx, const double *vy, int n, Uint8 r, Uint
                 break;
             if (yi > POLYSIZE - 4)
             {
-                free(list);
+                SDL_free(list);
                 return -2;
             }
             if (y > y1)
@@ -4183,7 +4183,7 @@ int aaFilledPolygonRGBA(const double *vx, const double *vy, int n, Uint8 r, Uint
             x = x1 + y0 * (y - y1);
             if (yi > POLYSIZE - 2)
             {
-                free(list);
+                SDL_free(list);
                 return -2;
             }
             list[yi++] = x;
@@ -4193,16 +4193,16 @@ int aaFilledPolygonRGBA(const double *vx, const double *vy, int n, Uint8 r, Uint
     }
 
     // Sort combined list:
-    qsort(list, yi / 2, sizeof(float) * 2, _gfxPrimitivesCompareFloat2);
+    SDL_qsort(list, yi / 2, sizeof(float) * 2, _gfxPrimitivesCompareFloat2);
 
     // Plot lines:
     strip = (float *)malloc((maxx - minx + 2) * sizeof(float));
     if (strip == NULL)
     {
-        free(list);
+        SDL_free(list);
         return -1;
     }
-    memset(strip, 0, (maxx - minx + 2) * sizeof(float));
+    SDL_memset(strip, 0, (maxx - minx + 2) * sizeof(float));
     n = yi;
     yi = list[1];
     j = 0;
@@ -4274,14 +4274,14 @@ int aaFilledPolygonRGBA(const double *vx, const double *vy, int n, Uint8 r, Uint
                     }
                 }
             }
-            memset(strip, 0, (maxx - minx + 2) * sizeof(float));
+            SDL_memset(strip, 0, (maxx - minx + 2) * sizeof(float));
             yi++;
         }
     }
 
     // Free arrays:
-    free(list);
-    free(strip);
+    SDL_free(list);
+    SDL_free(strip);
     return result;
 }
 
@@ -4327,7 +4327,7 @@ int aaFilledPieRGBA(float cx, float cy, float rx, float ry,
         nverts = 180;
 
     // Allocate combined vertex array
-    vx = vy = (double *)malloc(2 * sizeof(double) * (nverts + 1));
+    vx = vy = (double *)SDL_malloc(2 * sizeof(double) * (nverts + 1));
     if (vx == NULL)
         return (-1);
 
@@ -4349,7 +4349,7 @@ int aaFilledPieRGBA(float cx, float cy, float rx, float ry,
     result = aaFilledPolygonRGBA(vx, vy, nverts + 1 - (chord != 0), r, g, b, a);
 
     // Free combined vertex array
-    free(vx);
+    SDL_free(vx);
 
     return (result);
 }
@@ -4396,7 +4396,7 @@ int aaArcRGBA(float cx, float cy, float rx, float ry,
         nverts = 360;
 
     // Allocate combined vertex array
-    vx = vy = (double *)malloc(2 * sizeof(double) * nverts);
+    vx = vy = (double *)SDL_malloc(2 * sizeof(double) * nverts);
     if (vx == NULL)
         return (-1);
 
@@ -4416,7 +4416,7 @@ int aaArcRGBA(float cx, float cy, float rx, float ry,
     result = aaFilledPolygonRGBA(vx, vy, nverts, r, g, b, a);
 
     // Free combined vertex array
-    free(vx);
+    SDL_free(vx);
 
     return (result);
 }
@@ -4488,7 +4488,7 @@ int aaBezierRGBA(double *x, double *y, int n, int s, float thick, Uint8 r, Uint8
 
     result = aaFilledPolygonRGBA(vx, vy, nverts, r, g, b, a);
 
-    free(vx);
+    SDL_free(vx);
     return (result);
 }
 
@@ -4521,7 +4521,7 @@ int aaFilledPolyBezierRGBA(double *x, double *y, int n, int s, Uint8 r, Uint8 g,
     // Create combined vertex array:
     nbeziers = (n - 1) / 3;
     nverts = nbeziers * 4 * s + 1;
-    vx = (double *)malloc(nverts * 2 * sizeof(double));
+    vx = (double *)SDL_malloc(nverts * 2 * sizeof(double));
     if (vx == NULL)
         return -1;
     vy = vx + nverts;
@@ -4552,6 +4552,6 @@ int aaFilledPolyBezierRGBA(double *x, double *y, int n, int s, Uint8 r, Uint8 g,
 
     result = aaFilledPolygonRGBA(vx, vy, nverts, r, g, b, a);
 
-    free(vx);
+    SDL_free(vx);
     return (result);
 }
