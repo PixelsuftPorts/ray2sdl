@@ -3597,8 +3597,8 @@ static int hlinecliparc(int x1, int x2, int y, int xc, int yc, double s, double 
 {
     int result = 0;
     double a1, a2;
-    a1 = atan2(y, x1);
-    a2 = atan2(y, x2);
+    a1 = SDL_atan2(y, x1);
+    a2 = SDL_atan2(y, x2);
     if (a1 > a2)
     {
         double a = a1;
