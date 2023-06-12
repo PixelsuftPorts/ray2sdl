@@ -85,13 +85,13 @@ RLCAPI int GetMouseY(void) {
 RLCAPI Vector2 GetMousePosition(void) {
     int x, y;
     SDL_GetMouseState(&x, &y);
-    return VECLITERAL(Vector2) {.x = y, .y = y};
+    return VECLITERAL(Vector2) { (float)x, (float)y };
 }
 
 RLCAPI Vector2 GetMouseDelta(void) {
     int x, y;
     SDL_GetRelativeMouseState(&x, &y);
-    return VECLITERAL(Vector2) {.x = y, .y = y};
+    return VECLITERAL(Vector2) { (float)x, (float)y };
 }
 
 RLCAPI void SetMousePosition(int x, int y) {
