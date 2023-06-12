@@ -85,9 +85,24 @@ RLCAPI void InitWindow(int width, int height, const char *title) {
     if (rl.w == NULL) {
         TRACELOG(LOG_ERROR, "Failed to create window (%s)", SDL_GetError());
     }
+    int renderer_id = RENDERER_DEFAULT_ID;
+    int num_renderers = SDL_GetNumRenderDrivers();
+    if (num_renderers < 0)
+        TRACELOG(LOG_WARNING, "Failed to get num renderers (%s)", SDL_GetError());
+    else for (int i = 0; i < num_renderers; i++) {
+        SDL_RendererInfo r_info;
+        if (SDL_GetRenderDriverInfo(i, &r_info) < 0) {
+            TRACELOG(LOG_WARNING, "Failed to get renderer info (%s)", SDL_GetError());
+            continue;
+        }
+        if (!SDL_strcmp(r_info.name, RENDERER_NAME)) {
+            renderer_id = i;
+            break;
+        }
+    }
     rl.r = SDL_CreateRenderer(
         rl.w,
-        RENDER_ID, // TODO
+        renderer_id,
         SDL_RENDERER_ACCELERATED | (rl.fl & FLAG_VSYNC_HINT ? SDL_RENDERER_PRESENTVSYNC : 0)
     );
     CheckDarkMode(rl.w);
