@@ -22,7 +22,7 @@ RLCAPI void InitWindow(int width, int height, const char *title) {
         unsigned int fl_temp = rl.fl;
         SDL_memset(&rl, 0, sizeof(rl));
         rl.fl = fl_temp;
-        rl.not_first_init = true;
+        rl.not_first_init = /*true*/false;
         rl.log_level = LOG_INFO;
         rl.exit_key = KEY_ESCAPE;
         TRACELOG(LOG_INFO, "Initializing ray2sdl %s", RAYLIB_VERSION);
