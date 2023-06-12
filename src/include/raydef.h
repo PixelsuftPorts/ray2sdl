@@ -1094,7 +1094,7 @@ struct rl_type {
     bool should_close;
     bool need_to_swap;
 };
-struct rl_type rl;
+extern struct rl_type rl;
 
 
 #ifdef __cplusplus
