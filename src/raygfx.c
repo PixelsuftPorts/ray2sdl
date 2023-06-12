@@ -2931,7 +2931,7 @@ double _evaluateBezier(double *data, int ndata, double t)
     n = ndata - 1;
     result = 0.0;
     muk = 1;
-    munk = pow(1 - mu, (double)n);
+    munk = SDL_pow(1 - mu, (double)n);
     for (k = 0; k <= n; k++)
     {
         nn = n;
@@ -4080,7 +4080,7 @@ int aaFilledPolygonRGBA(const double *vx, const double *vy, int n, Uint8 r, Uint
     }
     minx = floor(minx);
     maxx = floor(maxx);
-    prec = floor(pow(2, 19) / prec);
+    prec = floor(SDL_pow(2, 19) / prec);
 
     // Allocate main array, this determines the maximum polygon size and complexity:
     list = (float *)malloc(POLYSIZE * sizeof(float));
