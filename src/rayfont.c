@@ -167,6 +167,7 @@ RLCAPI void DrawTextEx(Font font, const char *text, Vector2 position, float font
         }
         if (SDL_RenderCopyF(rl.r, tex, NULL, &dst_rect) < 0)
             RENDER_COPY_WARN();
+        SDL_DestroyTexture(tex);
         SDL_FreeSurface(surf);
     }
 #endif
@@ -208,6 +209,7 @@ RLCAPI void DrawTextPro(Font font, const char *text, Vector2 position, Vector2 o
         if (SDL_RenderCopyExF(rl.r, tex, NULL, &dst_rect,
             (const double)rotation, (const SDL_FPoint*)&origin, SDL_FLIP_NONE) < 0)
             RENDER_COPY_WARN();
+        SDL_DestroyTexture(tex);
         SDL_FreeSurface(surf);
     }
 #endif
