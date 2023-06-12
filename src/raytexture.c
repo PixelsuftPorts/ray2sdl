@@ -69,6 +69,18 @@ RLCAPI Texture2D LoadTextureFromImage(Image image) {
 
 RLCAPI RenderTexture2D LoadRenderTexture(int width, int height) {
     RenderTexture2D result = { 0 };
+    result.id = 0;
+    result.texture.tex = SDL_CreateTexture(
+        rl.r, DRAW_TEXTURE_FORMAT_ALPHA, RENDER_TEXTURE_DEFAULT_ACCESS, width, height
+    );
+    if (result.texture.tex == NULL) {
+        TRACELOG(LOG_WARNING, "Failed to create render texture (%s)", SDL_GetError());
+        return result;
+    }
+    result.texture.width = width;
+    result.texture.height = height;
+    result.texture.mipmaps = 1;
+    result.texture.id = GetTextureId(&result.texture);
     return result;
 }
 
@@ -86,10 +98,17 @@ RLCAPI void UnloadTexture(Texture2D texture) {
 }
 
 RLCAPI bool IsRenderTextureReady(RenderTexture2D target) {
-    return false;
+    return (bool)target.texture.tex;
 }
 
-RLCAPI void UnloadRenderTexture(RenderTexture2D target) {}
+RLCAPI void UnloadRenderTexture(RenderTexture2D target) {
+    if (target.texture.tex == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+    SDL_DestroyTexture(target.texture.tex);
+    target.texture.tex = NULL;
+}
 
 RLCAPI void UpdateTexture(Texture2D texture, const void *pixels) {
     if (texture.tex == NULL) {
