@@ -6,6 +6,7 @@
 
 // TODO:
 //  - Support rendering outside of the bounds [0, 0, render_width, render_height]
+//  - Fix with render texture (I think it's bugged, but not tested)
 //  - Fix offset when scaling
 
 RLCAPI void UpdateCameraTexture() {
