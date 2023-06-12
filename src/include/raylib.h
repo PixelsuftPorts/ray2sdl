@@ -90,6 +90,17 @@ RLAPI int GetFPS(void);
 RLAPI float GetFrameTime(void);
 RLAPI double GetTime(void);
 
+RLAPI Shader LoadShader(const char *vsFileName, const char *fsFileName);
+RLAPI Shader LoadShaderFromMemory(const char *vsCode, const char *fsCode);
+RLAPI bool IsShaderReady(Shader shader);
+RLAPI int GetShaderLocation(Shader shader, const char *uniformName);
+RLAPI int GetShaderLocationAttrib(Shader shader, const char *attribName);
+RLAPI void SetShaderValue(Shader shader, int locIndex, const void *value, int uniformType);
+RLAPI void SetShaderValueV(Shader shader, int locIndex, const void *value, int uniformType, int count);
+RLAPI void SetShaderValueMatrix(Shader shader, int locIndex, Matrix mat);
+RLAPI void SetShaderValueTexture(Shader shader, int locIndex, Texture2D texture);
+RLAPI void UnloadShader(Shader shader);
+
 RLAPI int GetRandomValue(int min, int max);
 RLAPI void SetRandomSeed(unsigned int seed);
 RLAPI void TakeScreenshot(const char *fileName);
