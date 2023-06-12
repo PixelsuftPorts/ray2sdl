@@ -1,6 +1,9 @@
 # ray2sdl
 Raylib -> SDL2 Source Compability layer
-# Why?
+## Why?
 Just to test my coding skills, maybe for fun
-# Performance
+## Performance
 Maybe SDL2 is little faster than raylib, but many of functions (drawings, cameras, ttf) are done softwarely.
+## Screenshots
+![Screen1](assets/screen1.png) <br />
+![Screen2](assets/screen2.png)
