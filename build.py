@@ -131,6 +131,7 @@ class App:
                 r'-ISDL2\include',
                 r'-ISDL2_image\include',
                 r'-ISDL2_mixer\include',
+                r'-ISDL2_ttf\include',
                 r'-Isrc\include',
                 r'-Wall'
             ]
@@ -153,7 +154,7 @@ class App:
                 r'-LSDL2_image\lib',
                 r'-lSDL2main',
                 r'-lSDL2',
-                # r'-lSDL2_ttf',
+                r'-lSDL2_ttf',
                 r'-lSDL2_mixer',
                 r'-lSDL2_image'
             ]

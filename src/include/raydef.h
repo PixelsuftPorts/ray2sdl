@@ -4,6 +4,9 @@
 #ifdef MIX_SUPPORT
 #include <SDL2/SDL_mixer.h>
 #endif
+#ifdef TTF_SUPPORT
+#include <SDL2/SDL_ttf.h>
+#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -1063,6 +1066,9 @@ struct rl_type {
 #ifdef MIX_SUPPORT
     bool mix_enabled;
     bool mix_device_opened;
+#endif
+#ifdef TTF_SUPPORT
+    bool ttf_enabled;
 #endif
     bool z_en;
     bool not_first_init;

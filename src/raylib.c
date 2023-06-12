@@ -12,6 +12,9 @@
 #ifdef MIX_SUPPORT
 #include <SDL2/SDL_mixer.h>
 #endif
+#ifdef TTF_SUPPORT
+#include <SDL2/SDL_ttf.h>
+#endif
 
 RLCAPI void InitWindow(int width, int height, const char *title) {
     if (!rl.not_first_init) {
@@ -56,6 +59,14 @@ RLCAPI void InitWindow(int width, int height, const char *title) {
         }
         else TRACELOG(LOG_INFO, "SDL2_mixer initialized successfully");
         rl.mix_device_opened = false;
+#endif
+#ifdef TTF_SUPPORT
+        rl.ttf_enabled = true;
+        if (TTF_Init() < 0) {
+            rl.ttf_enabled = false;
+            TRACELOG(LOG_WARNING, "Failed to init SDL2_ttf (%s)", TTF_GetError());
+        }
+        else TRACELOG(LOG_INFO, "SDL2_ttf initialized successfully");
 #endif
         rl.was_init = true;
     } 
@@ -270,8 +281,16 @@ RLCAPI void CloseWindow(void) {
         rl.w = NULL;
         rl.should_close = false;
     }
+#ifdef TTF_SUPPORT
+    if (rl.ttf_enabled) {
+        rl.ttf_enabled = false;
+        TTF_Quit();
+    }
+#endif
 #ifdef MIX_SUPPORT
     if (rl.mix_enabled) {
+        if (rl.mix_device_opened)
+            CloseAudioDevice();
         rl.mix_enabled = false;
         Mix_Quit();
     }
