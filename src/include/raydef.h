@@ -120,6 +120,7 @@ extern "C" {
 #define SET_RLE_WARN() TRACELOG(LOG_WARNING, "Failed to set surface RLE (%s)", SDL_GetError())
 #define QUERY_TEXTURE_WARN() TRACELOG(LOG_WARNING, "Failed to query texture (%s)", SDL_GetError())
 #define TINT_WARN() TRACELOG(LOG_WARNING, "Failed to set texture color/alpha mod (%s)", SDL_GetError())
+#define TTF_SIZE_WARN() TRACELOG(LOG_WARNING, "Failed to set ttf size (%s)", TTF_GetError())
 #define GET_COLOR_MASK_WARN() TRACELOG(LOG_WARNING, "Failed to get color masks for pixel format (%s)", SDL_GetError())
 #define FILENAME_WARN() TRACELOG(LOG_WARNING, "File name provided is not valid")
 #define NULLPTR_WARN() TRACELOG(LOG_WARNING, "NULL pointer passed")

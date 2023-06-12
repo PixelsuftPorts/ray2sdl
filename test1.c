@@ -84,9 +84,6 @@ int main(void)
         if (IsKeyUp(KEY_B))
             BeginMode2D(camera);
         ClearBackground(BLACK);
-        char fps_buf[15] = "FPS: ";
-        itoa(GetFPS(), fps_buf + 5, 10);
-        SetWindowTitle(fps_buf);
         int screenWidth = GetRenderWidth();
         DrawRectangle(0, 0, screenWidth, GetRenderHeight(), (Color){ 50, 50, 50, 255 });
         DrawTexturePro(
