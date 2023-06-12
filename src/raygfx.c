@@ -4383,8 +4383,8 @@ int aaArcRGBA(float cx, float cy, float rx, float ry,
         return -1;
 
     // Convert degrees to radians
-    start = fmod(start, 360.0) * 2.0 * M_PI / 360.0;
-    end = fmod(end, 360.0) * 2.0 * M_PI / 360.0;
+    start = SDL_fmod(start, 360.0) * 2.0 * M_PI / 360.0;
+    end = SDL_fmod(end, 360.0) * 2.0 * M_PI / 360.0;
     while (start >= end)
         end += 2.0 * M_PI;
 
