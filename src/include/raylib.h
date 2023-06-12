@@ -365,6 +365,12 @@ RLAPI void DrawTextPro(Font font, const char *text, Vector2 position, Vector2 or
 RLAPI void DrawTextCodepoint(Font font, int codepoint, Vector2 position, float fontSize, Color tint);
 RLAPI void DrawTextCodepoints(Font font, const int *codepoints, int count, Vector2 position, float fontSize, float spacing, Color tint);
 
+RLAPI int MeasureText(const char *text, int fontSize);
+RLAPI Vector2 MeasureTextEx(Font font, const char *text, float fontSize, float spacing);
+RLAPI int GetGlyphIndex(Font font, int codepoint);
+RLAPI GlyphInfo GetGlyphInfo(Font font, int codepoint);
+RLAPI Rectangle GetGlyphAtlasRec(Font font, int codepoint);
+
 RLAPI char *LoadUTF8(const int *codepoints, int length);
 RLAPI void UnloadUTF8(char *text);
 RLAPI int *LoadCodepoints(const char *text, int *count);

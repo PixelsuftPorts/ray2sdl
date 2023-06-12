@@ -216,3 +216,41 @@ RLCAPI void DrawTextPro(Font font, const char *text, Vector2 position, Vector2 o
 RLCAPI void DrawTextCodepoint(Font font, int codepoint, Vector2 position, float fontSize, Color tint) {}
 
 RLCAPI void DrawTextCodepoints(Font font, const int *codepoints, int count, Vector2 position, float fontSize, float spacing, Color tint) {}
+
+RLCAPI int MeasureText(const char *text, int fontSize) {
+    return MeasureTextEx(GetFontDefault(), text, fontSize, 0.0f).x;
+}
+
+RLCAPI Vector2 MeasureTextEx(Font font, const char *text, float fontSize, float spacing) {
+    Vector2 result = { 0 };
+#ifdef TTF_SUPPORT
+    if (font.is_ttf) {
+        if (font.ttf == NULL) {
+            NULLPTR_WARN();
+            return result;
+        }
+        int w, h;
+        if (TTF_SizeText(font.ttf, text, &w, &h) < 0) {
+            TRACELOG(LOG_WARNING, "Failed to get text size (%s)", TTF_GetError());
+            return result;
+        }
+        result.x = (float)w;
+        result.y = (float)h;
+    }
+#endif
+    return result;
+}
+
+RLCAPI int GetGlyphIndex(Font font, int codepoint) {
+    return 0;
+}
+
+RLCAPI GlyphInfo GetGlyphInfo(Font font, int codepoint) {
+    GlyphInfo result = { 0 };
+    return result;
+}
+
+RLCAPI Rectangle GetGlyphAtlasRec(Font font, int codepoint) {
+    Rectangle result = { 0 };
+    return result;
+}
