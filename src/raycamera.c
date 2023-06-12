@@ -7,11 +7,17 @@
 // TODO:
 //  - Support rendering outside of the bounds [0, 0, render_width, render_height]
 //  - Fix offset when scaling
-//  - Support on textures
 
 RLCAPI void UpdateCameraTexture() {
-    int w = GetRenderWidth();
-    int h = GetRenderHeight();
+    int w, h;
+    if (rl.texture_backup == NULL) {
+        w = GetRenderWidth();
+        h = GetRenderHeight();
+    }
+    else if (SDL_QueryTexture(rl.texture_backup, NULL, NULL, &w, &h) < 0) {
+        QUERY_TEXTURE_WARN();
+        return;
+    }
     if (rl.screen_tex)
         SDL_DestroyTexture(rl.screen_tex);
     rl.screen_tex = SDL_CreateTexture(
@@ -30,6 +36,7 @@ RLCAPI void UpdateCameraTexture() {
 }
 
 RLCAPI void BeginMode2D(Camera2D camera) {
+    rl.texture_backup = SDL_GetRenderTarget(rl.r);
     if (camera.zoom < 0.0f) {
         rl.z = -camera.zoom;
         rl.cam_flip = SDL_FLIP_HORIZONTAL | SDL_FLIP_VERTICAL;

@@ -76,6 +76,8 @@ RLAPI void EndDrawing(void);
 RLAPI void BeginMode2D(Camera2D camera);
 RLAPI void UpdateCameraTexture();
 RLAPI void EndMode2D(void);
+RLAPI void BeginTextureMode(RenderTexture2D target);
+RLAPI void EndTextureMode(void); 
 
 RLAPI Matrix GetCameraMatrix2D(Camera2D camera);
 RLAPI Vector2 GetScreenToWorld2D(Vector2 position, Camera2D camera);

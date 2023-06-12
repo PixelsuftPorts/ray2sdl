@@ -255,3 +255,20 @@ RLCAPI void DrawTextureNPatch(Texture2D texture, NPatchInfo nPatchInfo, Rectangl
         return;
     }
 }
+
+RLCAPI void BeginTextureMode(RenderTexture2D target) {
+    if (target.texture.tex == NULL) {
+        NULLPTR_WARN();
+        return;
+    }
+    if (rl.z_en) {
+        rl.texture_backup = target.texture.tex;
+    }
+    else if (SDL_SetRenderTarget(rl.r, target.texture.tex) < 0)
+        RENDER_TARGET_WARN();
+}
+
+RLCAPI void EndTextureMode(void) {
+    if (SDL_SetRenderTarget(rl.r, NULL) < 0)
+        RENDER_TARGET_WARN();
+}

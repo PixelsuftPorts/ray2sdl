@@ -1056,6 +1056,7 @@ struct rl_type {
     SDL_Cursor* cursor;
     SDL_Window* w;
     SDL_Renderer* r;
+    SDL_Texture* texture_backup;
     SDL_Texture* screen_tex;
     const Uint8* kbd_array;
     Uint8 mousepress_array[8];
