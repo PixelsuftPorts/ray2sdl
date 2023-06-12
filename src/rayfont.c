@@ -147,8 +147,6 @@ RLCAPI void DrawTextEx(Font font, const char *text, Vector2 position, float font
             NULLPTR_WARN();
             return;
         }
-        tint.g = 255;
-        tint.a = 128;
         Uint8 a = tint.a;
         tint.a = 255;
         SDL_Surface* surf = TTF_RenderFunc(font.ttf, text, *((SDL_Color*)&tint), 0);
@@ -165,7 +163,15 @@ RLCAPI void DrawTextEx(Font font, const char *text, Vector2 position, float font
         if (a < 255 && (SDL_SetTextureBlendMode(tex, SDL_BLENDMODE_BLEND) | SDL_SetTextureAlphaMod(tex, a)) < 0)
             BLEND_WARN();
         SDL_FRect dst_rect = { position.x, position.y, (float)surf->w, (float)surf->h };
-        if (SDL_RenderCopyF(rl.r, tex, NULL, &dst_rect) < 0)
+        if (rl.z_en) {
+            if (RENDER_ENABLE_SCALE() < 0)
+                SCALE_WARN();
+            if (SDL_RenderCopyF(rl.r, tex, NULL, &dst_rect) < 0)
+                RENDER_COPY_WARN();
+            if (RENDER_DISABLE_SCALE() < 0)
+                SCALE_WARN();
+        }
+        else if (SDL_RenderCopyF(rl.r, tex, NULL, &dst_rect) < 0)
             RENDER_COPY_WARN();
         SDL_FreeSurface(surf);
     }
@@ -173,7 +179,43 @@ RLCAPI void DrawTextEx(Font font, const char *text, Vector2 position, float font
 }
 
 RLCAPI void DrawTextPro(Font font, const char *text, Vector2 position, Vector2 origin, float rotation, float fontSize, float spacing, Color tint) {
-    // TODO: I'm very lazy
+#ifdef TTF_SUPPORT
+    if (font.is_ttf) {
+        if (font.ttf == NULL) {
+            NULLPTR_WARN();
+            return;
+        }
+        Uint8 a = tint.a;
+        tint.a = 255;
+        SDL_Surface* surf = TTF_RenderFunc(font.ttf, text, *((SDL_Color*)&tint), 0);
+        if (surf == NULL) {
+            TRACELOG(LOG_WARNING, "Failed to render ttf font (%s)", TTF_GetError());
+            return;
+        }
+        SDL_Texture* tex = SDL_CreateTextureFromSurface(rl.r, surf);
+        if (tex == NULL) {
+            SDL_FreeSurface(surf);
+            TRACELOG(LOG_WARNING, "Failed to create texture from surface (%s)", SDL_GetError());
+            return;
+        }
+        if (a < 255 && (SDL_SetTextureBlendMode(tex, SDL_BLENDMODE_BLEND) | SDL_SetTextureAlphaMod(tex, a)) < 0)
+            BLEND_WARN();
+        SDL_FRect dst_rect = { position.x, position.y, (float)surf->w, (float)surf->h };
+        if (rl.z_en) {
+            if (RENDER_ENABLE_SCALE() < 0)
+                SCALE_WARN();
+            if (SDL_RenderCopyExF(rl.r, tex, NULL, &dst_rect,
+                (const double)rotation, (const SDL_FPoint*)&origin, SDL_FLIP_NONE) < 0)
+                RENDER_COPY_WARN();
+            if (RENDER_DISABLE_SCALE() < 0)
+                SCALE_WARN();
+        }
+        else if (SDL_RenderCopyExF(rl.r, tex, NULL, &dst_rect,
+            (const double)rotation, (const SDL_FPoint*)&origin, SDL_FLIP_NONE) < 0)
+            RENDER_COPY_WARN();
+        SDL_FreeSurface(surf);
+    }
+#endif
 }
 
 RLCAPI void DrawTextCodepoint(Font font, int codepoint, Vector2 position, float fontSize, Color tint) {}
