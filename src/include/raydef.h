@@ -139,6 +139,13 @@ extern "C" {
 #define APPLY_TEXTURE_TINT(texture, tint) (SDL_SetTextureColorMod(texture, tint.r, tint.g, tint.b) |\
     SDL_SetTextureBlendMode(texture, tint.a >= 255 ? SDL_BLENDMODE_NONE : SDL_BLENDMODE_BLEND) |\
     SDL_SetTextureAlphaMod(texture, tint.a))
+#ifdef TTF_SUPPORT
+#ifdef TTF_AA
+#define TTF_RenderFunc TTF_RenderUTF8_Blended_Wrapped
+#else
+#define TTF_RenderFunc TTF_RenderUTF8_Solid_Wrapped
+#endif
+#endif
 
 #if (defined(__STDC__) && __STDC_VERSION__ >= 199901L) || (defined(_MSC_VER) && _MSC_VER >= 1800)
     #include <stdbool.h>

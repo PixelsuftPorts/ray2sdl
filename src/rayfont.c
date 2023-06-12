@@ -3,14 +3,6 @@
 #include <rayconf.h>
 
 // TODO: support BMFont
-#ifdef TTF_SUPPORT
-#ifdef TTF_AA
-#define TTF_RenderFunc TTF_RenderUTF8_Blended_Wrapped
-#else
-#define TTF_RenderFunc TTF_RenderUTF8_Solid_Wrapped
-#endif
-#endif
-
 Font GetDummyFont() {
     Font result = { 0 };
     return result;
@@ -169,6 +161,10 @@ RLCAPI void DrawTextEx(Font font, const char *text, Vector2 position, float font
         if (a < 255 && (SDL_SetTextureBlendMode(tex, SDL_BLENDMODE_BLEND) | SDL_SetTextureAlphaMod(tex, a)) < 0)
             BLEND_WARN();
         SDL_FRect dst_rect = { position.x, position.y, (float)surf->w, (float)surf->h };
+        if (rl.z_en) {
+            dst_rect.x = (dst_rect.x + rl.co.x) * rl.z;
+            dst_rect.y = (dst_rect.y + rl.co.y) * rl.z;
+        }
         if (SDL_RenderCopyF(rl.r, tex, NULL, &dst_rect) < 0)
             RENDER_COPY_WARN();
         SDL_FreeSurface(surf);
@@ -205,6 +201,10 @@ RLCAPI void DrawTextPro(Font font, const char *text, Vector2 position, Vector2 o
         if (a < 255 && (SDL_SetTextureBlendMode(tex, SDL_BLENDMODE_BLEND) | SDL_SetTextureAlphaMod(tex, a)) < 0)
             BLEND_WARN();
         SDL_FRect dst_rect = { position.x, position.y, (float)surf->w, (float)surf->h };
+        if (rl.z_en) {
+            dst_rect.x = (dst_rect.x + rl.co.x) * rl.z;
+            dst_rect.y = (dst_rect.y + rl.co.y) * rl.z;
+        }
         if (SDL_RenderCopyExF(rl.r, tex, NULL, &dst_rect,
             (const double)rotation, (const SDL_FPoint*)&origin, SDL_FLIP_NONE) < 0)
             RENDER_COPY_WARN();
