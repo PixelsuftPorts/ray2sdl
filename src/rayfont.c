@@ -16,15 +16,40 @@ RLCAPI Font LoadFont(const char *fileName) {
         NULLPTR_WARN();
         return GetDummyFont();
     }
+#ifdef TTF_SUPPORT
+    return LoadFontEx(fileName, DEFAULT_TTF_SIZE, NULL, 95);
+#else
     return GetDummyFont();
+#endif
 }
 
 RLCAPI Font LoadFontEx(const char *fileName, int fontSize, int *fontChars, int glyphCount) {
+#ifdef TTF_SUPPORT
     if (fileName == NULL) {
         NULLPTR_WARN();
         return GetDummyFont();
     }
+    TTF_Font* ttf = TTF_OpenFont(fileName, DEFAULT_TTF_SIZE);
+    if (ttf == NULL) {
+        TRACELOG(LOG_WARNING, "Failed to open ttf font %s (%s)", fileName, TTF_GetError());
+        return GetDummyFont();
+    }
+    Font result = { 0 };
+    result.ttf = ttf;
+    result.baseSize = TTF_FontHeight(ttf);
+    result.glyphPadding = 4;
+    result.glyphCount = 0;
+    for (Uint16 i = 0; i < 256; i++) {
+        if (TTF_GlyphIsProvided(ttf, i) > 0)
+            result.glyphCount++;
+    }
+    if (result.glyphCount <= 0)
+        result.glyphCount = glyphCount;
+    result.is_ttf = true;
+    return result;
+#else
     return GetDummyFont();
+#endif
 }
 
 RLCAPI Font LoadFontFromImage(Image image, Color key, int firstChar) {
@@ -40,6 +65,11 @@ RLCAPI Font LoadFontFromMemory(const char *fileType, const unsigned char *fileDa
 }
 
 RLCAPI bool IsFontReady(Font font) {
+#ifdef TTF_SUPPORT
+    if (font.is_ttf) {
+        return (bool)font.ttf;
+    }
+#endif
     return false;
 }
 
@@ -62,7 +92,18 @@ RLCAPI Image GenImageFontAtlas(const GlyphInfo *chars, Rectangle **recs, int gly
 
 RLCAPI void UnloadFontData(GlyphInfo *chars, int glyphCount) {}
 
-RLCAPI void UnloadFont(Font font) {}
+RLCAPI void UnloadFont(Font font) {
+#ifdef TTF_SUPPORT
+    if (font.is_ttf) {
+        if (font.ttf == NULL) {
+            NULLPTR_WARN();
+            return;
+        }
+        TTF_CloseFont(font.ttf);
+        font.ttf = NULL;
+    }
+#endif
+}
 
 RLCAPI bool ExportFontAsCode(Font font, const char *fileName) {
     if (fileName == NULL) {

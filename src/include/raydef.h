@@ -251,12 +251,16 @@ typedef struct GlyphInfo {
 
 // Font, font texture and GlyphInfo array data
 typedef struct Font {
-    int baseSize;           // Base size (default chars height)
-    int glyphCount;         // Number of glyph characters
-    int glyphPadding;       // Padding around the glyph characters
-    Texture2D texture;      // Texture atlas containing the glyphs
-    Rectangle *recs;        // Rectangles in texture for the glyphs
-    GlyphInfo *glyphs;      // Glyphs info data
+#ifdef TTF_SUPPORT
+    TTF_Font* ttf;
+#endif
+    Rectangle *recs;
+    GlyphInfo *glyphs;
+    Texture2D texture;
+    int baseSize;
+    int glyphCount;
+    int glyphPadding;
+    bool is_ttf;
 } Font;
 
 // Camera, defines position/orientation in 3d space

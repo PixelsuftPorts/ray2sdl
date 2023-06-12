@@ -18,10 +18,12 @@ int main(void)
     SetWindowIcon(img1);
     UnloadImage(img1);
     InitAudioDevice();
+    Font font1 = LoadFont("assets/segoeuib.ttf");
     Music mus1 = LoadMusicStream("assets/music1.mp3");
     Sound sound1 = LoadSound("assets/sound1.ogg");
     SetMusicVolume(mus1, 0.2f);
     Texture tex1 = LoadTexture("assets/win7.png");
+    printf("%i\n", font1.glyphPadding);
     SetExitKey(KEY_Q);
 
     while (!WindowShouldClose())
@@ -124,6 +126,7 @@ int main(void)
     UnloadSound(sound1);
     UnloadMusicStream(mus1);
     CloseAudioDevice();
+    UnloadFont(font1);
     CloseWindow();
 
     return 0;
