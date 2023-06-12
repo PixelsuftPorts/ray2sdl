@@ -133,11 +133,11 @@ extern "C" {
     rl.r, (color_a) >= 255 ? DRAW_TEXTURE_FORMAT : DRAW_TEXTURE_FORMAT_ALPHA, SDL_TEXTUREACCESS_TARGET,\
     width, height)
 #define APPLY_TEXTURE_BLEND(texture, color) SDL_SetTextureBlendMode(\
-    texture, color.a >= 255 ? SDL_BLENDMODE_NONE : SDL_BLENDMODE_BLEND)
+    texture, color.a >= 255 ? TEXTURE_NONE_BLEND : SDL_BLENDMODE_BLEND)
 #define RENDER_ENABLE_SCALE() SDL_RenderSetScale(rl.r, rl.z, rl.z)
 #define RENDER_DISABLE_SCALE() SDL_RenderSetScale(rl.r, 1.0f, 1.0f)
 #define APPLY_TEXTURE_TINT(texture, tint) (SDL_SetTextureColorMod(texture, tint.r, tint.g, tint.b) |\
-    SDL_SetTextureBlendMode(texture, tint.a >= 255 ? SDL_BLENDMODE_NONE : SDL_BLENDMODE_BLEND) |\
+    SDL_SetTextureBlendMode(texture, tint.a >= 255 ? TEXTURE_NONE_BLEND : SDL_BLENDMODE_BLEND) |\
     SDL_SetTextureAlphaMod(texture, tint.a))
 #ifdef TTF_SUPPORT
 #ifdef TTF_AA
