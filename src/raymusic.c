@@ -39,7 +39,7 @@ RLCAPI Music LoadMusicStream(const char *fileName) {
     }
 #else
     result.looping = false;
-    result.duration = 0.0;
+    double duration = 0.0;
 #endif
     result.duration = (float)duration;
     result.frameCount = (unsigned int)(duration * (double)result.stream.sampleRate);
