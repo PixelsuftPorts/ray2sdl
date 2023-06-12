@@ -44,7 +44,7 @@ RLCAPI Texture2D LoadTexture(const char *fileName) {
     if (SDL_QueryTexture(tex, &temp_format, NULL, &result.width, &result.height) < 0)
         QUERY_TEXTURE_WARN();
     result.format = (int)temp_format;
-    if (SDL_SetTextureBlendMode(tex, SDL_BLENDMODE_BLEND) < 0)
+    if (SDL_SetTextureBlendMode(tex, DEFAULT_BLEND) < 0)
         BLEND_WARN();
     result.id = GetTextureId(&result);
     return result;
