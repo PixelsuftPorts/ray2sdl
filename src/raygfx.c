@@ -573,7 +573,7 @@ int roundedBoxRGBA(Sint16 x1, Sint16 y1, Sint16 x2,
         result |= boxRGBA(x1, y1 + (Sint16)rad + 1, x2, y2 - (Sint16)rad, r, g, b, a);
     }
 
-    return (result);
+    return result;
 }
 
 /* ---- Box */
@@ -952,7 +952,7 @@ int _aalineRGBA(Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2, Uint8 r, Uint8 g, Ui
         result |= pixelRGBA(x2, y2, r, g, b, a);
     }
 
-    return (result);
+    return result;
 }
 
 /*!
@@ -1262,7 +1262,7 @@ int arcRGBA(Sint16 x, Sint16 y, Sint16 rad, Sint16 start, Sint16 end, Uint8 r, U
         cx++;
     } while (cx <= cy);
 
-    return (result);
+    return result;
 }
 
 /* ----- AA Circle */
@@ -1478,7 +1478,7 @@ int ellipseRGBA(Sint16 x, Sint16 y, float rx, float ry, Uint8 r, Uint8 g, Uint8 
         } while (i > h);
     }
 
-    return (result);
+    return result;
 }
 
 /* ----- AA Ellipse */
@@ -1703,7 +1703,7 @@ int aaellipseRGBA(Sint16 x, Sint16 y, Sint16 rx, Sint16 ry, Uint8 r, Uint8 g, Ui
         result |= pixelRGBAWeight(xx, yy, r, g, b, a, weight);
     }
 
-    return (result);
+    return result;
 }
 
 /* ---- Filled Ellipse */
@@ -1862,7 +1862,7 @@ int filledEllipseRGBA(Sint16 x, Sint16 y, float rx, float ry, Uint8 r, Uint8 g, 
         } while (i > h);
     }
 
-    return (result);
+    return result;
 }
 
 /* ----- Pie */
@@ -1979,7 +1979,7 @@ int _pieRGBA(Sint16 x, Sint16 y, float rad, float start, float end, Uint8 r, Uin
     /* Free combined vertex array */
     SDL_free(vx);
 
-    return (result);
+    return result;
 }
 
 /*!
@@ -2197,7 +2197,7 @@ int polygon(const Sint16 *vx, const Sint16 *vy, int n)
     result |= SDL_RenderDrawLines(rl.r, points, nn);
     SDL_free(points);
 
-    return (result);
+    return result;
 }
 
 /*!
@@ -2252,7 +2252,7 @@ int polygonRGBA(const Sint16 *vx, const Sint16 *vy, int n, Uint8 r, Uint8 g, Uin
      */
     result |= polygon(vx, vy, n);
 
-    return (result);
+    return result;
 }
 
 /* ---- AA-Polygon */
@@ -2320,7 +2320,7 @@ int aapolygonRGBA(const Sint16 *vx, const Sint16 *vy, int n, Uint8 r, Uint8 g, U
 
     result |= _aalineRGBA(*x1, *y1, *vx, *vy, r, g, b, a, 0);
 
-    return (result);
+    return result;
 }
 
 /* ---- Filled Polygon */
@@ -2538,7 +2538,7 @@ int filledPolygonRGBAMT(const Sint16 *vx, const Sint16 *vy, int n, Uint8 r, Uint
         }
     }
 
-    return (result);
+    return result;
 }
 
 /*!
@@ -2870,7 +2870,7 @@ int texturedPolygonMT(const Sint16 *vx, const Sint16 *vy, int n,
     SDL_RenderPresent(rl.r);
     SDL_DestroyTexture(textureAsTexture);
 
-    return (result);
+    return result;
 }
 
 /*!
@@ -2958,7 +2958,7 @@ double _evaluateBezier(double *data, int ndata, double t)
         result += data[k] * blend;
     }
 
-    return (result);
+    return result;
 }
 
 /*!
@@ -3044,7 +3044,7 @@ int bezierRGBA(const Sint16 *vx, const Sint16 *vy, int n, int s, Uint8 r, Uint8 
     SDL_free(x);
     SDL_free(y);
 
-    return (result);
+    return result;
 }
 
 /* ---- Thick Line */
@@ -3534,7 +3534,7 @@ int thickLineRGBA(Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2, float width, Uint8
      * Draw
      */
     result |= draw_varthick_line(LineStyle, x1, y1, x2, y2, (double)width);
-    return (result);
+    return result;
 }
 
 // Extensions for thick outline ellipses and arcs by Richard Russell 19-Feb-2019
@@ -3881,7 +3881,7 @@ int filledPolyBezierRGBA(const Sint16 *x, const Sint16 *y, int n, int s, Uint8 r
     result = filledPolygonRGBA(vx, vy, nverts, r, g, b, a);
 
     SDL_free(vx);
-    return (result);
+    return result;
 }
 
 // Extensions for anti-aliased filled ellipses and polygons by Richard Russell 20-Aug-2019
@@ -4353,7 +4353,7 @@ int aaFilledPieRGBA(float cx, float cy, float rx, float ry,
     // Free combined vertex array
     SDL_free(vx);
 
-    return (result);
+    return result;
 }
 
 /*!
@@ -4420,7 +4420,7 @@ int aaArcRGBA(float cx, float cy, float rx, float ry,
     // Free combined vertex array
     SDL_free(vx);
 
-    return (result);
+    return result;
 }
 
 /*!
@@ -4491,7 +4491,7 @@ int aaBezierRGBA(double *x, double *y, int n, int s, float thick, Uint8 r, Uint8
     result = aaFilledPolygonRGBA(vx, vy, nverts, r, g, b, a);
 
     SDL_free(vx);
-    return (result);
+    return result;
 }
 
 /*!
@@ -4555,5 +4555,5 @@ int aaFilledPolyBezierRGBA(double *x, double *y, int n, int s, Uint8 r, Uint8 g,
     result = aaFilledPolygonRGBA(vx, vy, nverts, r, g, b, a);
 
     SDL_free(vx);
-    return (result);
+    return result;
 }
