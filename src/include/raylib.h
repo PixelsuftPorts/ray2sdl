@@ -9,7 +9,7 @@ extern "C" {
 
 /*
 What is not done?
-cameras and modes, All 3D, fps clock, shaders,
+All 3D, shaders,
 gestures, gamecontrollers (I don't have them lol) and some other things
 */
 
