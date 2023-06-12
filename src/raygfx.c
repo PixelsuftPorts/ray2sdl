@@ -3544,6 +3544,7 @@ int thickLineRGBA(Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2, float width, Uint8
 static int renderdrawline(int x1, int y1, int x2, int y2)
 {
     int result;
+#if 0
 #ifndef __EMSCRIPTEN__
     if ((x1 == x2) && (y1 == y2))
         result = SDL_RenderDrawPoint(rl.r, x1, y1);
@@ -3588,6 +3589,7 @@ static int renderdrawline(int x1, int y1, int x2, int y2)
         SDL_free(points);
     }
     else
+#endif
 #endif
         result = SDL_RenderDrawLine(rl.r, x1, y1, x2, y2);
     return result;
@@ -4196,7 +4198,7 @@ int aaFilledPolygonRGBA(const double *vx, const double *vy, int n, Uint8 r, Uint
     SDL_qsort(list, yi / 2, sizeof(float) * 2, _gfxPrimitivesCompareFloat2);
 
     // Plot lines:
-    strip = (float *)malloc((maxx - minx + 2) * sizeof(float));
+    strip = (float *)SDL_malloc((maxx - minx + 2) * sizeof(float));
     if (strip == NULL)
     {
         SDL_free(list);
@@ -4450,7 +4452,7 @@ int aaBezierRGBA(double *x, double *y, int n, int s, float thick, Uint8 r, Uint8
 
     // Create combined vertex array:
     nverts = n * s * 2 + 2;
-    vx = (double *)malloc(nverts * 2 * sizeof(double));
+    vx = (double *)SDL_malloc(nverts * 2 * sizeof(double));
     if (vx == NULL)
         return -1;
     vy = vx + nverts;
