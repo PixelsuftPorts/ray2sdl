@@ -324,6 +324,18 @@ RLAPI Color GetPixelColor(void *srcPtr, int format);
 RLAPI void SetPixelColor(void *dstPtr, Color color, int format);
 RLAPI int GetPixelDataSize(int width, int height, int format);
 
+RLAPI Font GetFontDefault(void);
+RLAPI Font LoadFont(const char *fileName);
+RLAPI Font LoadFontEx(const char *fileName, int fontSize, int *fontChars, int glyphCount);
+RLAPI Font LoadFontFromImage(Image image, Color key, int firstChar);
+RLAPI Font LoadFontFromMemory(const char *fileType, const unsigned char *fileData, int dataSize, int fontSize, int *fontChars, int glyphCount);
+RLAPI bool IsFontReady(Font font);
+RLAPI GlyphInfo *LoadFontData(const unsigned char *fileData, int dataSize, int fontSize, int *fontChars, int glyphCount, int type);
+RLAPI Image GenImageFontAtlas(const GlyphInfo *chars, Rectangle **recs, int glyphCount, int fontSize, int padding, int packMethod);
+RLAPI void UnloadFontData(GlyphInfo *chars, int glyphCount);
+RLAPI void UnloadFont(Font font);
+RLAPI bool ExportFontAsCode(Font font, const char *fileName);
+
 RLAPI char *LoadUTF8(const int *codepoints, int length);
 RLAPI void UnloadUTF8(char *text);
 RLAPI int *LoadCodepoints(const char *text, int *count);
