@@ -2,7 +2,7 @@
 #include <raydef.h>
 #include <rayconf.h>
 
-// TODO: most of the functions work with channels, so we must cache values if sound is not playing 
+// TODO: Wave
 
 #ifdef MIX_IMPL
 #define AFK_CHANNEL -2
