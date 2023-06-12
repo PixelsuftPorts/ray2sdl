@@ -147,6 +147,17 @@ RLAPI void SetExitKey(int key);
 RLAPI int GetKeyPressed(void);
 RLAPI int GetCharPressed(void);
 
+RLAPI bool IsGamepadAvailable(int gamepad);
+RLAPI const char *GetGamepadName(int gamepad);
+RLAPI bool IsGamepadButtonPressed(int gamepad, int button);
+RLAPI bool IsGamepadButtonDown(int gamepad, int button);
+RLAPI bool IsGamepadButtonReleased(int gamepad, int button);
+RLAPI bool IsGamepadButtonUp(int gamepad, int button);
+RLAPI int GetGamepadButtonPressed(void);
+RLAPI int GetGamepadAxisCount(int gamepad);
+RLAPI float GetGamepadAxisMovement(int gamepad, int axis);
+RLAPI int SetGamepadMappings(const char *mappings);
+
 RLAPI bool IsMouseButtonPressed(int button);
 RLAPI bool IsMouseButtonDown(int button);
 RLAPI bool IsMouseButtonReleased(int button);

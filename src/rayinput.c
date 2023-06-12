@@ -174,3 +174,43 @@ RLCAPI int GetTouchPointCount(void) {
         TRACELOG(LOG_WARNING, "Failed to get num of touch fingers (%s)", SDL_GetError());
     return result;
 }
+
+RLCAPI bool IsGamepadAvailable(int gamepad) { // TODO
+    return false;
+}
+
+RLCAPI const char *GetGamepadName(int gamepad) {
+    return "";
+}
+
+RLCAPI bool IsGamepadButtonPressed(int gamepad, int button) {
+    return false;
+}
+
+RLCAPI bool IsGamepadButtonDown(int gamepad, int button) {
+    return false;
+}
+
+RLCAPI bool IsGamepadButtonReleased(int gamepad, int button) {
+    return false;
+}
+
+RLCAPI bool IsGamepadButtonUp(int gamepad, int button) {
+    return false;
+}
+
+RLCAPI int GetGamepadButtonPressed(void) {
+    return 0;
+}
+
+RLCAPI int GetGamepadAxisCount(int gamepad) {
+    return 0;
+}
+
+RLCAPI float GetGamepadAxisMovement(int gamepad, int axis) {
+    return 0.0f;
+}
+
+RLCAPI int SetGamepadMappings(const char *mappings) {
+    return 0;
+}
