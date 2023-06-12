@@ -121,6 +121,8 @@ RLCAPI void StopMusicStream(Music music) {
         NULLPTR_WARN();
         return;
     }
+    if (Mix_SetMusicPosition(0.0) < 0)
+        TRACELOG(LOG_WARNING, "Failed to set music position (%s)", Mix_GetError());
     Mix_HaltMusic();
 #endif
 }
