@@ -1548,7 +1548,7 @@ int aaellipseRGBA(Sint16 x, Sint16 y, Sint16 rx, Sint16 ry, Uint8 r, Uint8 g, Ui
     xc2 = 2 * x;
     yc2 = 2 * y;
 
-    sab = sqrt((double)(a2 + b2));
+    sab = SDL_sqrt((double)(a2 + b2));
     od = (Sint16)lrint(sab * 0.01) + 1; /* introduce some overdraw */
     dxt = (Sint16)lrint((double)a2 / sab) + od;
 
@@ -3680,19 +3680,19 @@ int thickEllipseRGBA(Sint16 xc, Sint16 yc, Sint16 xr, Sint16 yr, Uint8 r, Uint8 
     {
         for (x = -xo; x <= -xi; x++)
         {
-            y = sqrt(yo2 * (1.0 - x * x / xo2)) + 0.5;
+            y = SDL_sqrt(yo2 * (1.0 - x * x / xo2)) + 0.5;
             result |= renderdrawline(xc + x, yc - y, xc + x, yc + y);
         }
         for (x = -xi + 1; x <= xi - 1; x++)
         {
-            y = sqrt(yo2 * (1.0 - x * x / xo2)) + 0.5;
-            z = sqrt(yi2 * (1.0 - x * x / xi2)) + 0.5;
+            y = SDL_sqrt(yo2 * (1.0 - x * x / xo2)) + 0.5;
+            z = SDL_sqrt(yi2 * (1.0 - x * x / xi2)) + 0.5;
             result |= renderdrawline(xc + x, yc + z, xc + x, yc + y);
             result |= renderdrawline(xc + x, yc - z, xc + x, yc - y);
         }
         for (x = xo; x >= xi; x--)
         {
-            y = sqrt(yo2 * (1.0 - x * x / xo2)) + 0.5;
+            y = SDL_sqrt(yo2 * (1.0 - x * x / xo2)) + 0.5;
             result |= renderdrawline(xc + x, yc - y, xc + x, yc + y);
         }
     }
@@ -3700,19 +3700,19 @@ int thickEllipseRGBA(Sint16 xc, Sint16 yc, Sint16 xr, Sint16 yr, Uint8 r, Uint8 
     {
         for (y = -yo; y <= -yi; y++)
         {
-            x = sqrt(xo2 * (1.0 - y * y / yo2)) + 0.5;
+            x = SDL_sqrt(xo2 * (1.0 - y * y / yo2)) + 0.5;
             result |= renderdrawline(xc - x, yc + y, xc + x, yc + y);
         }
         for (y = -yi + 1; y <= yi - 1; y++)
         {
-            x = sqrt(xo2 * (1.0 - y * y / yo2)) + 0.5;
-            z = sqrt(xi2 * (1.0 - y * y / yi2)) + 0.5;
+            x = SDL_sqrt(xo2 * (1.0 - y * y / yo2)) + 0.5;
+            z = SDL_sqrt(xi2 * (1.0 - y * y / yi2)) + 0.5;
             result |= renderdrawline(xc + z, yc + y, xc + x, yc + y);
             result |= renderdrawline(xc - z, yc + y, xc - x, yc + y);
         }
         for (y = yo; y >= yi; y--)
         {
-            x = sqrt(xo2 * (1.0 - y * y / yo2)) + 0.5;
+            x = SDL_sqrt(xo2 * (1.0 - y * y / yo2)) + 0.5;
             result |= renderdrawline(xc - x, yc + y, xc + x, yc + y);
         }
     }
@@ -3770,19 +3770,19 @@ int thickArcRGBA(Sint16 xc, Sint16 yc, Sint16 rad, Sint16 start, Sint16 end, Uin
 
     for (y = -ro; y <= -ri; y++)
     {
-        x = sqrt(ro2 * (1.0 - y * y / ro2)) + 0.5;
+        x = SDL_sqrt(ro2 * (1.0 - y * y / ro2)) + 0.5;
         result |= hlinecliparc(-x, x, y, xc, yc, s, f);
     }
     for (y = -ri + 1; y <= ri - 1; y++)
     {
-        x = sqrt(ro2 * (1.0 - y * y / ro2)) + 0.5;
-        z = sqrt(ri2 * (1.0 - y * y / ri2)) + 0.5;
+        x = SDL_sqrt(ro2 * (1.0 - y * y / ro2)) + 0.5;
+        z = SDL_sqrt(ri2 * (1.0 - y * y / ri2)) + 0.5;
         result |= hlinecliparc(z, x, y, xc, yc, s, f);
         result |= hlinecliparc(-z, -x, y, xc, yc, s, f);
     }
     for (y = ro; y >= ri; y--)
     {
-        x = sqrt(ro2 * (1.0 - y * y / ro2)) + 0.5;
+        x = SDL_sqrt(ro2 * (1.0 - y * y / ro2)) + 0.5;
         result |= hlinecliparc(-x, x, y, xc, yc, s, f);
     }
     return result;
@@ -3922,7 +3922,7 @@ int aaFilledEllipseRGBA(float cx, float cy, float rx, float ry, Uint8 r, Uint8 g
             x = 0.5;
             if (s < 1.0)
             {
-                x = rx * sqrt(1.0 - s);
+                x = rx * SDL_sqrt(1.0 - s);
                 if (x >= 0.5)
                 {
                     result |= SDL_SetRenderDrawColor(rl.r, r, g, b, a);
@@ -3979,7 +3979,7 @@ int aaFilledEllipseRGBA(float cx, float cy, float rx, float ry, Uint8 r, Uint8 g
             y = 0.5;
             if (s < 1.0)
             {
-                y = ry * sqrt(1.0 - s);
+                y = ry * SDL_sqrt(1.0 - s);
                 if (y >= 0.5)
                 {
                     result |= SDL_SetRenderDrawColor(rl.r, r, g, b, a);
@@ -4314,13 +4314,13 @@ int aaFilledPieRGBA(float cx, float cy, float rx, float ry,
         return -1;
 
     // Convert degrees to radians
-    start = fmod(start, 360.0) * 2.0 * M_PI / 360.0;
-    end = fmod(end, 360.0) * 2.0 * M_PI / 360.0;
+    start = SDL_fmod(start, 360.0) * 2.0 * M_PI / 360.0;
+    end = SDL_fmod(end, 360.0) * 2.0 * M_PI / 360.0;
     while (start >= end)
         end += 2.0 * M_PI;
 
     // Calculate number of vertices on perimeter
-    nverts = (end - start) * sqrt(rx * ry) / M_PI;
+    nverts = (end - start) * SDL_sqrt(rx * ry) / M_PI;
     if (nverts < 2)
         nverts = 2;
     if (nverts > 180)
@@ -4389,7 +4389,7 @@ int aaArcRGBA(float cx, float cy, float rx, float ry,
         end += 2.0 * M_PI;
 
     // Calculate number of vertices
-    nverts = 2 * SDL_floor((end - start) * sqrt(rx * ry) / M_PI);
+    nverts = 2 * SDL_floor((end - start) * SDL_sqrt(rx * ry) / M_PI);
     if (nverts < 2)
         nverts = 2;
     if (nverts > 360)
@@ -4468,7 +4468,7 @@ int aaBezierRGBA(double *x, double *y, int n, int s, float thick, Uint8 r, Uint8
 
         dx = x2 - x1;
         dy = y2 - y1;
-        d = thick * 0.5L / sqrt(dx * dx + dy * dy);
+        d = thick * 0.5L / SDL_sqrt(dx * dx + dy * dy);
         dx *= d;
         dy *= d;
 
