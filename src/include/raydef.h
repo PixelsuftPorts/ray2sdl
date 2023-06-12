@@ -413,15 +413,21 @@ typedef struct AudioStream {
     unsigned int channels;      // Number of channels (1-mono, 2-stereo, ...)
 } AudioStream;
 
+#ifdef MIX_SUPPORT
+typedef struct SoundExtra {
+    int channel;
+    Uint8 pan;
+    bool has_pan;
+} SoundExtra;
+#endif
+
 // Sound
 typedef struct Sound {
 #ifdef MIX_SUPPORT
     Mix_Chunk* chunk;
-    AudioStream stream;
-    int channel;
-#else
-    AudioStream stream;
+    SoundExtra* extra;
 #endif
+    AudioStream stream;
     unsigned int frameCount;
 } Sound;
 
