@@ -281,6 +281,9 @@ RLCAPI void CloseWindow(void) {
         rl.w = NULL;
         rl.should_close = false;
     }
+    if (IsFontReady(rl.default_font)) {
+        UnloadFont(rl.default_font);
+    }
 #ifdef TTF_SUPPORT
     if (rl.ttf_enabled) {
         rl.ttf_enabled = false;

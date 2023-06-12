@@ -336,6 +336,13 @@ RLAPI void UnloadFontData(GlyphInfo *chars, int glyphCount);
 RLAPI void UnloadFont(Font font);
 RLAPI bool ExportFontAsCode(Font font, const char *fileName);
 
+RLAPI void DrawFPS(int posX, int posY);
+RLAPI void DrawText(const char *text, int posX, int posY, int fontSize, Color color);
+RLAPI void DrawTextEx(Font font, const char *text, Vector2 position, float fontSize, float spacing, Color tint);
+RLAPI void DrawTextPro(Font font, const char *text, Vector2 position, Vector2 origin, float rotation, float fontSize, float spacing, Color tint);
+RLAPI void DrawTextCodepoint(Font font, int codepoint, Vector2 position, float fontSize, Color tint);
+RLAPI void DrawTextCodepoints(Font font, const int *codepoints, int count, Vector2 position, float fontSize, float spacing, Color tint);
+
 RLAPI char *LoadUTF8(const int *codepoints, int length);
 RLAPI void UnloadUTF8(char *text);
 RLAPI int *LoadCodepoints(const char *text, int *count);

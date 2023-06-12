@@ -1042,6 +1042,9 @@ struct rl_type {
 #endif
     SDL_TouchID touch_dev;
     SDL_FPoint cam_origin;
+#ifdef TTF_SUPPORT
+    Font default_font;
+#endif
     SDL_Cursor* cursor;
     SDL_Window* w;
     SDL_Renderer* r;
