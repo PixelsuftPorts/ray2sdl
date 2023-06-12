@@ -16,6 +16,8 @@
 #include <SDL2/SDL_ttf.h>
 #endif
 
+struct rl_type rl;
+
 RLCAPI void InitWindow(int width, int height, const char *title) {
     if (!rl.not_first_init) {
         unsigned int fl_temp = rl.fl;
