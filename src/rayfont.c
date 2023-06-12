@@ -141,12 +141,14 @@ RLCAPI void DrawTextEx(Font font, const char *text, Vector2 position, float font
         }
         Uint8 a = tint.a;
         tint.a = 255;
+#if SDL_TTF_VERSION_ATLEAST(2, 0, 18)
         if (rl.z_en) {
             if (TTF_SetFontSizeDPI(font.ttf, (int)fontSize, (int)(72.0f * rl.z), (int)(72.0f * rl.z)) < 0)
                 TTF_SIZE_WARN();
         }
         else if (TTF_SetFontSize(font.ttf, (int)fontSize) < 0)
             TTF_SIZE_WARN();
+#endif
         SDL_Surface* surf = TTF_RenderFunc(font.ttf, text, *((SDL_Color*)&tint), 0);
         if (surf == NULL) {
             TRACELOG(LOG_WARNING, "Failed to render ttf font (%s)", TTF_GetError());
@@ -182,12 +184,14 @@ RLCAPI void DrawTextPro(Font font, const char *text, Vector2 position, Vector2 o
         }
         Uint8 a = tint.a;
         tint.a = 255;
+#if SDL_TTF_VERSION_ATLEAST(2, 0, 18)
         if (rl.z_en) {
             if (TTF_SetFontSizeDPI(font.ttf, (int)fontSize, (int)(72.0f * rl.z), (int)(72.0f * rl.z)) < 0)
                 TTF_SIZE_WARN();
         }
         else if (TTF_SetFontSize(font.ttf, (int)fontSize) < 0)
             TTF_SIZE_WARN();
+#endif
         SDL_Surface* surf = TTF_RenderFunc(font.ttf, text, *((SDL_Color*)&tint), 0);
         if (surf == NULL) {
             TRACELOG(LOG_WARNING, "Failed to render ttf font (%s)", TTF_GetError());

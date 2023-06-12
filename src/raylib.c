@@ -695,7 +695,7 @@ RLCAPI int GetRandomValue(int min, int max) {
         max = min;
         min = tmp;
     }
-    return (int)((float)((double)rand() / (double)(RAND_MAX + 1)) * (float)(max - min + 1)) + min;
+    return (int)((float)((double)rand() / ((double)RAND_MAX + 1.0)) * (float)(max - min + 1)) + min;
 }
 
 RLCAPI void SetRandomSeed(unsigned int seed) {

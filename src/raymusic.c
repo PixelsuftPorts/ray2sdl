@@ -30,12 +30,17 @@ RLCAPI Music LoadMusicStream(const char *fileName) {
     result.mus = mus;
     result.looping = false;
     result.ctxType = Mix_GetMusicType(mus);
+#if SDL_MIXER_VERSION_ATLEAST(2, 6, 0)
     result.looping = Mix_GetMusicLoopStartTime(mus) >= 0.0;
     double duration = Mix_MusicDuration(mus);
     if (duration < 0.0) {
         duration = 0.0;
         TRACELOG(LOG_WARNING, "Failed to get music duration (%s)", Mix_GetError());
     }
+#else
+    result.looping = false;
+    result.duration = 0.0;
+#endif
     result.duration = (float)duration;
     result.frameCount = (unsigned int)(duration * (double)result.stream.sampleRate);
     result.ctxData = NULL;
@@ -199,11 +204,15 @@ RLCAPI float GetMusicTimePlayed(Music music) {
         NULLPTR_WARN();
         return 0.0f;
     }
+#if SDL_MIXER_VERSION_ATLEAST(2, 6, 0)
     double result = Mix_GetMusicPosition(music.mus);
     if (result < 0.0) {
         TRACELOG(LOG_WARNING, "Failed to get music position (Feature is not supported)");
         return 0.0f;
     }
+#else
+    double result = 0.0;
+#endif
     return (float)result;
 #else
     return 0.0f;
