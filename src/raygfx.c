@@ -3613,13 +3613,13 @@ static int hlinecliparc(int x1, int x2, int y, int xc, int yc, double s, double 
         if ((a1 > f) && (a2 < s))
             return result;
         if ((a1 < s) && (a1 > f))
-            x1 = y / tan(s);
+            x1 = y / SDL_tan(s);
         if ((a2 > f) && (a2 < s))
-            x2 = y / tan(f);
+            x2 = y / SDL_tan(f);
         if ((a1 < f) && (a2 > s))
         {
-            result |= renderdrawline(x1 + xc, y + yc, y / tan(f) + xc, y + yc);
-            result |= renderdrawline(y / tan(s) + xc, y + yc, x2 + xc, y + yc);
+            result |= renderdrawline(x1 + xc, y + yc, y / SDL_tan(f) + xc, y + yc);
+            result |= renderdrawline(y / SDL_tan(s) + xc, y + yc, x2 + xc, y + yc);
             return result;
         }
     }
@@ -3628,9 +3628,9 @@ static int hlinecliparc(int x1, int x2, int y, int xc, int yc, double s, double 
         if ((a1 > f) || (a2 < s))
             return result;
         if (a1 < s)
-            x1 = y / tan(s);
+            x1 = y / SDL_tan(s);
         if (a2 > f)
-            x2 = y / tan(f);
+            x2 = y / SDL_tan(f);
     }
     result |= renderdrawline(x1 + xc, y + yc, x2 + xc, y + yc);
     return result;
