@@ -18,7 +18,6 @@
 
 RLCAPI void InitWindow(int width, int height, const char *title) {
     if (!rl.not_first_init) {
-        // TODO: clean need things when not first init maybe?
         unsigned int fl_temp = rl.fl;
         SDL_memset(&rl, 0, sizeof(rl));
         rl.fl = fl_temp;
