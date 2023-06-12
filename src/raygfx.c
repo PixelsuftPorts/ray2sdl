@@ -1080,19 +1080,19 @@ int arcRGBA(Sint16 x, Sint16 y, Sint16 rad, Sint16 start, Sint16 end, Uint8 r, U
             {
             case 0:
             case 3:
-                temp = sin(dstart * M_PI / 180.);
+                temp = SDL_sin(dstart * M_PI / 180.);
                 break;
             case 1:
             case 6:
-                temp = cos(dstart * M_PI / 180.);
+                temp = SDL_cos(dstart * M_PI / 180.);
                 break;
             case 2:
             case 5:
-                temp = -cos(dstart * M_PI / 180.);
+                temp = -SDL_cos(dstart * M_PI / 180.);
                 break;
             case 4:
             case 7:
-                temp = -sin(dstart * M_PI / 180.);
+                temp = -SDL_sin(dstart * M_PI / 180.);
                 break;
             }
             temp *= rad;
@@ -1117,19 +1117,19 @@ int arcRGBA(Sint16 x, Sint16 y, Sint16 rad, Sint16 start, Sint16 end, Uint8 r, U
             {
             case 0:
             case 3:
-                temp = sin(dend * M_PI / 180);
+                temp = SDL_sin(dend * M_PI / 180);
                 break;
             case 1:
             case 6:
-                temp = cos(dend * M_PI / 180);
+                temp = SDL_cos(dend * M_PI / 180);
                 break;
             case 2:
             case 5:
-                temp = -cos(dend * M_PI / 180);
+                temp = -SDL_cos(dend * M_PI / 180);
                 break;
             case 4:
             case 7:
-                temp = -sin(dend * M_PI / 180);
+                temp = -SDL_sin(dend * M_PI / 180);
                 break;
             }
             temp *= rad;
@@ -3862,16 +3862,16 @@ int filledPolyBezierRGBA(const Sint16 *x, const Sint16 *y, int n, int s, Uint8 r
             x2 = _evaluateBezier(dx + j * 3, 4, t);
             y2 = _evaluateBezier(dy + j * 3, 4, t);
 
-            vx[i + j * s * 4] = floor(x1 + 0.5);
-            vy[i + j * s * 4] = floor(y1 + 0.5);
+            vx[i + j * s * 4] = SDL_floor(x1 + 0.5);
+            vy[i + j * s * 4] = SDL_floor(y1 + 0.5);
 
             x1 = x2;
             y1 = y2;
         }
     }
 
-    vx[j * s * 4] = floor(x1 + 0.5);
-    vy[j * s * 4] = floor(y1 + 0.5);
+    vx[j * s * 4] = SDL_floor(x1 + 0.5);
+    vy[j * s * 4] = SDL_floor(y1 + 0.5);
 
     free(dy);
     free(dx);
@@ -4078,9 +4078,9 @@ int aaFilledPolygonRGBA(const double *vx, const double *vy, int n, Uint8 r, Uint
         if (y > prec)
             prec = y;
     }
-    minx = floor(minx);
-    maxx = floor(maxx);
-    prec = floor(SDL_pow(2, 19) / prec);
+    minx = SDL_floor(minx);
+    maxx = SDL_floor(maxx);
+    prec = SDL_floor(SDL_pow(2, 19) / prec);
 
     // Allocate main array, this determines the maximum polygon size and complexity:
     list = (float *)malloc(POLYSIZE * sizeof(float));
@@ -4090,8 +4090,8 @@ int aaFilledPolygonRGBA(const double *vx, const double *vy, int n, Uint8 r, Uint
     // Build vertex list.  Special x-values used to indicate vertex type:
     // x = -100001.0 indicates /\, x = -100003.0 indicates \/, x = -100002.0 neither
     yi = 0;
-    y0 = floor(vy[n - 1] * prec) / prec;
-    y1 = floor(vy[0] * prec) / prec;
+    y0 = SDL_floor(vy[n - 1] * prec) / prec;
+    y1 = SDL_floor(vy[0] * prec) / prec;
     for (i = 1; i <= n; i++)
     {
         if (yi > POLYSIZE - 4)
@@ -4099,7 +4099,7 @@ int aaFilledPolygonRGBA(const double *vx, const double *vy, int n, Uint8 r, Uint
             free(list);
             return -2;
         }
-        y2 = floor(vy[i % n] * prec) / prec;
+        y2 = SDL_floor(vy[i % n] * prec) / prec;
         if (((y1 < y2) - (y1 > y2)) == ((y0 < y1) - (y0 > y1)))
         {
             list[yi++] = -100002.0;
@@ -4135,9 +4135,9 @@ int aaFilledPolygonRGBA(const double *vx, const double *vy, int n, Uint8 r, Uint
         double d = 0.5 / prec;
 
         x1 = vx[i - 1];
-        y1 = floor(vy[i - 1] * prec) / prec;
+        y1 = SDL_floor(vy[i - 1] * prec) / prec;
         x2 = vx[i % n];
-        y2 = floor(vy[i % n] * prec) / prec;
+        y2 = SDL_floor(vy[i % n] * prec) / prec;
 
         if (y2 < y1)
         {
@@ -4177,7 +4177,7 @@ int aaFilledPolygonRGBA(const double *vx, const double *vy, int n, Uint8 r, Uint
             }
         }
 
-        y = floor(y1) + 1.0;
+        y = SDL_floor(y1) + 1.0;
         while (y <= y2)
         {
             x = x1 + y0 * (y - y1);
@@ -4338,8 +4338,8 @@ int aaFilledPieRGBA(float cx, float cy, float rx, float ry,
     for (i = 0; i < nverts; i++)
     {
         double angle = start + (end - start) * (double)i / (double)(nverts - 1);
-        vx[i] = cx + rx * cos(angle);
-        vy[i] = cy + ry * sin(angle);
+        vx[i] = cx + rx * SDL_cos(angle);
+        vy[i] = cy + ry * SDL_sin(angle);
     }
 
     // Center:
@@ -4389,7 +4389,7 @@ int aaArcRGBA(float cx, float cy, float rx, float ry,
         end += 2.0 * M_PI;
 
     // Calculate number of vertices
-    nverts = 2 * floor((end - start) * sqrt(rx * ry) / M_PI);
+    nverts = 2 * SDL_floor((end - start) * sqrt(rx * ry) / M_PI);
     if (nverts < 2)
         nverts = 2;
     if (nverts > 360)
@@ -4407,10 +4407,10 @@ int aaArcRGBA(float cx, float cy, float rx, float ry,
     for (i = 0; i < nverts / 2; i++)
     {
         double angle = start + (end - start) * (double)i / (double)(nverts / 2 - 1);
-        vx[i] = cx + (rx + thick / 2) * cos(angle);
-        vy[i] = cy + (ry + thick / 2) * sin(angle);
-        vx[nverts - 1 - i] = cx + (rx - thick / 2) * cos(angle);
-        vy[nverts - 1 - i] = cy + (ry - thick / 2) * sin(angle);
+        vx[i] = cx + (rx + thick / 2) * SDL_cos(angle);
+        vy[i] = cy + (ry + thick / 2) * SDL_sin(angle);
+        vx[nverts - 1 - i] = cx + (rx - thick / 2) * SDL_cos(angle);
+        vy[nverts - 1 - i] = cy + (ry - thick / 2) * SDL_sin(angle);
     }
 
     result = aaFilledPolygonRGBA(vx, vy, nverts, r, g, b, a);
