@@ -179,6 +179,15 @@ RLAPI Vector2 GetTouchPosition(int index);
 RLAPI int GetTouchPointId(int index);
 RLAPI int GetTouchPointCount(void);
 
+RLAPI void SetGesturesEnabled(unsigned int flags);
+RLAPI bool IsGestureDetected(int gesture);
+RLAPI int GetGestureDetected(void);
+RLAPI float GetGestureHoldDuration(void);
+RLAPI Vector2 GetGestureDragVector(void);
+RLAPI float GetGestureDragAngle(void);
+RLAPI Vector2 GetGesturePinchVector(void);
+RLAPI float GetGesturePinchAngle(void);
+
 RLAPI void DrawPixel(int posX, int posY, Color color);
 RLAPI void DrawPixelV(Vector2 position, Color color);
 RLAPI void DrawLine(int startPosX, int startPosY, int endPosX, int endPosY, Color color);

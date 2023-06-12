@@ -214,3 +214,37 @@ RLCAPI float GetGamepadAxisMovement(int gamepad, int axis) {
 RLCAPI int SetGamepadMappings(const char *mappings) {
     return 0;
 }
+
+RLCAPI void SetGesturesEnabled(unsigned int flags) {
+
+}
+
+RLCAPI bool IsGestureDetected(int gesture) {
+    return false;
+}
+
+RLCAPI int GetGestureDetected(void) {
+    return 0;
+}
+
+RLCAPI float GetGestureHoldDuration(void) {
+    return 0.0f;
+}
+
+RLCAPI Vector2 GetGestureDragVector(void) {
+    Vector2 result = { 0 };
+    return result;
+}
+
+RLCAPI float GetGestureDragAngle(void) {
+    return 0.0f;
+}
+
+RLCAPI Vector2 GetGesturePinchVector(void) {
+    Vector2 result = { 0 };
+    return result;
+}
+
+RLCAPI float GetGesturePinchAngle(void) {
+    return 0.0f;
+}
