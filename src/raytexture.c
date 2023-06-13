@@ -208,8 +208,6 @@ RLCAPI void DrawTextureRec(Texture2D texture, Rectangle source, Vector2 position
     SDL_FRect dst_rect = { position.x, position.y, source.width, source.height };
     if (APPLY_TEXTURE_TINT(texture.tex, tint) < 0)
         TINT_WARN();
-    SDL_BlendMode bl;
-    SDL_GetTextureBlendMode(texture.tex, &bl);
     if (rl.z_en) {
         if (RENDER_ENABLE_SCALE() < 0)
             SCALE_WARN();
