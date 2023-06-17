@@ -19,6 +19,7 @@ int main(void)
     UnloadImage(img1);
     InitAudioDevice();
     Music mus1 = LoadMusicStream("assets/music1.mp3");
+    float mus1_length = GetMusicTimeLength(mus1);
     Sound sound1 = LoadSound("assets/sound1.ogg");
     SetMusicVolume(mus1, 0.2f);
     Texture tex1 = LoadTexture("assets/win7.png");
@@ -111,10 +112,11 @@ int main(void)
         //EndBlendMode();
         DrawFPS(0, 0);
         EndMode2D();
-        DrawRectangleRec((Rectangle){
-            GetMusicTimePlayed(mus1) / GetMusicTimeLength(mus1) * ((float)GetRenderWidth() - 50.0f),
-            (float)GetRenderHeight() - 50.0f, 50.0f, 50.0f
-        }, RED);
+        if (mus1_length > 0.0f)
+            DrawRectangleRec((Rectangle){
+                GetMusicTimePlayed(mus1) / mus1_length * ((float)GetRenderWidth() - 50.0f),
+                (float)GetRenderHeight() - 50.0f, 50.0f, 50.0f
+            }, RED);
         EndDrawing();
     }
 
